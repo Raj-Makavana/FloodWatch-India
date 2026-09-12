@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account – FloodWatch India</title>
+  <meta name="description" content="Create an account on FloodWatch India – Register authority terminal for risk reporting." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/toast.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-page:    #0b1120;
+      --bg-card:    #0d1526;
+      --bg-input:   #0a1020;
+      --accent:     #1a6dff;
+      --border:     rgba(30, 80, 180, 0.28);
+      --border-input: rgba(30, 80, 180, 0.35);
+      --text:       #dde6f5;
+      --text-dim:   #7a8faa;
+      --text-label: #8a9bb5;
+      --green:      #22c55e;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+    }
+
+    .top-bar { height: 2px; background: var(--green); width: 100%; }
+
+    .tab-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      padding: 8px 20px;
+      letter-spacing: 0.5px;
+      background: #0b1120;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .page-body {
+      min-height: calc(100vh - 50px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 36px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+
+    .brand-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #d94326 0%, #b83520 100%);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 20px rgba(217,67,38,0.35);
+    }
+
+    .card-title { text-align: center; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .card-sub { text-align: center; font-size: 12.5px; color: var(--text-dim); margin-bottom: 24px; }
+
+    .field { margin-bottom: 16px; }
+    .field-label {
+      display: block; font-size: 10.5px; font-weight: 600;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--text-label); margin-bottom: 7px;
+    }
+    .field-input {
+      width: 100%; background: var(--bg-input);
+      border: 1px solid var(--border-input); border-radius: 7px;
+      padding: 10px 13px; font-size: 13px; color: var(--text);
+      font-family: 'Inter', sans-serif; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field-input::placeholder { color: rgba(138,155,181,0.5); }
+    .field-input:focus { border-color: rgba(26,109,255,0.6); box-shadow: 0 0 0 3px rgba(26,109,255,0.12); }
+
+    .agree-wrap {
+      display: flex; align-items: flex-start; gap: 9px;
+      margin-bottom: 22px; cursor: pointer; user-select: none;
+      margin-top: 4px;
+    }
+    .agree-wrap input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; margin-top: 1px; flex-shrink: 0; }
+    .agree-label { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+    .btn-primary {
+      width: 100%; padding: 12px;
+      background: linear-gradient(135deg, #1a6dff 0%, #0d50cc 100%);
+      border: none; border-radius: 8px; color: #fff;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+      margin-bottom: 20px; box-shadow: 0 4px 16px rgba(26,109,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,109,255,0.45); }
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .or-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .or-line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+    .or-text { font-size: 11px; color: var(--text-dim); letter-spacing: 0.5px; }
+
+    .btn-google {
+      width: 100%; padding: 11px; background: transparent;
+      border: 1px solid rgba(255,255,255,0.14); border-radius: 8px;
+      color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-bottom: 24px;
+    }
+    .btn-google:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.22); }
+    .btn-google:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .google-icon {
+      width: 18px; height: 18px;
+      border: 1.5px solid var(--text-dim); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--text-dim); flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .bottom-link { text-align: center; font-size: 12.5px; color: var(--text-dim); }
+    .bottom-link a { color: var(--accent); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .bottom-link a:hover { color: #7bb3ff; text-decoration: underline; }
+
+    .bottom-bar { height: 2px; background: var(--green); width: 100%; position: fixed; bottom: 0; left: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar"></div>
+
+  <div class="page-body">
+    <div class="card">
+
+      <div class="brand-icon">≋</div>
+      <div class="card-title">Create Account</div>
+      <div class="card-sub">Register authority terminal for risk reporting</div>
+
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="field">
+          <label class="field-label" for="fullname">Full Name</label>
+          <input class="field-input" id="fullname" type="text" placeholder="e.g. Dr. Rajesh Kumar" autocomplete="name" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="email">Institutional Email</label>
+          <input class="field-input" id="email" type="email" placeholder="e.g. r.kumar@ndma.gov.in" autocomplete="email" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Password</label>
+          <input class="field-input" id="password" type="password" placeholder="••••••••" autocomplete="new-password" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="confirm">Confirm Password</label>
+          <input class="field-input" id="confirm" type="password" placeholder="••••••••" autocomplete="new-password" required />
+        </div>
+
+        <label class="agree-wrap">
+          <input type="checkbox" id="agree" required />
+          <span class="agree-label">I agree to Terms &amp; Conditions and data-governance standards</span>
+        </label>
+
+      </form>
+
+      <div class="or-divider">
+        <div class="or-line"></div>
+        <span class="or-text">OR</span>
+        <div class="or-line"></div>
+      </div>
+
+      <button type="button" class="btn-google" id="btnGoogle" onclick="handleGoogle()">
+        <span class="google-icon">G</span>
+        Continue with Google
+      </button>
+
+      <div class="bottom-link">
+        Already have an account? <a href="login.html">Sign In</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom-bar"></div>
+
+  <script src="assets/toast.js"></script>
+  <script>
+    const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:5000/api/auth' : '/api/auth';
+    let isSubmitting = false;
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      if (isSubmitting) return;
+
+      const name = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm').value;
+      const agree = document.getElementById('agree').checked;
+      const btn = document.getElementById('btnSignup');
+
+      // Validation
+      if (!name) {
+        showToast('Please enter your name.', 'error');
+        return;
+      }
+      if (!email) {
+        showToast('Please enter your email.', 'error');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('Please enter a valid email address.', 'error');
+        return;
+      }
+      if (!password) {
+        showToast('Please enter your password.', 'error');
+        return;
+      }
+      if (password.length < 8) {
+        showToast('Password must be at least 8 characters.', 'error');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showToast('Passwords do not match.', 'error');
+        return;
+      }
+      if (!agree) {
+        showToast('Please accept the Terms & Conditions to proceed.', 'error');
+        return;
+      }
+
+      isSubmitting = true;
+      btn.textContent = 'Creating account…';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch(`${API_BASE}/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            confirmPassword,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showToast('Account created successfully.', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html?signup=success';
+          }, 900);
+        } else {
+          showToast(data.message || 'Something went wrong. Please try again.', 'error');
+          btn.textContent = 'Create Account';
+          btn.disabled = false;
+          isSubmitting = false;
+        }
+      } catch (err) {
+        showToast('Unable to connect. Please try again.', 'error');
+        btn.textContent = 'Create Account';
+        btn.disabled = false;
+        isSubmitting = false;
+      }
+    }
+
+    function handleGoogle() {
+      const btnGoogle = document.getElementById('btnGoogle');
+      btnGoogle.disabled = true;
+      showToast('Redirecting to Google...', 'info');
+      setTimeout(() => {
+        window.location.href = `${API_BASE}/google`;
+      }, 500);
+    }
+  </script>
+</body>
+</html>
