@@ -19,10 +19,16 @@ export class AuthService {
     if (!this.googleClient) {
       const clientId = process.env.GOOGLE_CLIENT_ID;
       const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-      const redirectUri =
-        (process.env.GOOGLE_REDIRECT_URI && !process.env.GOOGLE_REDIRECT_URI.includes('your-vercel-backend-url'))
-          ? process.env.GOOGLE_REDIRECT_URI
-          : 'http://localhost:5000/api/auth/google/callback';
+      let redirectUri = process.env.GOOGLE_REDIRECT_URI;
+
+      if (!redirectUri || redirectUri.includes('your-vercel-backend-url') || redirectUri.includes('localhost')) {
+        if (process.env.VERCEL_URL || process.env.VERCEL) {
+          const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || 'flood-watch-india.vercel.app';
+          redirectUri = `https://${host}/api/auth/google/callback`;
+        } else {
+          redirectUri = 'http://localhost:5000/api/auth/google/callback';
+        }
+      }
 
       this.googleClient = new OAuth2Client(clientId, clientSecret, redirectUri);
     }
