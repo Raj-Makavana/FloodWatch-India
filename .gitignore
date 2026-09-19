@@ -1,38 +1,39 @@
-# Environment secret files
+# Environment secret files (Protected - NEVER commit to Git/GitHub)
 .env
 .env.local
 .env.*.local
 backend/.env
 frontend/.env
-# Root merged env (never commit!)
-.env
 
-# Python virtual environment
+# Dependencies & Build artifacts
+node_modules/
+dist/
+build/
+
+# Python Virtual Environment & Cache
 venv/
+.venv/
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_cache/
 
-# Dependencies and build outputs
-node_modules/
-backend/node_modules/
-frontend/node_modules/
-backend/dist/
-dist/
+# Large Datasets to be pushed to secondary repository
+data/divideddata/
+data/raw/
 
+# Temporary Scratch Scripts & Local Notes
+scratch/
+commands
+*.log
 
-# Data directories
-data/raw/*
+# Generated PDF Reports (Optional)
+*.pdf
 
-# IDE and Editor files
+# Operating System & IDE files
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
-# Incomplete downloads & large uncompressed shapefiles (>100MB)
 *.crdownload
 *.crdownload.part*
-scripts/fix_push.ps1
-data/raw/Reservoir.shp
-data/raw/Reservoir.dbf
-
-# Local run commands / notes
-commands

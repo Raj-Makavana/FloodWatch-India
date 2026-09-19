@@ -365,9 +365,69 @@
     .status-active { background: var(--green-dim); color: var(--green); }
     .status-deployed { background: var(--red-dim); color: var(--red); }
     .status-standby { background: var(--yellow-dim); color: var(--yellow); }
-    .relief-distance {
+    /* ── AI Flood Risk Predictor Widget ── */
+    .ai-predict-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .ai-field-group { margin-bottom: 8px; }
+    .ai-label {
+      display: block;
+      font-size: 10px;
       font-family: var(--mono);
-      font-size: 9px; color: var(--text-dim);
+      color: var(--text-dim);
+      margin-bottom: 3px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .ai-select, .ai-input {
+      width: 100%;
+      background: #0f0f0f;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ai-select:focus, .ai-input:focus {
+      border-color: var(--blue);
+    }
+    .ai-btn-predict {
+      width: 100%;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 10px rgba(37,99,235,0.3);
+      transition: all 0.2s;
+      margin-top: 10px;
+    }
+    .ai-btn-predict:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+    }
+    .ai-result-box {
+      margin-top: 12px;
+      padding: 10px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      animation: fadeInUp 0.3s ease-out;
     }
 
     /* ── Map Container ── */
@@ -571,25 +631,62 @@
       100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); }
     }
 
-    /* ── Responsive ── */
+    /* ── Responsive Mobile Enhancements ── */
+    .mobile-dash-tab-bar {
+      display: none;
+      background: rgba(7, 8, 13, 0.98);
+      border-bottom: 1px solid var(--border);
+      padding: 6px;
+      gap: 6px;
+      position: sticky;
+      top: var(--header-h);
+      z-index: 1005;
+    }
+    .mobile-dash-tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .mobile-dash-tab-btn.active {
+      background: linear-gradient(135deg, rgba(37,99,235,0.3), rgba(30,58,138,0.4));
+      border-color: var(--blue);
+      color: #fff;
+    }
+
     @media (max-width: 768px) {
+      .mobile-dash-tab-bar { display: flex; }
       .dashboard-wrapper {
         flex-direction: column;
-        height: auto;
-        overflow-y: auto;
+        height: calc(100vh - var(--header-h) - var(--status-h) - 44px);
+        overflow: hidden;
       }
       .sidebar {
         width: 100%;
+        height: 100%;
         max-height: none;
         border-right: none;
-        border-bottom: 1px solid var(--border);
-        order: 2;
+        display: none;
+        overflow-y: auto;
+      }
+      .sidebar.active-mobile-tab {
+        display: block;
       }
       .map-container {
-        height: 55vh;
-        order: 1;
+        width: 100%;
+        height: 100%;
+        display: none;
       }
-      html, body { overflow: auto; }
+      .map-container.active-mobile-tab {
+        display: block;
+      }
       .map-legend { bottom: 8px; padding: 8px 14px; }
       .legend-items { gap: 12px; }
     }
@@ -598,6 +695,12 @@
 <body>
 
   <div class="risk-bar"></div>
+
+  <!-- Mobile Tab Switcher Bar -->
+  <div class="mobile-dash-tab-bar" id="mobileDashTabBar">
+    <button class="mobile-dash-tab-btn active" id="btnDashMap" onclick="switchDashMobileTab('map')">🗺️ Live Map</button>
+    <button class="mobile-dash-tab-btn" id="btnDashOps" onclick="switchDashMobileTab('ops')">🎛️ Operations & AI</button>
+  </div>
 
   <!-- ── Header Nav ── -->
   <nav class="header-nav">
@@ -640,6 +743,65 @@
         </div>
       </div>
 
+      <!-- AI Flood Risk Predictor -->
+      <div class="sidebar-card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-header-icon">🤖</span>
+            <span class="card-header-title">AI Flood Risk Predictor</span>
+          </div>
+          <span class="card-header-badge" style="background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(59,130,246,0.3);">ML v1.0</span>
+        </div>
+        <div class="card-body" style="padding: 10px;">
+          <div class="ai-field-group">
+            <label class="ai-label">State / UT</label>
+            <select id="stateSelect" class="ai-select" onchange="onStateChange()">
+              <option value="">-- Loading States --</option>
+            </select>
+          </div>
+          <div class="ai-field-group">
+            <label class="ai-label">District</label>
+            <select id="districtSelect" class="ai-select" onchange="onDistrictChange()">
+              <option value="">-- Select State First --</option>
+            </select>
+          </div>
+
+          <!-- Live Weather & Flood Telemetry Preview (Open-Meteo & GloFAS) -->
+          <div id="liveTelemetryPreview" style="display:none; background: rgba(15,23,42,0.7); border: 1px solid rgba(56,189,248,0.25); border-radius: 6px; padding: 9px; margin-bottom: 8px; font-size: 10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+              <span style="color: var(--blue); font-weight: 700; display: flex; align-items: center; gap: 5px;">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981; box-shadow: 0 0 6px #10b981;"></span>
+                Open-Meteo & GloFAS Live
+              </span>
+              <span id="liveImdBadge" style="font-size: 8.5px; font-weight: 700; padding: 2px 6px; border-radius: 4px; background: #16a34a; color: #fff;">GREEN SAFE</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; color: var(--text-dim);">
+              <div>🌧️ 24h Rain: <b id="liveRainVal" style="color: #38bdf8;">-- mm</b></div>
+              <div>🌡️ Temp: <b id="liveTempVal" style="color: #f1f5f9;">--°C</b></div>
+              <div>🌱 Soil Moisture: <b id="liveSoilVal" style="color: #f1f5f9;">--</b></div>
+              <div>🌊 River Flow: <b id="liveRiverVal" style="color: #38bdf8;">-- m³/s</b></div>
+            </div>
+            <div id="liveDamVal" style="margin-top: 5px; font-size: 9px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 4px;">
+              🏛️ CWC Dam Storage: --
+            </div>
+          </div>
+
+          <div class="ai-field-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+              <label class="ai-label" style="margin-bottom:0;">24h Rainfall (mm)</label>
+              <button type="button" onclick="syncLiveRainfall()" style="background:none; border:none; color:var(--blue); font-size:9.5px; cursor:pointer; text-decoration:underline;">
+                🔄 Auto-Fill Live Rain
+              </button>
+            </div>
+            <input type="number" id="rainfallInput" class="ai-input" placeholder="Auto-fetched from Open-Meteo" value="0.0" min="0" step="0.1" />
+          </div>
+          <button class="ai-btn-predict" onclick="checkFloodRisk()">
+            <span>⚡</span> Assess Live Flood Risk (AI Inference)
+          </button>
+          <div id="riskResultCard" style="display: none;"></div>
+        </div>
+      </div>
+
       <!-- Live Flood Alerts -->
       <div class="sidebar-card">
         <div class="card-header">
@@ -654,12 +816,45 @@
         </div>
       </div>
 
-      <!-- Historical Flood Events -->
+      <!-- Historical State-Wise Flood Data Table (Neon PostgreSQL DB) -->
+      <div class="sidebar-card">
+        <div class="card-header">
+          <div class="card-header-left">
+            <span class="card-header-icon">📜</span>
+            <span class="card-header-title">Historical Flood Database (Neon DB)</span>
+          </div>
+          <span class="card-header-badge" style="background: rgba(16,185,129,0.2); color: #10b981;">6,879 Events</span>
+        </div>
+        <div class="card-body" style="padding: 8px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+            <span style="font-size: 9.5px; color: #94a3b8;">State-wise records from Neon PostgreSQL DB:</span>
+            <span id="historicalDbStatus" style="font-size: 8.5px; color: #10b981; font-weight:700;">🟢 Neon Connected</span>
+          </div>
+          <div style="max-height: 190px; overflow-y: auto; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,0.3);">
+            <table style="width: 100%; border-collapse: collapse; font-size: 9px; text-align: left; color: var(--text);">
+              <thead style="background: rgba(15,23,42,0.9); position: sticky; top: 0; color: var(--blue); border-bottom: 1px solid var(--border);">
+                <tr>
+                  <th style="padding: 4px 6px;">Year</th>
+                  <th style="padding: 4px 6px;">State</th>
+                  <th style="padding: 4px 6px;">Districts</th>
+                  <th style="padding: 4px 6px;">Main Cause</th>
+                  <th style="padding: 4px 6px; text-align:right;">Fatalities</th>
+                </tr>
+              </thead>
+              <tbody id="historicalTableBody">
+                <tr><td colspan="5" style="padding: 10px; text-align: center; color: #64748b;">Loading Neon DB data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historical Flood Events Chart -->
       <div class="sidebar-card">
         <div class="card-header">
           <div class="card-header-left">
             <span class="card-header-icon">📊</span>
-            <span class="card-header-title">Flood Events (2018–2024)</span>
+            <span class="card-header-title">Flood Frequency & Trend</span>
           </div>
         </div>
         <div class="card-body">
@@ -1011,6 +1206,31 @@
     }
 
     /* ══════════════════════════════════════════
+       Mobile Tab Switcher
+    ══════════════════════════════════════════ */
+    function switchDashMobileTab(tab) {
+      const btnMap = document.getElementById("btnDashMap");
+      const btnOps = document.getElementById("btnDashOps");
+      const sidebar = document.querySelector(".sidebar");
+      const mapContainer = document.querySelector(".map-container");
+
+      if (!sidebar || !mapContainer) return;
+
+      if (tab === 'map') {
+        if (btnMap) btnMap.classList.add("active");
+        if (btnOps) btnOps.classList.remove("active");
+        mapContainer.classList.add("active-mobile-tab");
+        sidebar.classList.remove("active-mobile-tab");
+        if (map) setTimeout(() => map.invalidateSize(), 150);
+      } else {
+        if (btnOps) btnOps.classList.add("active");
+        if (btnMap) btnMap.classList.remove("active");
+        sidebar.classList.add("active-mobile-tab");
+        mapContainer.classList.remove("active-mobile-tab");
+      }
+    }
+
+    /* ══════════════════════════════════════════
        Init
     ══════════════════════════════════════════ */
     document.addEventListener('DOMContentLoaded', () => {
@@ -1019,6 +1239,11 @@
       renderAlerts();
       renderChart();
       loadReliefWithGeolocation();
+
+      // Mobile Initial Tab
+      if (window.innerWidth <= 768) {
+        switchDashMobileTab('map');
+      }
 
       // Animate stat counters
       setTimeout(() => {
@@ -1030,7 +1255,312 @@
       // Live clock
       updateClock();
       setInterval(updateClock, 1000);
+
+      // Load AI Model States dropdown & Neon DB Historical Table
+      loadStates();
+      fetchHistoricalEventsTable('');
     });
+
+    /* ══════════════════════════════════════════
+       AI Flood Prediction API Integration (Live Telemetry)
+    ══════════════════════════════════════════ */
+    const ML_API_BASE = "http://127.0.0.1:8000";
+    let currentLiveTelemetry = null;
+
+    async function fetchHistoricalEventsTable(state = '') {
+      const tbody = document.getElementById("historicalTableBody");
+      if (!tbody) return;
+      try {
+        let url = '/api/historical-floods?limit=30';
+        if (state && state.trim() !== '') {
+          url += `&state=${encodeURIComponent(state.trim())}`;
+        }
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Neon DB fetch error");
+        const json = await res.json();
+        const records = json.data || [];
+
+        if (records.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="padding:8px; text-align:center; color:#94a3b8;">No historical events recorded for ${state}.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = records.map(r => `
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+            <td style="padding: 4px 6px; font-weight: 700; color: var(--blue);">${r.year || 2024}</td>
+            <td style="padding: 4px 6px; color: #fff;">${r.state}</td>
+            <td style="padding: 4px 6px; color: #94a3b8; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${r.districts}">${r.districts || 'Statewide'}</td>
+            <td style="padding: 4px 6px; color: #cbd5e1; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${r.main_cause}">${r.main_cause || 'Heavy Rain'}</td>
+            <td style="padding: 4px 6px; text-align: right; color: ${r.human_fatality > 10 ? '#ef4444' : '#facc15'}; font-weight:700;">${r.human_fatality || 0}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.warn("Neon DB table fetch error:", err.message);
+        tbody.innerHTML = `<tr><td colspan="5" style="padding:8px; text-align:center; color:#ef4444;">⚠️ Neon DB Standby</td></tr>`;
+      }
+    }
+
+    async function loadStates() {
+      try {
+        const res = await fetch(`${ML_API_BASE}/states`);
+        if (!res.ok) throw new Error("Backend offline");
+        const data = await res.json();
+        const stateSelect = document.getElementById("stateSelect");
+        if (!stateSelect) return;
+        
+        stateSelect.innerHTML = '<option value="">-- Select State --</option>';
+        data.states.forEach(st => {
+          const opt = document.createElement("option");
+          opt.value = st;
+          opt.textContent = st;
+          stateSelect.appendChild(opt);
+        });
+      } catch (err) {
+        console.warn("ML API not connected:", err.message);
+        const stateSelect = document.getElementById("stateSelect");
+        if (stateSelect) {
+          stateSelect.innerHTML = '<option value="Gujarat">Gujarat (Offline Demo)</option><option value="Bihar">Bihar (Offline Demo)</option><option value="Assam">Assam (Offline Demo)</option>';
+        }
+      }
+    }
+
+    async function onStateChange() {
+      const selectedState = document.getElementById("stateSelect").value;
+      const districtSelect = document.getElementById("districtSelect");
+      if (!districtSelect) return;
+      districtSelect.innerHTML = '<option value="">-- Select District --</option>';
+      if (!selectedState) {
+        document.getElementById("liveTelemetryPreview").style.display = "none";
+        fetchHistoricalEventsTable('');
+        return;
+      }
+
+      // Filter Neon DB historical table by selected state
+      fetchHistoricalEventsTable(selectedState);
+
+      try {
+        const res = await fetch(`${ML_API_BASE}/districts/${encodeURIComponent(selectedState)}`);
+        if (!res.ok) throw new Error("Districts fetch error");
+        const data = await res.json();
+        data.districts.forEach(dist => {
+          const opt = document.createElement("option");
+          opt.value = dist;
+          opt.textContent = dist;
+          districtSelect.appendChild(opt);
+        });
+      } catch (err) {
+        districtSelect.innerHTML = '<option value="All Districts">All Districts / State Level</option>';
+      }
+
+      // Fetch live telemetry for selected state
+      fetchDistrictLiveTelemetry(selectedState, null);
+    }
+
+    async function onDistrictChange() {
+      const state = document.getElementById("stateSelect").value;
+      const district = document.getElementById("districtSelect").value;
+      if (state) {
+        fetchDistrictLiveTelemetry(state, district);
+      }
+    }
+
+    async function fetchDistrictLiveTelemetry(state, district) {
+      const previewPill = document.getElementById("liveTelemetryPreview");
+      if (!previewPill) return;
+
+      previewPill.style.display = "block";
+      document.getElementById("liveRainVal").textContent = "Loading...";
+      document.getElementById("liveTempVal").textContent = "--";
+      document.getElementById("liveSoilVal").textContent = "--";
+      document.getElementById("liveRiverVal").textContent = "--";
+
+      try {
+        let url = `${ML_API_BASE}/live-weather/${encodeURIComponent(state)}`;
+        if (district && district !== "All Districts") {
+          url += `?district=${encodeURIComponent(district)}`;
+        }
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Telemetry offline");
+        const data = await res.json();
+        currentLiveTelemetry = data;
+
+        const w = data.live_weather || {};
+        const r = data.river_telemetry || {};
+        const imd = data.imd_alert || {};
+        const dam = data.dam_telemetry || {};
+
+        document.getElementById("liveRainVal").textContent = `${w.rainfall_24h_mm || 0} mm`;
+        document.getElementById("liveTempVal").textContent = `${w.temperature_c || 28}°C`;
+        document.getElementById("liveSoilVal").textContent = `${w.soil_moisture || 0.3}`;
+        document.getElementById("liveRiverVal").textContent = r.discharge_m3s !== null ? `${r.discharge_m3s} m³/s` : "N/A";
+
+        // IMD Alert Badge
+        const imdBadge = document.getElementById("liveImdBadge");
+        if (imdBadge) {
+          imdBadge.textContent = imd.level || "GREEN SAFE";
+          imdBadge.style.background = imd.color || "#16a34a";
+        }
+
+        // CWC Dam Info
+        const damPill = document.getElementById("liveDamVal");
+        if (damPill) {
+          const damCount = dam.total_dams_in_zone || 0;
+          const cap = dam.total_storage_capacity_mcm || 0;
+          const topDamName = (dam.major_dams && dam.major_dams.length > 0) ? dam.major_dams[0].dam_name : "Local Reservoirs";
+          damPill.innerHTML = `🏛️ CWC Dams: <b>${damCount} dams</b> (${cap.toLocaleString()} MCM capacity) | Key: <i>${topDamName}</i>`;
+        }
+
+        // Auto fill rainfall input with real-time 24h rain
+        const rainInput = document.getElementById("rainfallInput");
+        if (rainInput) {
+          rainInput.value = w.rainfall_24h_mm || 0.0;
+        }
+
+        // Fly map to coordinates if map exists
+        if (typeof map !== 'undefined' && map && data.coordinates) {
+          map.flyTo([data.coordinates.latitude, data.coordinates.longitude], 8, { duration: 1.2 });
+        }
+      } catch (err) {
+        console.warn("Live telemetry fetch fallback:", err.message);
+        document.getElementById("liveRainVal").textContent = "API Standby";
+      }
+    }
+
+    function syncLiveRainfall() {
+      if (currentLiveTelemetry && currentLiveTelemetry.live_weather) {
+        document.getElementById("rainfallInput").value = currentLiveTelemetry.live_weather.rainfall_24h_mm || 0.0;
+        if (typeof showToast === 'function') showToast("Synced live 24-hour Open-Meteo rainfall!", "info");
+      } else {
+        const state = document.getElementById("stateSelect").value;
+        const district = document.getElementById("districtSelect").value;
+        if (state) fetchDistrictLiveTelemetry(state, district);
+      }
+    }
+
+    async function checkFloodRisk() {
+      const state = document.getElementById("stateSelect").value;
+      const district = document.getElementById("districtSelect").value;
+      const rainfall = parseFloat(document.getElementById("rainfallInput").value) || 0.0;
+      const resultCard = document.getElementById("riskResultCard");
+
+      if (!state) {
+        if (typeof showToast === 'function') showToast("Please select a state first!", "warning");
+        else alert("Please select a state first!");
+        return;
+      }
+
+      resultCard.style.display = "block";
+      resultCard.innerHTML = `<div class="ai-result-box" style="text-align: center; color: var(--blue);">
+        <span style="display:inline-block; animation: pulse 1s infinite;">🔄</span> Querying Open-Meteo Weather, GloFAS River Flow & ML Model...
+      </div>`;
+
+      try {
+        const response = await fetch(`${ML_API_BASE}/predict-flood`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            state: state,
+            district: district || null,
+            rainfall_24h_mm: rainfall
+          })
+        });
+
+        if (!response.ok) throw new Error("API status " + response.status);
+        const data = await response.json();
+        const pred = data.prediction;
+        const w = data.live_weather || {};
+        const r = data.river_telemetry || {};
+        const imd = data.imd_alert || {};
+        const dam = data.dam_telemetry || {};
+        const q = data.query || {};
+
+        resultCard.innerHTML = `
+          <div class="ai-result-box" style="border-left: 4px solid ${pred.color_code}; background: rgba(10,15,28,0.95);">
+            
+            <!-- Location & IMD Warning Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 12px; font-weight: 800; color: #fff;">${q.district || 'State Level'}, ${q.state}</div>
+                <div style="font-size: 9px; color: #64748b; font-family: monospace;">
+                  📍 ${q.coordinates ? `${q.coordinates.latitude.toFixed(2)}°N, ${q.coordinates.longitude.toFixed(2)}°E` : ''}
+                </div>
+              </div>
+              <span style="background: ${imd.color || pred.color_code}; color: #fff; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 10px; letter-spacing:0.5px;">
+                ${imd.level || pred.alert_level}
+              </span>
+            </div>
+
+            <!-- Risk Gauge & Probability -->
+            <div style="background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 10px; color: #94a3b8;">Gradient Boosting Flood Risk:</span>
+                <b style="font-size: 14px; color: ${pred.color_code};">${pred.flood_risk_probability}</b>
+              </div>
+              <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-top: 5px; overflow: hidden;">
+                <div style="width: ${pred.risk_probability_raw * 100}%; height: 100%; background: ${pred.color_code}; transition: width 0.6s ease;"></div>
+              </div>
+              <div style="font-size: 10px; font-weight: 700; color: ${pred.color_code}; margin-top: 4px;">
+                Category: ${pred.risk_category}
+              </div>
+            </div>
+
+            <!-- Real-Time Telemetry Grid (Open-Meteo & GloFAS) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 9.5px; margin-bottom: 8px;">
+              <div style="background: rgba(15,23,42,0.6); padding: 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.15);">
+                <div style="color: #64748b;">🌧️ Open-Meteo Rain</div>
+                <b style="color: #38bdf8;">${w.accumulated_24h_rainfall_mm || 0} mm (24h)</b>
+              </div>
+              <div style="background: rgba(15,23,42,0.6); padding: 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.15);">
+                <div style="color: #64748b;">🌊 GloFAS River Flow</div>
+                <b style="color: #38bdf8;">${r.discharge_m3s !== null ? `${r.discharge_m3s} m³/s` : 'Normal Flow'}</b>
+              </div>
+              <div style="background: rgba(15,23,42,0.6); padding: 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.15);">
+                <div style="color: #64748b;">🌡️ Ambient Temp</div>
+                <b style="color: #f1f5f9;">${w.temperature_c || 28}°C (${w.weather_description || 'Clear'})</b>
+              </div>
+              <div style="background: rgba(15,23,42,0.6); padding: 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.15);">
+                <div style="color: #64748b;">🌱 Topsoil Moisture</div>
+                <b style="color: #f1f5f9;">${w.soil_moisture || 0.3} m³/m³</b>
+              </div>
+            </div>
+
+            <!-- IMD Advisory Banner -->
+            <div style="background: rgba(239,68,68,0.1); border-left: 3px solid ${imd.color || pred.color_code}; padding: 6px 8px; border-radius: 4px; font-size: 9.5px; color: #e2e8f0; margin-bottom: 8px;">
+              <b>⚡ IMD Advisory:</b> ${imd.advisory || pred.action_guidance}
+            </div>
+
+            <!-- CWC Dam Telemetry -->
+            ${dam.total_dams_in_zone ? `
+              <div style="font-size: 9px; color: #94a3b8; margin-bottom: 6px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 4px;">
+                🏛️ <b>India-WRIS Dam Telemetry:</b> ${dam.total_dams_in_zone} registered dams (${dam.total_storage_capacity_mcm} MCM storage).
+                ${dam.major_dams && dam.major_dams.length ? `<br/>Primary Basin: <i>${dam.major_dams[0].dam_name} (${dam.major_dams[0].river})</i>` : ''}
+              </div>
+            ` : ''}
+
+            <!-- Drivers & Guidance -->
+            <div style="font-size: 9px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px;">
+              <b>Risk Drivers:</b> ${pred.key_risk_drivers.join(", ")}
+            </div>
+          </div>
+        `;
+
+        // Fly map to selected coordinates
+        if (typeof map !== 'undefined' && map && q.coordinates) {
+          map.flyTo([q.coordinates.latitude, q.coordinates.longitude], 9, { duration: 1.5 });
+        }
+
+        if (typeof showToast === 'function') {
+          showToast(`Live ML inference generated for ${q.district || q.state}: ${pred.risk_category}`, 'info');
+        }
+      } catch (err) {
+        resultCard.innerHTML = `
+          <div class="ai-result-box" style="border-left: 4px solid var(--red); color: var(--red); font-size: 10.5px;">
+            ⚠️ <b>FastAPI Server Offline</b><br/>
+            Please run in terminal: <code>python -m uvicorn app:app --port 8000</code>
+          </div>
+        `;
+      }
+    }
   </script>
 </body>
 </html>

@@ -71,6 +71,52 @@ app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'ok', service: 'floodwatch-auth-api' });
 });
 
+// Neon DB Historical Floods endpoint for Dashboard Table
+app.get('/api/historical-floods', async (req: Request, res: Response) => {
+  try {
+    const { state, limit } = req.query;
+    let sql = 'SELECT id, uei, state, districts, start_date, end_date, duration_days, main_cause, human_fatality, human_injured, human_displaced, extent_of_damage, event_source, year FROM historical_flood_events';
+    const params: any[] = [];
+    if (state && typeof state === 'string' && state.trim() !== '') {
+      sql += ' WHERE LOWER(state) LIKE LOWER($1)';
+      params.push(`%${state.trim()}%`);
+    }
+    sql += ' ORDER BY year DESC, id DESC LIMIT ' + Math.min(parseInt(limit as string) || 100, 200);
+    const { db } = await import('./config/db');
+    const result = await db.query(sql, params);
+    res.json({
+      success: true,
+      total: result.rows.length,
+      data: result.rows
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message || 'Database query failed' });
+  }
+});
+
+// Neon DB District Metrics endpoint
+app.get('/api/district-metrics', async (req: Request, res: Response) => {
+  try {
+    const { state } = req.query;
+    let sql = 'SELECT id, district_name, state_name, dfsi, percent_flooded_area, human_fatality, population, total_dams_count, total_gross_storage_capacity_mcm, flood_risk_category, flood_severity_score_100 FROM district_flood_metrics';
+    const params: any[] = [];
+    if (state && typeof state === 'string' && state.trim() !== '') {
+      sql += ' WHERE LOWER(state_name) = LOWER($1)';
+      params.push(state.trim());
+    }
+    sql += ' ORDER BY flood_severity_score_100 DESC LIMIT 100';
+    const { db } = await import('./config/db');
+    const result = await db.query(sql, params);
+    res.json({
+      success: true,
+      total: result.rows.length,
+      data: result.rows
+    });
+  } catch (err: any) {
+    res.status(500).json({ success: false, message: err.message || 'Database query failed' });
+  }
+});
+
 // Authentication routes
 app.use('/api/auth', authRoutes);
 

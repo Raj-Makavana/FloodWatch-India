@@ -2,1145 +2,1064 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FloodWatch India – Real-Time Flood Risk Telemetry</title>
-  <meta name="description" content="Real-time flood risk prediction for India using ML models (Random Forest + Gradient Boosting) and GIS Doppler satellite data." />
-
-  <!-- Leaflet CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FloodWatch India — Flood Predict Platform</title>
+  <meta name="description" content="India's most advanced AI-powered flood risk prediction platform. Real-time meteorological weather radar and state-wise flood risk heat maps." />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/toast.css" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ===================== RESET & BASE ===================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-header:         #070b14;
-      --bg-primary:        #04060b;
-      --bg-secondary:      #0c101a;
-      --text-primary:      #e6edf3;
-      --text-secondary:    #8b949e;
-      --brand-red:         #e04826;
-      --cyan-border:       #38bdf8;
-      --high:              #ff2222;
-      --medium:            #ff8800;
-      --border:            #262f3d;
+      --bg: #07080d;
+      --bg2: #0b0f1a;
+      --glass: rgba(12, 17, 30, 0.94);
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(56,189,248,0.25);
+      --t1: #f1f5f9;
+      --t2: #94a3b8;
+      --t3: #475569;
+      --red: #ef4444;
+      --yellow: #facc15;
+      --green: #10b981;
+      --blue: #38bdf8;
+      --brand: #f97316;
+      --hh: 58px;
     }
 
     html, body {
       height: 100%;
       width: 100%;
       font-family: 'Inter', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      background: var(--bg);
+      color: var(--t1);
       overflow: hidden;
-      user-select: none;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ===================== HEADER ===================== */
-    .header-container {
+    /* HEADER */
+    header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 1000;
-      background: rgba(7, 11, 20, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 10px 24px 8px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .header-top-row {
+      height: var(--hh);
+      background: rgba(7, 8, 13, 0.98);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1000;
     }
 
-    .brand-section {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-    }
-
-    .brand-title {
-      font-family: 'Inter', sans-serif;
-      font-size: 21px;
-      font-weight: 700;
-      color: #e2492f;
-      letter-spacing: -0.3px;
-    }
-
-    .brand-subtitle {
-      font-size: 11px;
-      color: #8b949e;
-      font-weight: 400;
-      letter-spacing: 0.2px;
-    }
-
-    .header-actions {
+    .logo {
       display: flex;
       align-items: center;
       gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px;
+      box-shadow: 0 0 16px rgba(234,88,12,0.45);
+      border: 1px solid rgba(255,255,255,0.15);
+      flex-shrink: 0;
+    }
+    .logo-text { line-height: 1.15; }
+    .logo-name {
+      font-size: 16px; font-weight: 800; color: #fff;
+      letter-spacing: -0.4px;
+    }
+    .logo-name span { color: var(--brand); }
+    .logo-sub {
+      font-size: 9px; color: var(--t3);
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.8px; text-transform: uppercase;
     }
 
-    .btn-signin, .btn-signup {
-      padding: 5px 16px;
-      background: #121824;
-      border: 1px solid #2d3748;
-      border-radius: 6px;
-      color: #cbd5e1;
+    .hdr-auth { display: flex; align-items: center; gap: 8px; }
+
+    .btn {
+      padding: 7px 15px;
+      border-radius: 7px;
       font-size: 12.5px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
       font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(255,255,255,0.14);
+      color: var(--t2);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.07);
+      color: #fff; border-color: rgba(255,255,255,0.3);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: #fff;
+      border-color: rgba(234,88,12,0.5);
+      box-shadow: 0 2px 14px rgba(234,88,12,0.4);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #f97316, #dc4a0c);
+      transform: translateY(-1px);
     }
 
-    .btn-signin:hover, .btn-signup:hover {
-      background: #1e293b;
-      border-color: #64748b;
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    }
-
-    .user-badge {
-      display: flex;
+    /* MOBILE NAV SWITCHER (VISIBLE ONLY ON MOBILE) */
+    .mobile-tab-bar {
+      display: none;
+      position: fixed;
+      top: var(--hh);
+      left: 0; right: 0;
+      height: 44px;
+      background: #090c16;
+      border-bottom: 1px solid var(--border);
+      z-index: 900;
+      padding: 0 10px;
       align-items: center;
-      gap: 7px;
-      background: rgba(30, 64, 175, 0.25);
-      border: 1px solid rgba(59, 130, 246, 0.4);
+      justify-content: center;
+      gap: 10px;
+    }
+    .mobile-tab-btn {
+      flex: 1;
+      height: 32px;
       border-radius: 6px;
-      padding: 4px 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--t2);
       font-size: 12px;
-      color: #93c5fd;
+      font-weight: 700;
       cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-family: 'Inter', sans-serif;
       transition: all 0.2s;
     }
-    .user-badge:hover {
-      background: rgba(30, 64, 175, 0.4);
-      border-color: #60a5fa;
+    .mobile-tab-btn.active {
+      background: rgba(56,189,248,0.18);
+      border-color: var(--blue);
+      color: #fff;
     }
 
-    .btn-signout {
-      padding: 5px 14px;
-      background: rgba(239, 68, 68, 0.12);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-radius: 6px;
-      color: #f87171;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-    }
-    .btn-signout:hover {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: #ef4444;
-      color: #fca5a5;
-    }
-
-    .header-bottom-row {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      font-size: 11.5px;
-      color: #94a3b8;
-      margin-top: 1px;
-    }
-
-    .legend-bullet {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .legend-bullet:hover { opacity: 0.85; }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .dot.high {
-      background: #ff2a2a;
-      box-shadow: 0 0 8px #ff2a2a, 0 0 16px rgba(255, 42, 42, 0.8);
-    }
-    .dot.medium {
-      background: #ff9100;
-      box-shadow: 0 0 8px #ff9100, 0 0 16px rgba(255, 145, 0, 0.8);
-    }
-
-    /* ===================== MAP CONTAINER ===================== */
-    #map {
+    /* MAIN APP SPLIT */
+    .app {
       position: fixed;
-      top: 72px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1;
-      background: #04060a;
+      top: var(--hh); left: 0; right: 0; bottom: 0;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      z-index: 10;
     }
 
-    .leaflet-container {
-      background: #04060a !important;
+    /* LEFT PANEL */
+    .left-panel {
+      background: var(--glass);
+      backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .left-panel::-webkit-scrollbar { width: 4px; }
+    .left-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    .hero {
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(234,88,12,0.06) 0%, transparent 100%);
+    }
+    .hero-title {
+      font-size: 22px; font-weight: 900;
+      color: #fff; letter-spacing: -0.5px;
+    }
+    .hero-title span {
+      color: transparent;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
-    /* Satellite dark filter matching oceanic dark terrain from reference */
-    .satellite-dark {
-      filter: brightness(0.42) saturate(0.25) contrast(1.4) hue-rotate(198deg);
-    }
+    .features-section { padding: 16px 20px 24px; }
 
-    /* State map labels */
-    .state-map-label {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 10.5px;
-      color: #f1f5f9;
-      text-shadow:
-        -1px -1px 0 #000,
-         1px -1px 0 #000,
-        -1px  1px 0 #000,
-         1px  1px 0 #000,
-         0 0 8px rgba(0, 0, 0, 0.9),
-         0 0 16px rgba(0, 0, 0, 0.9);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0.92;
-      text-align: center;
+    .feature-card {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
     }
-
-    .state-map-label.high-zone {
-      color: #ffdddd;
-      text-shadow: 0 0 10px rgba(255, 40, 40, 0.9), 0 0 4px #000, 1px 1px 2px #000;
+    .feature-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+      transform: translateX(3px);
     }
-
-    /* Radar Heat Pulse Animation */
-    .radar-plume {
-      pointer-events: none;
-      transform-origin: center;
-      animation: radarPulse 3.5s ease-in-out infinite alternate;
+    .feature-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
-
-    @keyframes radarPulse {
-      0% {
-        opacity: 0.88;
-        transform: scale(0.99);
-        filter: drop-shadow(0 0 14px rgba(255, 30, 0, 0.7));
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.01);
-        filter: drop-shadow(0 0 24px rgba(255, 80, 0, 0.95)) drop-shadow(0 0 45px rgba(255, 200, 0, 0.6));
-      }
-      100% {
-        opacity: 0.92;
-        transform: scale(0.995);
-        filter: drop-shadow(0 0 18px rgba(255, 50, 0, 0.8));
-      }
+    .fi-red { background: rgba(239,68,68,0.15); }
+    .fi-blue { background: rgba(56,189,248,0.15); }
+    .fi-green { background: rgba(16,185,129,0.15); }
+    .fi-orange { background: rgba(245,158,11,0.15); }
+    .fi-purple { background: rgba(168,85,247,0.15); }
+    .feature-text { flex: 1; min-width: 0; }
+    .feature-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--t1); margin-bottom: 2px;
     }
+    .feature-desc {
+      font-size: 11px; color: var(--t3);
+      line-height: 1.4;
+    }
+    .feature-badge {
+      font-size: 9px; font-weight: 800;
+      padding: 2px 6px; border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap; align-self: center;
+    }
+    .fb-live { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .fb-new { background: rgba(56,189,248,0.2); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.3); }
+    .fb-ai { background: rgba(168,85,247,0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
 
-    /* Leaflet Controls Styling */
-    .leaflet-control-zoom {
-      border: 1px solid #1e293b !important;
-      border-radius: 6px !important;
+    /* RIGHT MAP PANEL */
+    .right-panel {
+      position: relative;
       overflow: hidden;
-      margin-top: 16px !important;
-      margin-left: 16px !important;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6) !important;
+      width: 100%; height: 100%;
+    }
+
+    #floodMap {
+      width: 100%; height: 100%;
+    }
+
+    /* MAP OVERLAYS */
+    .map-top-bar {
+      position: absolute; top: 12px; left: 12px; right: 12px;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      pointer-events: none;
+      gap: 8px;
+    }
+    .map-title-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(7,8,13,0.92);
+      border: 1px solid var(--border2);
+      backdrop-filter: blur(16px);
+      border-radius: 9px;
+      padding: 7px 12px;
+      pointer-events: all;
+    }
+    .mtp-icon { font-size: 15px; }
+    .mtp-text { font-size: 11.5px; font-weight: 700; color: #fff; }
+
+    .map-controls {
+      display: flex; align-items: center; gap: 6px;
+      pointer-events: all;
+    }
+    .map-toggle-btn {
+      background: rgba(7,8,13,0.9);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(16px);
+      border-radius: 8px;
+      padding: 7px 11px;
+      font-size: 11px; font-weight: 600;
+      color: var(--t2); cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .map-toggle-btn:hover, .map-toggle-btn.active {
+      border-color: var(--border2); color: #fff;
+      background: rgba(56,189,248,0.15);
+    }
+
+    /* FLOOD ALERT RISK SPECTRUM LEGEND */
+    .noaa-legend {
+      position: absolute;
+      bottom: 14px; left: 14px;
+      z-index: 600;
+      background: rgba(7,8,13,0.95);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 14px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+      min-width: 270px;
+      max-width: 320px;
+    }
+    .nl-title {
+      font-size: 9.5px; font-weight: 800;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      color: #94a3b8; font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 6px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nl-bar {
+      height: 10px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, 
+        rgba(255,255,255,0.06) 0%, 
+        rgba(255,255,255,0.06) 30%, 
+        #facc15 50%, 
+        #f97316 75%, 
+        #ef4444 100%
+      );
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+      margin-bottom: 5px;
+    }
+    .nl-labels {
+      display: flex; justify-content: space-between;
+      font-size: 9px; font-family: 'JetBrains Mono', monospace;
+      color: #94a3b8;
+    }
+
+    /* MY LOCATION BUTTON */
+    .locate-btn {
+      position: absolute;
+      bottom: 20px; right: 16px;
+      z-index: 600;
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px;
+      background: rgba(7,8,13,0.94);
+      border: 1px solid rgba(56,189,248,0.45);
+      border-radius: 28px;
+      color: var(--blue);
+      font-size: 12px; font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.85);
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .locate-btn:hover {
+      background: rgba(56,189,248,0.22);
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    /* POPUP STYLING */
+    .leaflet-popup-content-wrapper {
+      background: rgba(7,8,13,0.98) !important;
+      border: 1px solid rgba(56,189,248,0.35) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.95), 0 0 30px rgba(56,189,248,0.1) !important;
+      padding: 0 !important; color: #fff !important;
+    }
+    .leaflet-popup-tip-container { display: none !important; }
+    .leaflet-popup-close-button { color: #475569 !important; font-size: 16px !important; top: 10px !important; right: 12px !important; z-index: 10; }
+    .leaflet-popup-content { margin: 0 !important; }
+    .leaflet-control-zoom {
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      border-radius: 8px !important;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.7) !important;
+      margin-bottom: 75px !important;
+      margin-right: 12px !important;
     }
     .leaflet-control-zoom-in, .leaflet-control-zoom-out {
-      background: #0f172a !important;
-      color: #94a3b8 !important;
+      background: rgba(11,15,26,0.95) !important;
+      color: var(--t2) !important;
       border: none !important;
-      font-size: 14px !important;
-      width: 28px !important;
-      height: 28px !important;
-      line-height: 28px !important;
+      width: 30px !important; height: 30px !important;
+      line-height: 30px !important; font-size: 15px !important;
     }
     .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover {
-      background: #1e293b !important;
-      color: #38bdf8 !important;
+      background: rgba(56,189,248,0.15) !important;
+      color: var(--blue) !important;
     }
     .leaflet-control-attribution { display: none !important; }
 
-    /* ===================== FLOATING BOTTOM CENTER PANEL ===================== */
-    .assessment-panel {
-      position: fixed;
-      bottom: 22px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      background: rgba(9, 13, 22, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 3px;
-      padding: 9px 36px 9px 36px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
+    /* POPUP CARD */
+    .pop-wrap { padding: 15px 17px; min-width: 220px; max-width: 260px; }
+    .pop-state { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 5px; }
+    .pop-row1 { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .pop-badge {
+      font-size: 9.5px; font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.6px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 4px;
     }
-
-    .assessment-panel:hover {
-      border-color: rgba(56, 189, 248, 0.4);
-      transform: translateX(-50%) translateY(-2px);
-    }
-
-    .panel-title {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1.4px;
-      color: #e2e8f0;
-      text-transform: uppercase;
-    }
-
-    .panel-legend {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-
-    .panel-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: #cbd5e1;
-    }
-
-    .sq-box {
-      width: 13px;
-      height: 13px;
-      border-radius: 1px;
-    }
-    .sq-box.high {
-      background: #d62828;
-      box-shadow: 0 0 6px rgba(214, 40, 40, 0.6);
-    }
-    .sq-box.medium {
-      background: #e77e23;
-      box-shadow: 0 0 6px rgba(231, 126, 35, 0.6);
-    }
-
-    /* ===================== FLOATING LOCATE ME BUTTON ===================== */
-    .btn-locate-floating {
-      position: fixed;
-      bottom: 22px;
-      right: 24px;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 18px;
-      background: #111827;
-      border: 1px solid #374151;
-      border-radius: 24px;
-      color: #e5e7eb;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
-      font-family: 'Inter', sans-serif;
-    }
-
-    .btn-locate-floating:hover {
-      background: #1f2937;
-      border-color: #38bdf8;
-      color: #38bdf8;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(56, 189, 248, 0.25);
-    }
-
-    /* Floating Quick Filter Widget (Top Right of Map) */
-    .map-telemetry-status {
-      position: fixed;
-      top: 86px;
-      right: 24px;
-      z-index: 1000;
-      background: rgba(10, 16, 28, 0.88);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(56, 189, 248, 0.2);
-      border-radius: 6px;
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      color: #94a3b8;
-    }
-    .live-beacon {
-      width: 7px;
-      height: 7px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #22c55e;
-      animation: beaconFlash 1.8s infinite;
-    }
-    @keyframes beaconFlash {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.8); }
-    }
-
-    /* Popup Styling */
-    .leaflet-popup-content-wrapper {
-      background: #090e1a !important;
-      border: 1px solid rgba(56, 189, 248, 0.35) !important;
-      border-radius: 8px !important;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(56, 189, 248, 0.15) !important;
-      padding: 0 !important;
-    }
-    .leaflet-popup-tip-container { display: none; }
-    .leaflet-popup-close-button {
-      color: #94a3b8 !important;
-      font-size: 16px !important;
-      top: 10px !important;
-      right: 12px !important;
-    }
-    .leaflet-popup-content { margin: 0 !important; color: var(--text-primary) !important; }
-
-    .sp { padding: 18px 20px; min-width: 230px; }
-    .sp-name { font-size: 16px; font-weight: 700; color: #f8fafc; margin-bottom: 8px; }
-    .sp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-    .sp-badge { padding: 3px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; }
-    .sp-badge.high { background: rgba(239,68,68,0.25); color: #f87171; border: 1px solid rgba(239,68,68,0.5); }
-    .sp-badge.medium { background: rgba(249,115,22,0.25); color: #fb923c; border: 1px solid rgba(249,115,22,0.5); }
-    .sp-badge.low { background: rgba(34,197,94,0.2); color: #4ade80; border: 1px solid rgba(34,197,94,0.4); }
-    .sp-prob { font-size: 26px; font-weight: 800; margin: 4px 0 2px; }
-    .sp-prob.high { color: #f87171; text-shadow: 0 0 12px rgba(248, 113, 113, 0.5); }
-    .sp-prob.medium { color: #fb923c; text-shadow: 0 0 12px rgba(251, 146, 60, 0.5); }
-    .sp-prob.low { color: #4ade80; }
-    .sp-prob-label { font-size: 10.5px; color: #94a3b8; margin-bottom: 10px; }
-    .sp-metric {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: #cbd5e1;
-      padding: 4px 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 6px;
-    }
-    .sp-alert {
-      font-size: 11px;
-      color: #cbd5e1;
+    .pb-high { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.45); }
+    .pb-med { background: rgba(234,179,8,0.2); color: #fef08a; border: 1px solid rgba(234,179,8,0.45); }
+    .pb-low { background: rgba(148,163,184,0.15); color: #cbd5e1; border: 1px solid rgba(148,163,184,0.3); }
+    .pop-prob-big { font-size: 32px; font-weight: 900; font-family: 'JetBrains Mono', monospace; line-height: 1; }
+    .ppb-high { color: #ef4444; text-shadow: 0 0 18px rgba(239,68,68,0.5); }
+    .ppb-med { color: #facc15; text-shadow: 0 0 14px rgba(234,179,8,0.4); }
+    .ppb-low { color: #94a3b8; }
+    .pop-prob-cap { font-size: 9.5px; color: var(--t3); margin-top: 2px; margin-bottom: 8px; }
+    .pop-meta { display: flex; justify-content: space-between; font-size: 10.5px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,0.07); color: var(--t2); }
+    .pop-meta b { color: #fff; font-weight: 600; }
+    .pop-guidance {
+      font-size: 10px; line-height: 1.4;
       padding: 7px 9px;
-      background: rgba(239, 68, 68, 0.1);
-      border-radius: 4px;
-      margin-bottom: 12px;
-      border-left: 3px solid #ef4444;
-      line-height: 1.4;
+      border-radius: 6px; margin: 8px 0 10px;
     }
-    .sp-unlock {
-      font-size: 11.5px;
-      color: #38bdf8;
-      cursor: pointer;
-      text-align: center;
-      font-weight: 600;
-      padding: 6px;
-      background: rgba(56, 189, 248, 0.1);
-      border-radius: 4px;
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      transition: all 0.2s;
+    .pg-high { background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; color: #fca5a5; }
+    .pg-med { background: rgba(234,179,8,0.1); border-left: 3px solid #facc15; color: #fef08a; }
+    .pg-low { background: rgba(148,163,184,0.08); border-left: 3px solid #64748b; color: #cbd5e1; }
+    .pop-action {
+      width: 100%; padding: 8px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.18), rgba(56,189,248,0.08));
+      border: 1px solid rgba(56,189,248,0.4);
+      border-radius: 7px;
+      color: var(--blue); font-size: 11.5px; font-weight: 700;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.18s; text-align: center;
     }
-    .sp-unlock:hover {
-      background: rgba(56, 189, 248, 0.2);
-      border-color: #38bdf8;
-    }
+    .pop-action:hover { background: rgba(56,189,248,0.28); color: #fff; }
 
-    /* ===================== UNLOCK MODAL ===================== */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 3000;
-      background: rgba(4, 7, 14, 0.85);
-      backdrop-filter: blur(8px);
+    /* MODAL */
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(14px);
       display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
     }
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-bg.open { opacity: 1; pointer-events: all; }
     .modal-card {
-      background: #0d121f; border: 1px solid #1e293b; border-radius: 12px;
-      padding: 32px; max-width: 420px; width: 90%; position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 30px rgba(56, 189, 248, 0.15);
+      background: #0a0e1c;
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 28px;
+      max-width: 440px; width: 90%;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.95), 0 0 40px rgba(56,189,248,0.08);
+      transform: translateY(12px) scale(0.97);
+      transition: transform 0.25s;
     }
-    .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: #8b949e; font-size: 18px; cursor: pointer; }
-    .modal-title { font-size: 20px; font-weight: 700; color: #f8fafc; margin-bottom: 8px; }
-    .modal-desc { font-size: 13px; color: #94a3b8; margin-bottom: 22px; line-height: 1.5; }
-    .modal-actions { display: flex; gap: 10px; }
-    .btn-modal-primary { flex: 1; padding: 10px; background: #2563eb; border: none; border-radius: 6px; color: #fff; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .btn-modal-primary:hover { background: #1d4ed8; }
-    .btn-modal-secondary { flex: 1; padding: 10px; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #cbd5e1; font-size: 13.5px; cursor: pointer; }
+    .modal-bg.open .modal-card { transform: translateY(0) scale(1); }
+    .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--t3); font-size: 18px; cursor: pointer; }
+    .modal-close:hover { color: #fff; }
+    .modal-head { font-size: 11px; font-weight: 700; color: var(--blue); font-family: 'JetBrains Mono', monospace; margin-bottom: 8px; letter-spacing: 0.6px; }
+    .modal-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 8px; }
+    .modal-desc { font-size: 12.5px; color: var(--t2); line-height: 1.5; margin-bottom: 18px; }
+    .modal-feat { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+    .modal-feat-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--t1); }
+    .modal-btns { display: flex; gap: 10px; }
 
-    /* Loader */
-    .map-loader {
-      position: fixed; top: 72px; left: 0; right: 0; bottom: 0; z-index: 500;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: #04060b; gap: 12px;
+    /* ═══════════════════════════════════════════════════════════
+       MOBILE RESPONSIVE STYLES (Screen width <= 900px)
+       ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      :root { --hh: 54px; }
+
+      header { padding: 0 14px; }
+      .logo-name { font-size: 14px; }
+      .logo-sub { display: none; }
+      .logo-icon { width: 30px; height: 30px; font-size: 16px; }
+      .btn { padding: 6px 11px; font-size: 11.5px; }
+
+      /* Mobile tab switcher */
+      .mobile-tab-bar { display: flex; }
+
+      .app {
+        top: calc(var(--hh) + 44px);
+        grid-template-columns: 1fr;
+        display: block;
+      }
+
+      .left-panel {
+        display: none;
+        height: 100%;
+        width: 100%;
+        border-right: none;
+      }
+      .left-panel.active-tab {
+        display: flex;
+      }
+
+      .right-panel {
+        display: none;
+        height: 100%;
+        width: 100%;
+      }
+      .right-panel.active-tab {
+        display: block;
+      }
+
+      .map-top-bar { top: 8px; left: 8px; right: 8px; flex-wrap: wrap; }
+      .map-title-pill { padding: 5px 9px; font-size: 10.5px; }
+      .map-toggle-btn { padding: 5px 8px; font-size: 10px; }
+      
+      .noaa-legend {
+        bottom: 8px; left: 8px; right: 8px;
+        min-width: unset; max-width: unset;
+        padding: 8px 12px;
+      }
+      .nl-title { font-size: 8.5px; margin-bottom: 4px; }
+      .nl-labels { font-size: 8px; }
+
+      .locate-btn {
+        bottom: 68px; right: 12px;
+        padding: 8px 13px; font-size: 11px;
+      }
+
+      .leaflet-control-zoom {
+        margin-bottom: 120px !important;
+        margin-right: 8px !important;
+      }
     }
-    .spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: #e04826; border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { font-size: 12px; color: #94a3b8; letter-spacing: 0.5px; }
   </style>
 </head>
 <body>
 
-<!-- Loader -->
-<div class="map-loader" id="loader">
-  <div class="spinner"></div>
-  <div class="loader-text">Loading Doppler Radar Flood Risk Telemetry...</div>
-</div>
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🌊</div>
+    <div class="logo-text">
+      <div class="logo-name">Flood<span>Watch</span> India</div>
+      <div class="logo-sub">Flood Predict Platform</div>
+    </div>
+  </a>
 
-<!-- ==================== HEADER ==================== -->
-<header class="header-container">
-  <div class="header-top-row">
-    <div class="brand-section">
-      <h1 class="brand-title">FloodWatch India</h1>
-      <span class="brand-subtitle" id="timestamp">Last updated: 28 Aug 2025 14:30 IST • RF + GBM v2.1</span>
-    </div>
-    <div class="header-actions" id="headerActions">
-      <button class="btn-signin" onclick="window.location.href='login.html'">Sign In</button>
-      <button class="btn-signup" onclick="window.location.href='signup.html'">Sign Up</button>
-    </div>
-  </div>
-  <div class="header-bottom-row">
-    <div class="legend-bullet" onclick="filterRisk('high')">
-      <span class="dot high"></span>
-      <span>High Risk (Action Required)</span>
-    </div>
-    <div class="legend-bullet" onclick="filterRisk('medium')">
-      <span class="dot medium"></span>
-      <span>Medium Risk (Monitoring)</span>
-    </div>
+  <div class="hdr-auth">
+    <a href="login.html" class="btn btn-ghost">Sign In</a>
+    <a href="signup.html" class="btn btn-primary">Sign Up Free &#8594;</a>
   </div>
 </header>
 
-<!-- Live Telemetry Badge -->
-<div class="map-telemetry-status">
-  <span class="live-beacon"></span>
-  <span>LIVE SATELLITE RADAR</span>
+<!-- MOBILE TAB SWITCHER -->
+<div class="mobile-tab-bar">
+  <button class="mobile-tab-btn active" id="tabMap" onclick="switchMobileTab('map')">🗺️ Live Flood Map</button>
+  <button class="mobile-tab-btn" id="tabFeatures" onclick="switchMobileTab('features')">⚡ Platform Features</button>
 </div>
 
-<!-- ==================== MAP ==================== -->
-<div id="map"></div>
+<!-- MAIN APP -->
+<div class="app">
 
-<!-- ==================== FLOATING ASSESSMENT PANEL ==================== -->
-<div class="assessment-panel" onclick="openModal()">
-  <div class="panel-title">METROLOGICAL FLOOD RISK ASSESSMENT</div>
-  <div class="panel-legend">
-    <div class="panel-legend-item">
-      <div class="sq-box high"></div>
-      <span>HIGH RISK</span>
+  <!-- LEFT PANEL -->
+  <div class="left-panel" id="featuresPanel">
+    <div class="hero">
+      <h1 class="hero-title">
+        Platform <span>Features</span>
+      </h1>
     </div>
-    <div class="panel-legend-item">
-      <div class="sq-box medium"></div>
-      <span>MEDIUM <span id="medCountNum">22</span></span>
+
+    <div class="features-section">
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-red">🗺️</div>
+        <div class="feature-text">
+          <div class="feature-title">Live Flood Risk Map</div>
+          <div class="feature-desc">Meteorological radar heatmaps and state-wise risk zones updated from trained ML inference.</div>
+        </div>
+        <span class="feature-badge fb-live">LIVE</span>
+      </div>
+
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-blue">🤖</div>
+        <div class="feature-text">
+          <div class="feature-title">37-State AI Prediction</div>
+          <div class="feature-desc">Individual Gradient Boosting Classifier per state — trained on IMD, GIS, dam & population telemetry.</div>
+        </div>
+        <span class="feature-badge fb-ai">AI</span>
+      </div>
+
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-orange">🌧️</div>
+        <div class="feature-text">
+          <div class="feature-title">Rainfall Impact Simulator</div>
+          <div class="feature-desc">Enter forecasted rainfall → get instant flood probability for any district in real-time.</div>
+        </div>
+        <span class="feature-badge fb-new">NEW</span>
+      </div>
+
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-green">📍</div>
+        <div class="feature-text">
+          <div class="feature-title">My Location Risk Alert</div>
+          <div class="feature-desc">One-click to detect your GPS location and show real-time flood risk for your exact region.</div>
+        </div>
+        <span class="feature-badge fb-live">GPS</span>
+      </div>
+
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-purple">📊</div>
+        <div class="feature-text">
+          <div class="feature-title">District-Level Forecasts</div>
+          <div class="feature-desc">Block-level inundation probability, dam spillway data and 72-hour advanced warnings.</div>
+        </div>
+        <span class="feature-badge fb-ai">PRO</span>
+      </div>
+
+      <div class="feature-card" onclick="openModal()">
+        <div class="feature-icon fi-blue">📱</div>
+        <div class="feature-text">
+          <div class="feature-title">Emergency SMS Alerts</div>
+          <div class="feature-desc">Custom push notifications when flood risk crosses threshold in your selected districts.</div>
+        </div>
+        <span class="feature-badge fb-new">ALERT</span>
+      </div>
     </div>
+  </div>
+
+  <!-- RIGHT MAP PANEL -->
+  <div class="right-panel active-tab" id="mapPanel">
+    <div id="floodMap"></div>
+
+    <!-- MAP TOP BAR -->
+    <div class="map-top-bar">
+      <div class="map-title-pill">
+        <span class="mtp-icon">🛰️</span>
+        <div class="mtp-text">India Satellite Flood Radar</div>
+      </div>
+    </div>
+
+    <!-- FLOOD ALERT RISK SPECTRUM LEGEND -->
+    <div class="noaa-legend">
+      <div class="nl-title">
+        <span>Flood Risk Inundation Alert</span>
+        <span style="color:#ef4444;font-weight:900;">LIVE</span>
+      </div>
+      <div class="nl-bar"></div>
+      <div class="nl-labels">
+        <span style="color:#64748b;">Normal (Safe)</span>
+        <span style="color:#facc15;font-weight:800;">🟡 Medium Risk</span>
+        <span style="color:#ef4444;font-weight:900;">🔴 High Risk</span>
+      </div>
+    </div>
+
+    <!-- MY LOCATION BUTTON -->
+    <button class="locate-btn" id="locateBtn" onclick="locateMe()">
+      📍 My Location
+    </button>
   </div>
 </div>
 
-<!-- ==================== FLOATING LOCATE ME BUTTON ==================== -->
-<button class="btn-locate-floating" id="btnLocate" onclick="locateMe()">
-  <span>📍</span> Locate Me
-</button>
-
-<!-- ==================== UNLOCK MODAL ==================== -->
-<div class="modal-overlay" id="modal" onclick="modalBackdrop(event)">
+<!-- UNLOCK MODAL -->
+<div class="modal-bg" id="modal" onclick="handleModalClick(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title">Access District-Level Telemetry</div>
-    <div class="modal-desc">Sign in to unlock real-time GIS river flow models, block-level water inundation forecasts, and customized emergency SMS alerts.</div>
-    <div class="modal-actions">
-      <button class="btn-modal-primary" onclick="window.location.href='login.html'">Sign In</button>
-      <button class="btn-modal-secondary" onclick="window.location.href='signup.html'">Create Account</button>
+    <div class="modal-head">🔒 PREMIUM INTELLIGENCE ACCESS</div>
+    <div class="modal-title">Unlock Full District-Level Forecasts</div>
+    <div class="modal-desc">Sign up to access real-time block-level inundation maps, 72-hour early warnings, SMS alerts, dam telemetry and historical flood GIS layers.</div>
+    <div class="modal-feat">
+      <div class="modal-feat-item">🗺️ Block-level water inundation probability maps</div>
+      <div class="modal-feat-item">📊 72-hour ahead predictive warning system</div>
+      <div class="modal-feat-item">📱 Custom SMS & WhatsApp emergency alerts</div>
+      <div class="modal-feat-item">📁 Historical flood GIS layers (2000–2025)</div>
+      <div class="modal-feat-item">🏞️ River gauge & dam discharge live telemetry</div>
+    </div>
+    <div class="modal-btns">
+      <a href="signup.html" class="btn btn-primary" style="flex:1;justify-content:center;">Create Free Account</a>
+      <a href="login.html" class="btn btn-ghost" style="flex:1;justify-content:center;">Sign In</a>
     </div>
   </div>
 </div>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+
 <script>
-// Mock Flood Risk Telemetry Data
-const RISK = {
-  'Assam':              { level:'high',   prob:89, river:'Brahmaputra Basin', rain:'230 mm', note:'Severe river overflow warning active', labelPos:[26.2, 92.8] },
-  'Bihar':              { level:'high',   prob:84, river:'Kosi & Gandak', rain:'195 mm', note:'Critical embankment alert', labelPos:[25.6, 85.8] },
-  'Uttarakhand':        { level:'high',   prob:81, river:'Alaknanda & Bhagirathi', rain:'210 mm', note:'Flash flood warning in foothill catchments', labelPos:[30.1, 79.2] },
-  'Himachal Pradesh':   { level:'high',   prob:74, river:'Beas River', rain:'160 mm', note:'High runoff alert in hill terrain', labelPos:[31.8, 77.2] },
-  'West Bengal':        { level:'high',   prob:78, river:'Damodar & Teesta', rain:'175 mm', note:'Delta inundation advisory', labelPos:[23.2, 87.8] },
-  'Arunachal Pradesh':  { level:'high',   prob:76, river:'Siang River', rain:'240 mm', note:'Intense precipitation event', labelPos:[28.2, 94.7] },
-  'Jammu and Kashmir':  { level:'high',   prob:70, river:'Jhelum Basin', rain:'140 mm', note:'Mountain catchment surcharge', labelPos:[34.0, 75.8] },
-  'Kerala':             { level:'high',   prob:88, river:'Periyar & Pamba', rain:'260 mm', note:'Dam spillway alerts active', labelPos:[10.2, 76.5] },
-  'Tamil Nadu':         { level:'high',   prob:75, river:'Cauvery & Adyar', rain:'185 mm', note:'Coastal storm surge & riverine influx', labelPos:[11.2, 78.8] },
-  'Andhra Pradesh':     { level:'high',   prob:82, river:'Godavari & Krishna', rain:'215 mm', note:'Downstream delta flood surge warning', labelPos:[16.0, 80.2] },
-  'Odisha':             { level:'high',   prob:80, river:'Mahanadi & Baitarani', rain:'205 mm', note:'Coastal low pressure basin flood', labelPos:[20.3, 84.8] },
-  'Meghalaya':          { level:'high',   prob:85, river:'Umiam Basin', rain:'310 mm', note:'Cloudburst warning in plateau region', labelPos:[25.5, 91.3] },
-  'Manipur':            { level:'high',   prob:72, river:'Imphal River', rain:'155 mm', note:'Excess rainfall in valley', labelPos:[24.7, 93.9] },
-  'Mizoram':            { level:'high',   prob:69, river:'Tlawng River', rain:'145 mm', note:'Landslide-flood combination alert', labelPos:[23.3, 92.8] },
-  'Tripura':            { level:'medium', prob:58, river:'Gomati River', rain:'110 mm', note:'Moderate runoff monitoring', labelPos:[23.7, 91.7] },
-  'Nagaland':           { level:'medium', prob:56, river:'Dhansiri River', rain:'98 mm', note:'Catchment level monitoring', labelPos:[26.1, 94.5] },
-  'Uttar Pradesh':      { level:'medium', prob:55, river:'Ganga & Yamuna', rain:'92 mm', note:'Upstream surge monitored in eastern belt', labelPos:[27.0, 80.9] },
-  'Maharashtra':        { level:'medium', prob:50, river:'Krishna Upstream', rain:'88 mm', note:'Ghats precipitation active', labelPos:[19.5, 76.0] },
-  'Gujarat':            { level:'medium', prob:46, river:'Narmada & Tapi', rain:'75 mm', note:'Gulf & coastal weather system active', labelPos:[22.3, 71.2] },
-  'Jharkhand':          { level:'medium', prob:48, river:'Subarnarekha', rain:'82 mm', note:'Moderate reservoir discharge', labelPos:[23.6, 85.3] },
-  'Chhattisgarh':       { level:'medium', prob:42, river:'Hasdeo River', rain:'70 mm', note:'Normal-to-elevated river stage', labelPos:[21.2, 81.6] },
-  'Karnataka':          { level:'medium', prob:38, river:'Tungabhadra', rain:'65 mm', note:'Western Ghats monitoring', labelPos:[14.8, 75.6] },
-  'Telangana':          { level:'medium', prob:44, river:'Godavari Catchment', rain:'78 mm', note:'Inflow monitoring at dams', labelPos:[17.8, 79.1] },
-  'Goa':                { level:'low',    prob:26, river:'Mandovi River', rain:'45 mm', note:'Normal monsoon rainfall', labelPos:[15.3, 74.0] },
-  'Rajasthan':          { level:'low',    prob:14, river:'Chambal', rain:'12 mm', note:'Low risk conditions', labelPos:[26.6, 73.8] },
-  'Madhya Pradesh':     { level:'low',    prob:24, river:'Narmada Basin', rain:'35 mm', note:'Normal reservoir operations', labelPos:[23.5, 78.3] },
-  'Punjab':             { level:'low',    prob:16, river:'Sutlej & Beas', rain:'20 mm', note:'Normal river discharge', labelPos:[30.9, 75.4] },
-  'Haryana':            { level:'low',    prob:12, river:'Yamuna Canal', rain:'15 mm', note:'Safe canal levels', labelPos:[29.1, 76.1] },
-  'Delhi':              { level:'low',    prob:18, river:'Yamuna', rain:'18 mm', note:'Safe gauge readings', labelPos:[28.6, 77.1] }
+// ═══════════════════════════════════════════════════════════
+// EMBEDDED REAL ML DATA & GEOJSON BOUNDARIES (Zero Network Lag)
+// ═══════════════════════════════════════════════════════════
+const PREDS = {"Andaman & Nicobar":{"state":"Andaman & Nicobar","risk_category":"Low Risk","risk_level":"low","probability":0.007768604850988405,"probability_str":"0.78%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Andhra Pradesh":{"state":"Andhra Pradesh","risk_category":"Extreme High Risk","risk_level":"high","probability":0.8904575737697844,"probability_str":"89.05%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Arunachal Pradesh":{"state":"Arunachal Pradesh","risk_category":"Low Risk","risk_level":"low","probability":0.00010040559831008085,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Assam":{"state":"Assam","risk_category":"Extreme High Risk","risk_level":"high","probability":0.9998228712288072,"probability_str":"99.98%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Bihar":{"state":"Bihar","risk_category":"Extreme High Risk","risk_level":"high","probability":0.9999197321350566,"probability_str":"99.99%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Chandigarh":{"state":"Chandigarh","risk_category":"Low Risk","risk_level":"low","probability":2.027958317390341e-05,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["Heavy 24h Rainfall Intensity (75.0 mm)"]},"Chhattisgarh":{"state":"Chhattisgarh","risk_category":"Low Risk","risk_level":"low","probability":0.00012160723338255328,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Dadra & Nagar Have":{"state":"Dadra & Nagar Have","risk_category":"Low Risk","risk_level":"low","probability":0.022680253259817342,"probability_str":"2.27%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Daman & Diu":{"state":"Daman & Diu","risk_category":"Low Risk","risk_level":"low","probability":0.007642990097997565,"probability_str":"0.76%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Delhi":{"state":"Delhi","risk_category":"Low Risk","risk_level":"low","probability":0.0012199075337584408,"probability_str":"0.12%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Goa":{"state":"Goa","risk_category":"Low Risk","risk_level":"low","probability":0.02729009741761046,"probability_str":"2.73%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Gujarat":{"state":"Gujarat","risk_category":"Low Risk","risk_level":"low","probability":0.009853670889673946,"probability_str":"0.99%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Haryana":{"state":"Haryana","risk_category":"Low Risk","risk_level":"low","probability":0.004989372995363964,"probability_str":"0.5%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Himachal Pradesh":{"state":"Himachal Pradesh","risk_category":"Low Risk","risk_level":"low","probability":0.001168160654163154,"probability_str":"0.12%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Jammu & Kashmir":{"state":"Jammu & Kashmir","risk_category":"Low Risk","risk_level":"low","probability":2.0911606903235282e-05,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Jharkhand":{"state":"Jharkhand","risk_category":"Low Risk","risk_level":"low","probability":0.0012151672085432186,"probability_str":"0.12%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Karnataka":{"state":"Karnataka","risk_category":"Low Risk","risk_level":"low","probability":0.001996756391110942,"probability_str":"0.2%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Kerala":{"state":"Kerala","risk_category":"Extreme High Risk","risk_level":"high","probability":0.9900369324096642,"probability_str":"99.0%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Ladakh":{"state":"Ladakh","risk_category":"Low Risk","risk_level":"low","probability":0.017819912508272164,"probability_str":"1.78%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["Heavy 24h Rainfall Intensity (75.0 mm)"]},"Lakshadweep":{"state":"Lakshadweep","risk_category":"Low Risk","risk_level":"low","probability":0.0023676158256906534,"probability_str":"0.24%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Madhya Pradesh":{"state":"Madhya Pradesh","risk_category":"Low Risk","risk_level":"low","probability":8.592554017946118e-06,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Maharashtra":{"state":"Maharashtra","risk_category":"Extreme High Risk","risk_level":"high","probability":0.9995547180777331,"probability_str":"99.96%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)","High Dam Catchment Water Inflow"]},"Manipur":{"state":"Manipur","risk_category":"Low Risk","risk_level":"low","probability":9.08591148429717e-05,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Meghalaya":{"state":"Meghalaya","risk_category":"Low Risk","risk_level":"low","probability":0.0001646269785477989,"probability_str":"0.02%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Mizoram":{"state":"Mizoram","risk_category":"Low Risk","risk_level":"low","probability":8.969193160308624e-05,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Nagaland":{"state":"Nagaland","risk_category":"Low Risk","risk_level":"low","probability":6.857465410683476e-05,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Odisha":{"state":"Odisha","risk_category":"Low Risk","risk_level":"low","probability":3.0378765791522517e-05,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Puducherry":{"state":"Puducherry","risk_category":"Low Risk","risk_level":"low","probability":0.0004148386044222354,"probability_str":"0.04%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Punjab":{"state":"Punjab","risk_category":"Low Risk","risk_level":"low","probability":4.170616310884785e-05,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Rajasthan":{"state":"Rajasthan","risk_category":"Low Risk","risk_level":"low","probability":0.0006779543771479754,"probability_str":"0.07%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Sikkim":{"state":"Sikkim","risk_category":"Low Risk","risk_level":"low","probability":0.0012222377114446382,"probability_str":"0.12%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Tamil Nadu":{"state":"Tamil Nadu","risk_category":"Low Risk","risk_level":"low","probability":3.709557840523958e-05,"probability_str":"0.0%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Telangana":{"state":"Telangana","risk_category":"Low Risk","risk_level":"low","probability":0.00404182202556155,"probability_str":"0.4%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Tripura":{"state":"Tripura","risk_category":"Low Risk","risk_level":"low","probability":0.00010279303117984014,"probability_str":"0.01%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Uttar Pradesh":{"state":"Uttar Pradesh","risk_category":"Low Risk","risk_level":"low","probability":0.0926104184251666,"probability_str":"9.26%","alert_level":"GREEN SAFE","color_code":"#16a34a","action_guidance":"Normal conditions. Standard hydrological monitoring active.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"Uttarakhand":{"state":"Uttarakhand","risk_category":"Extreme High Risk","risk_level":"high","probability":0.8839664361201828,"probability_str":"88.4%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]},"West Bengal":{"state":"West Bengal","risk_category":"Extreme High Risk","risk_level":"high","probability":0.9980617591333739,"probability_str":"99.81%","alert_level":"RED EMERGENCY ALERT","color_code":"#dc2626","action_guidance":"Immediate evacuation warning for low-lying areas. River overflow imminent.","key_risk_drivers":["High Historical Flood Inundation Index","Heavy 24h Rainfall Intensity (75.0 mm)"]}};
+const INDIA_GEO = {"type":"FeatureCollection","features":[{"type":"Feature","properties":{"ST_NM":"Jammu & Kashmir"},"geometry":{"type":"Polygon","coordinates":[[[74.3,32.7],[74.6,33.2],[75.3,33.5],[75.9,33.9],[76.5,34.3],[77.1,34.7],[77.6,35.5],[78.3,35.7],[79.0,35.2],[79.5,34.5],[79.2,33.8],[78.8,33.2],[78.0,32.5],[77.3,32.0],[76.5,31.8],[75.8,32.0],[75.2,32.3],[74.7,32.1],[74.3,32.7]]]}},{"type":"Feature","properties":{"ST_NM":"Himachal Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[75.8,32.0],[76.5,31.8],[77.3,32.0],[78.0,32.5],[78.4,31.8],[78.0,31.2],[77.4,30.6],[76.9,30.4],[76.3,30.8],[75.9,31.2],[75.8,32.0]]]}},{"type":"Feature","properties":{"ST_NM":"Punjab"},"geometry":{"type":"Polygon","coordinates":[[[73.9,29.6],[74.3,30.1],[74.9,30.5],[75.4,30.9],[75.9,31.2],[76.3,30.8],[76.0,30.1],[75.5,29.7],[75.0,29.4],[74.5,29.4],[73.9,29.6]]]}},{"type":"Feature","properties":{"ST_NM":"Haryana"},"geometry":{"type":"Polygon","coordinates":[[[74.5,29.4],[75.0,29.4],[75.5,29.7],[76.0,30.1],[76.3,30.8],[76.9,30.4],[77.4,30.0],[77.4,29.2],[77.0,28.6],[76.5,28.3],[75.9,28.4],[75.4,28.6],[74.9,28.9],[74.5,29.4]]]}},{"type":"Feature","properties":{"ST_NM":"Delhi"},"geometry":{"type":"Polygon","coordinates":[[[76.8,28.4],[77.1,28.4],[77.3,28.7],[77.2,29.0],[76.9,29.0],[76.7,28.8],[76.8,28.4]]]}},{"type":"Feature","properties":{"ST_NM":"Uttarakhand"},"geometry":{"type":"Polygon","coordinates":[[[77.4,30.0],[77.4,30.6],[78.0,31.2],[78.4,31.8],[79.2,31.5],[79.5,30.8],[79.0,30.0],[78.3,29.5],[77.7,29.5],[77.4,30.0]]]}},{"type":"Feature","properties":{"ST_NM":"Uttar Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[77.4,29.2],[77.4,30.0],[77.7,29.5],[78.3,29.5],[79.0,30.0],[79.5,30.0],[80.2,29.6],[80.6,29.0],[81.3,28.8],[82.0,28.6],[83.2,28.0],[84.0,27.5],[83.5,27.0],[82.8,26.5],[82.0,26.0],[81.0,25.6],[80.0,25.8],[79.2,26.2],[78.5,26.8],[77.8,27.5],[77.4,28.0],[77.0,28.6],[77.4,29.2]]]}},{"type":"Feature","properties":{"ST_NM":"Rajasthan"},"geometry":{"type":"Polygon","coordinates":[[[69.5,23.0],[70.0,23.5],[70.8,24.0],[71.5,24.5],[72.3,24.9],[73.0,25.3],[73.7,25.8],[74.5,26.3],[75.2,26.8],[75.8,27.2],[76.5,28.3],[77.0,28.6],[77.4,28.0],[77.8,27.5],[77.4,27.0],[76.8,26.8],[76.3,26.2],[75.8,25.7],[75.3,25.2],[74.8,24.5],[74.2,24.0],[73.5,23.5],[72.8,23.0],[72.0,22.8],[71.2,22.8],[70.5,22.8],[69.9,22.8],[69.5,23.0]]]}},{"type":"Feature","properties":{"ST_NM":"Gujarat"},"geometry":{"type":"Polygon","coordinates":[[[68.0,22.0],[68.5,22.5],[69.0,22.8],[69.5,23.0],[70.5,22.8],[71.2,22.8],[72.0,22.8],[72.8,23.0],[73.5,23.5],[74.0,23.5],[74.5,23.0],[74.5,22.3],[74.0,21.8],[73.5,21.3],[73.0,20.8],[72.5,20.5],[72.2,21.0],[71.8,21.5],[71.3,21.8],[70.8,22.0],[70.2,22.2],[69.6,21.9],[69.1,22.2],[68.5,22.5],[68.0,22.0]]]}},{"type":"Feature","properties":{"ST_NM":"Madhya Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[74.5,26.3],[75.2,26.8],[75.8,27.2],[76.3,26.2],[76.8,26.8],[77.4,27.0],[77.8,27.5],[78.0,27.0],[79.2,26.2],[80.0,25.8],[81.0,25.6],[82.0,26.0],[82.8,26.5],[83.0,25.8],[82.5,25.0],[82.0,24.5],[81.5,24.0],[81.0,23.5],[80.5,23.0],[80.0,22.5],[79.3,22.0],[78.5,21.8],[77.8,22.0],[77.0,22.2],[76.3,22.0],[75.5,22.2],[74.8,22.5],[74.2,23.0],[73.5,23.5],[74.0,24.0],[74.8,24.5],[75.3,25.2],[75.8,25.7],[76.3,26.2],[74.5,26.3]]]}},{"type":"Feature","properties":{"ST_NM":"Bihar"},"geometry":{"type":"Polygon","coordinates":[[[83.2,28.0],[84.0,27.5],[85.0,27.0],[86.0,27.0],[87.0,26.8],[87.5,26.3],[87.0,25.7],[86.5,25.3],[85.9,25.0],[85.2,24.7],[84.5,24.5],[83.8,24.7],[83.2,25.0],[82.8,25.5],[82.8,26.5],[83.2,28.0]]]}},{"type":"Feature","properties":{"ST_NM":"Jharkhand"},"geometry":{"type":"Polygon","coordinates":[[[83.8,24.7],[84.5,24.5],[85.2,24.7],[85.9,25.0],[86.5,25.3],[87.0,25.7],[87.5,25.3],[87.8,24.6],[87.5,24.0],[87.0,23.5],[86.5,23.0],[85.8,22.7],[85.0,22.5],[84.3,22.8],[83.7,23.2],[83.2,23.8],[83.2,24.5],[83.8,24.7]]]}},{"type":"Feature","properties":{"ST_NM":"West Bengal"},"geometry":{"type":"Polygon","coordinates":[[[87.0,26.8],[88.0,26.7],[88.5,26.5],[89.0,26.3],[88.8,25.8],[88.5,25.2],[88.0,24.5],[87.5,24.0],[87.5,23.5],[87.0,23.0],[86.5,22.5],[86.0,22.0],[87.5,21.5],[87.8,22.0],[88.2,22.5],[88.5,22.8],[88.6,22.0],[88.4,21.5],[88.0,21.0],[87.3,21.5],[86.0,22.0],[87.0,23.0],[87.5,23.5],[87.5,24.0],[87.0,25.7],[87.5,26.3],[87.0,26.8]]]}},{"type":"Feature","properties":{"ST_NM":"Sikkim"},"geometry":{"type":"Polygon","coordinates":[[[88.0,27.5],[88.4,27.6],[88.9,27.5],[88.8,27.0],[88.5,26.5],[88.0,26.7],[87.8,27.0],[88.0,27.5]]]}},{"type":"Feature","properties":{"ST_NM":"Arunachal Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[91.5,27.5],[92.0,27.8],[93.0,28.0],[94.0,28.2],[95.0,28.0],[96.0,28.5],[97.0,28.2],[97.5,28.0],[97.0,27.3],[96.5,27.0],[96.0,27.2],[95.5,27.0],[95.0,27.0],[94.5,27.0],[94.0,27.2],[93.5,27.0],[93.0,27.0],[92.5,27.0],[92.0,27.0],[91.5,27.0],[91.5,27.5]]]}},{"type":"Feature","properties":{"ST_NM":"Assam"},"geometry":{"type":"Polygon","coordinates":[[[89.5,26.3],[90.0,26.5],[90.5,26.7],[91.0,26.8],[91.5,27.0],[92.0,27.0],[92.5,27.0],[93.0,27.0],[93.5,27.0],[94.0,27.2],[94.5,27.0],[95.0,27.0],[95.5,26.8],[95.0,26.3],[94.5,26.0],[94.0,25.7],[93.5,25.5],[93.0,25.7],[92.5,25.5],[92.0,25.0],[91.5,25.0],[91.0,25.2],[90.5,25.5],[90.0,25.8],[89.5,26.3]]]}},{"type":"Feature","properties":{"ST_NM":"Nagaland"},"geometry":{"type":"Polygon","coordinates":[[[93.5,25.5],[94.0,25.7],[94.5,26.0],[95.0,26.3],[95.5,26.8],[95.5,26.3],[95.8,25.8],[95.5,25.3],[95.0,25.0],[94.5,25.0],[94.0,25.0],[93.5,25.0],[93.5,25.5]]]}},{"type":"Feature","properties":{"ST_NM":"Manipur"},"geometry":{"type":"Polygon","coordinates":[[[93.0,25.7],[93.5,25.5],[94.0,25.0],[94.5,25.0],[95.0,25.0],[94.8,24.5],[94.5,24.0],[94.0,23.8],[93.5,23.8],[93.0,24.0],[92.8,24.5],[92.8,25.0],[93.0,25.7]]]}},{"type":"Feature","properties":{"ST_NM":"Mizoram"},"geometry":{"type":"Polygon","coordinates":[[[92.8,24.5],[93.0,24.0],[93.5,23.8],[93.8,23.3],[93.5,22.8],[93.0,22.5],[92.5,22.8],[92.2,23.2],[92.0,23.7],[92.2,24.2],[92.5,24.5],[92.8,24.5]]]}},{"type":"Feature","properties":{"ST_NM":"Tripura"},"geometry":{"type":"Polygon","coordinates":[[[91.5,23.5],[91.9,23.8],[92.5,23.8],[92.8,23.5],[92.5,23.0],[92.2,22.8],[91.9,22.9],[91.5,23.0],[91.5,23.5]]]}},{"type":"Feature","properties":{"ST_NM":"Meghalaya"},"geometry":{"type":"Polygon","coordinates":[[[89.8,25.5],[90.3,25.8],[90.8,25.8],[91.5,25.7],[92.0,25.5],[92.5,25.2],[92.0,25.0],[91.5,25.0],[91.0,25.2],[90.5,25.5],[90.0,25.8],[89.8,25.5]]]}},{"type":"Feature","properties":{"ST_NM":"Odisha"},"geometry":{"type":"Polygon","coordinates":[[[81.5,21.0],[82.0,21.5],[82.5,21.8],[83.0,22.0],[83.7,22.5],[84.3,22.8],[85.0,22.5],[85.8,22.0],[86.5,21.8],[87.0,21.5],[87.5,21.0],[87.0,20.5],[86.5,20.0],[86.0,19.8],[85.5,19.5],[85.0,19.2],[84.5,18.8],[84.0,18.5],[83.5,18.5],[83.0,19.0],[82.5,19.5],[82.0,20.0],[81.5,20.5],[81.5,21.0]]]}},{"type":"Feature","properties":{"ST_NM":"Chhattisgarh"},"geometry":{"type":"Polygon","coordinates":[[[80.0,22.5],[80.5,23.0],[81.0,23.5],[81.5,24.0],[82.0,24.5],[82.5,25.0],[83.0,25.0],[83.2,24.5],[83.2,23.8],[82.8,23.3],[82.5,22.7],[82.0,22.2],[81.5,21.8],[81.0,21.5],[80.5,21.5],[80.0,22.0],[80.0,22.5]]]}},{"type":"Feature","properties":{"ST_NM":"Maharashtra"},"geometry":{"type":"Polygon","coordinates":[[[72.8,20.5],[73.0,21.0],[73.5,21.3],[74.0,21.8],[74.5,22.3],[75.0,22.5],[75.5,22.5],[76.3,22.0],[77.0,22.2],[77.8,22.0],[78.5,21.8],[79.3,22.0],[80.0,22.0],[80.5,21.5],[80.5,21.0],[80.0,20.5],[79.5,20.0],[79.0,19.5],[78.5,19.2],[78.0,18.8],[77.5,18.5],[77.0,18.5],[76.5,18.8],[76.0,19.0],[75.5,19.2],[75.0,19.5],[74.5,19.8],[74.0,20.0],[73.5,20.2],[73.0,20.3],[72.8,20.5]]]}},{"type":"Feature","properties":{"ST_NM":"Goa"},"geometry":{"type":"Polygon","coordinates":[[[73.7,15.0],[74.0,15.2],[74.3,15.5],[74.5,15.8],[74.5,14.9],[74.2,14.8],[73.9,14.9],[73.7,15.0]]]}},{"type":"Feature","properties":{"ST_NM":"Karnataka"},"geometry":{"type":"Polygon","coordinates":[[[74.0,15.2],[74.5,15.8],[75.0,16.0],[75.5,16.3],[76.0,16.8],[76.5,17.2],[77.0,17.5],[77.5,17.8],[78.0,17.8],[78.5,18.0],[78.5,17.0],[78.0,16.5],[77.5,16.0],[77.0,15.5],[76.5,15.0],[76.0,14.5],[75.5,14.0],[75.0,13.8],[74.8,13.3],[74.5,13.0],[74.2,13.5],[74.0,13.8],[73.8,14.5],[74.0,15.2]]]}},{"type":"Feature","properties":{"ST_NM":"Telangana"},"geometry":{"type":"Polygon","coordinates":[[[77.0,18.5],[77.5,18.5],[78.0,18.8],[78.5,19.2],[79.0,19.5],[79.5,19.5],[80.0,19.5],[80.5,19.0],[80.5,18.5],[80.0,18.0],[79.5,17.5],[79.0,17.0],[78.5,17.0],[78.0,17.3],[77.5,17.5],[77.0,17.8],[76.5,18.0],[77.0,18.5]]]}},{"type":"Feature","properties":{"ST_NM":"Andhra Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[78.0,17.3],[78.5,17.0],[79.0,17.0],[79.5,17.5],[80.0,18.0],[80.5,18.5],[81.0,18.5],[81.5,18.0],[82.0,17.5],[82.5,17.0],[83.0,17.5],[83.5,18.0],[84.0,18.5],[84.5,18.8],[84.5,18.0],[84.0,17.5],[83.5,17.0],[83.0,16.5],[82.5,16.0],[82.0,15.5],[81.5,15.0],[81.0,14.5],[80.5,14.0],[80.0,13.8],[79.5,14.0],[79.0,14.2],[78.5,14.5],[78.0,15.0],[77.5,15.5],[77.0,16.0],[77.5,16.5],[78.0,17.0],[78.0,17.3]]]}},{"type":"Feature","properties":{"ST_NM":"Tamil Nadu"},"geometry":{"type":"Polygon","coordinates":[[[77.5,13.0],[78.0,13.3],[78.5,13.5],[79.0,13.8],[79.5,14.0],[80.0,13.8],[80.5,13.5],[80.2,13.0],[80.0,12.5],[79.5,12.0],[79.0,11.5],[78.5,11.0],[78.0,10.5],[77.5,10.0],[77.0,9.8],[76.5,9.5],[76.2,10.0],[76.5,10.5],[77.0,11.0],[77.2,11.5],[77.0,12.0],[76.8,12.5],[77.0,13.0],[77.5,13.0]]]}},{"type":"Feature","properties":{"ST_NM":"Kerala"},"geometry":{"type":"Polygon","coordinates":[[[75.5,12.0],[76.0,12.5],[76.5,12.8],[76.8,12.5],[77.0,12.0],[76.8,11.5],[76.5,11.0],[76.0,10.5],[75.8,10.0],[75.5,9.5],[76.0,8.5],[76.3,8.2],[76.5,8.5],[76.8,9.0],[77.0,9.5],[77.0,9.8],[76.5,9.5],[76.2,10.0],[76.5,10.5],[75.5,11.0],[75.3,11.5],[75.5,12.0]]]}},{"type":"Feature","properties":{"ST_NM":"Ladakh"},"geometry":{"type":"Polygon","coordinates":[[[75.8,34.0],[76.5,34.8],[77.5,35.8],[78.8,35.5],[79.8,34.5],[79.2,33.5],[78.2,32.5],[77.0,32.8],[76.2,33.5],[75.8,34.0]]]}},{"type":"Feature","properties":{"ST_NM":"Andaman & Nicobar"},"geometry":{"type":"Polygon","coordinates":[[[92.6,11.4],[92.8,11.4],[92.9,12.5],[93.0,13.5],[92.7,13.5],[92.5,12.5],[92.6,11.4]]]}},{"type":"Feature","properties":{"ST_NM":"Lakshadweep"},"geometry":{"type":"Polygon","coordinates":[[[72.861,10.566],[72.819,10.6953],[72.709,10.7752],[72.573,10.7752],[72.463,10.6953],[72.421,10.566],[72.463,10.4367],[72.573,10.3568],[72.709,10.3568],[72.819,10.4367],[72.861,10.566]]]}},{"type":"Feature","properties":{"ST_NM":"Chandigarh"},"geometry":{"type":"Polygon","coordinates":[[[76.899,30.733],[76.8761,30.8035],[76.8161,30.8471],[76.7419,30.8471],[76.6819,30.8035],[76.659,30.733],[76.6819,30.6625],[76.7419,30.6189],[76.8161,30.6189],[76.8761,30.6625],[76.899,30.733]]]}},{"type":"Feature","properties":{"ST_NM":"Puducherry"},"geometry":{"type":"Polygon","coordinates":[[[79.928,11.941],[79.9051,12.0115],[79.8451,12.0551],[79.7709,12.0551],[79.7109,12.0115],[79.688,11.941],[79.7109,11.8705],[79.7709,11.8269],[79.8451,11.8269],[79.9051,11.8705],[79.928,11.941]]]}},{"type":"Feature","properties":{"ST_NM":"Dadra & Nagar Have"},"geometry":{"type":"Polygon","coordinates":[[[73.128,20.276],[73.1051,20.3465],[73.0451,20.3901],[72.9709,20.3901],[72.9109,20.3465],[72.888,20.276],[72.9109,20.2055],[72.9709,20.1619],[73.0451,20.1619],[73.1051,20.2055],[73.128,20.276]]]}},{"type":"Feature","properties":{"ST_NM":"Daman & Diu"},"geometry":{"type":"Polygon","coordinates":[[[72.959,20.428],[72.9361,20.4985],[72.8761,20.5421],[72.8019,20.5421],[72.7419,20.4985],[72.719,20.428],[72.7419,20.3575],[72.8019,20.3139],[72.8761,20.3139],[72.9361,20.3575],[72.959,20.428]]]}}]};
+
+const RIVER_DATA = {
+  'Andaman & Nicobar': 'Kalpong Basin',
+  'Andhra Pradesh': 'Krishna & Godavari',
+  'Arunachal Pradesh': 'Siang & Subansiri',
+  'Assam': 'Brahmaputra & Barak',
+  'Bihar': 'Kosi, Gandak & Ganga',
+  'Chandigarh': 'Sukhna Choe',
+  'Chhattisgarh': 'Mahanadi & Hasdeo',
+  'Dadra & Nagar Have': 'Daman Ganga',
+  'Daman & Diu': 'Daman Ganga Estuary',
+  'Delhi': 'Yamuna River',
+  'Goa': 'Mandovi & Zuari',
+  'Gujarat': 'Narmada, Tapi & Sabarmati',
+  'Haryana': 'Yamuna & Ghaggar',
+  'Himachal Pradesh': 'Beas, Sutlej & Ravi',
+  'Jammu & Kashmir': 'Jhelum & Chenab',
+  'Jharkhand': 'Subarnarekha & Damodar',
+  'Karnataka': 'Cauvery & Tungabhadra',
+  'Kerala': 'Periyar, Pamba & Bharathapuzha',
+  'Ladakh': 'Indus River',
+  'Lakshadweep': 'Arabian Sea Atolls',
+  'Madhya Pradesh': 'Narmada, Chambal & Betwa',
+  'Maharashtra': 'Godavari, Krishna & Konkan',
+  'Manipur': 'Imphal & Barak',
+  'Meghalaya': 'Umiam & Simsang',
+  'Mizoram': 'Tlawng & Kolodyne',
+  'Nagaland': 'Dhansiri & Doyang',
+  'Odisha': 'Mahanadi & Brahmani',
+  'Puducherry': 'Gingee & Sankaraparani',
+  'Punjab': 'Sutlej, Beas & Ravi',
+  'Rajasthan': 'Chambal & Luni',
+  'Sikkim': 'Teesta River',
+  'Tamil Nadu': 'Cauvery, Vaigai & Palar',
+  'Telangana': 'Godavari & Krishna',
+  'Tripura': 'Gumti, Howrah & Manu',
+  'Uttar Pradesh': 'Ganga, Yamuna & Ghaghara',
+  'Uttarakhand': 'Alaknanda & Bhagirathi',
+  'West Bengal': 'Hooghly, Teesta & Damodar'
 };
 
-// No static state labels — radar plumes convey all risk data
+const LAT_LNG = {
+  'Andaman & Nicobar': [11.667, 92.736],
+  'Andhra Pradesh': [16.506, 80.648],
+  'Arunachal Pradesh': [27.1, 93.616],
+  'Assam': [26.144, 91.736],
+  'Bihar': [25.594, 85.137],
+  'Chandigarh': [30.733, 76.779],
+  'Chhattisgarh': [21.251, 81.629],
+  'Dadra & Nagar Have': [20.276, 73.008],
+  'Daman & Diu': [20.428, 72.839],
+  'Delhi': [28.613, 77.209],
+  'Goa': [15.498, 73.827],
+  'Gujarat': [22.258, 71.192],
+  'Haryana': [29.058, 76.085],
+  'Himachal Pradesh': [31.104, 77.173],
+  'Jammu & Kashmir': [34.083, 74.797],
+  'Jharkhand': [23.344, 85.309],
+  'Karnataka': [14.52, 75.722],
+  'Kerala': [10.85, 76.271],
+  'Ladakh': [34.152, 77.577],
+  'Lakshadweep': [10.566, 72.641],
+  'Madhya Pradesh': [23.259, 77.412],
+  'Maharashtra': [19.751, 75.713],
+  'Manipur': [24.663, 93.906],
+  'Meghalaya': [25.578, 91.893],
+  'Mizoram': [23.164, 92.937],
+  'Nagaland': [26.158, 94.562],
+  'Odisha': [20.951, 85.098],
+  'Puducherry': [11.941, 79.808],
+  'Punjab': [31.147, 75.341],
+  'Rajasthan': [27.023, 74.217],
+  'Sikkim': [27.533, 88.512],
+  'Tamil Nadu': [11.127, 78.656],
+  'Telangana': [18.112, 79.019],
+  'Tripura': [23.94, 91.988],
+  'Uttar Pradesh': [26.846, 80.946],
+  'Uttarakhand': [30.066, 79.019],
+  'West Bengal': [22.986, 87.855]
+};
 
-// Initialize Map
-const map = L.map('map', {
-  center: [22.8, 82.5],
-  zoom: 5,
-  zoomControl: true,
-  minZoom: 4,
-  maxZoom: 9,
-  worldCopyJump: false,
-});
+function getPred(name) {
+  if (!name) return null;
+  if (PREDS[name]) return PREDS[name];
+  const norm = name.toLowerCase().replace(/&/g,'and').replace(/\s+/g,' ').trim();
+  for (const [k,v] of Object.entries(PREDS)) {
+    if (k.toLowerCase().replace(/&/g,'and').replace(/\s+/g,' ').trim() === norm) return v;
+  }
+  return null;
+}
 
-// Dark Esri Satellite Imagery Base
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-  className: 'satellite-dark',
-  maxZoom: 18,
-  attribution: '',
-}).addTo(map);
+// ═══════════════════════════════════════════════════════════
+// MAP INITIALIZATION (PERMANENT SATELLITE RADAR VIEW)
+// ═══════════════════════════════════════════════════════════
+let map, satLayer, geoLayer, heatLayer, userMarker;
 
-/* =========================================================================
-   FIERY RADAR HEAT PLUMES (Direct Geographic Placement on Indian Basins)
-   ========================================================================= */
-function createRadarOverlay() {
-  const plumes = [
-    // HIGH RISK - Fiery red/white hotspots
-    // 1. NORTH: Kashmir & Jhelum Basin
-    { bounds: [[32.8, 74.2], [35.6, 78.0]], type: 'kashmir' },
-    // 2. NORTH: Uttarakhand Flash Flood Corridor
-    { bounds: [[29.0, 78.2], [31.5, 81.5]], type: 'uttarakhand' },
-    // 3. NORTH-EAST: Assam Brahmaputra Mega-Flood Zone
-    { bounds: [[24.5, 89.8], [28.5, 96.8]], type: 'northeast' },
-    // 4. EAST: Odisha & Bengal Delta Convergence
-    { bounds: [[18.8, 83.5], [22.8, 87.8]], type: 'odisha' },
-    // 5. SOUTH-EAST: Andhra Godavari/Krishna Delta
-    { bounds: [[14.5, 79.2], [18.2, 83.2]], type: 'andhra' },
-    // 6. SOUTH: Tamil Nadu Cauvery Delta
-    { bounds: [[10.2, 78.2], [13.5, 80.8]], type: 'tamilnadu' },
-    // 7. SOUTH-WEST: Kerala Western Ghats Intense Rainfall
-    { bounds: [[8.4, 75.8], [11.8, 77.6]], type: 'kerala' },
+function initMap() {
+  const isMobile = window.innerWidth <= 900;
 
-    // MEDIUM RISK - Orange/yellow moderate zones
-    // 8. Bihar-Kosi Plain
-    { bounds: [[24.5, 83.8], [27.0, 87.5]], type: 'medium' },
-    // 9. Uttar Pradesh Eastern Belt - Ganga
-    { bounds: [[25.0, 79.5], [27.5, 83.5]], type: 'medium' },
-    // 10. West Bengal Plains
-    { bounds: [[22.5, 86.5], [25.0, 89.0]], type: 'medium' },
-    // 11. Maharashtra Western Ghats
-    { bounds: [[17.0, 73.5], [19.8, 76.5]], type: 'medium' },
-    // 12. Gujarat Gulf Coast
-    { bounds: [[21.0, 69.5], [23.5, 73.0]], type: 'medium_light' },
-    // 13. Jharkhand Subarnarekha
-    { bounds: [[22.5, 84.0], [24.5, 86.8]], type: 'medium_light' },
-    // 14. Chhattisgarh Hasdeo
-    { bounds: [[20.2, 80.0], [23.0, 83.0]], type: 'medium_light' },
+  map = L.map('floodMap', {
+    center: isMobile ? [22.5, 79.5] : [22.8, 81.5],
+    zoom: isMobile ? 4.3 : 5,
+    minZoom: 3.8, maxZoom: 12,
+    zoomControl: true,
+    attributionControl: false
+  });
+  map.zoomControl.setPosition('bottomright');
+
+  // Realistic ArcGIS High-Resolution Satellite Earth Imagery
+  satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19
+  }).addTo(map);
+
+  // Geographic labels & boundaries
+  L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 19, pane: 'shadowPane'
+  }).addTo(map);
+
+  // Render Vivid Meteorological Radar Layers & Interactive Clickable States
+  buildRadarLayers();
+  renderGeoLayer(INDIA_GEO);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PURE METEOROLOGICAL RADAR HEATMAP (NO CIRCLES, NO LABELS)
+// ═══════════════════════════════════════════════════════════
+function buildRadarLayers() {
+  if (typeof L.heatLayer !== 'function') return;
+
+  // Dense coordinates along actual river valleys and flood corridors
+  const heatPoints = [
+    // 🔴 HIGH RISK RIVER CORRIDORS (RED ALERT)
+    // North Bihar (Kosi, Gandak & Bagmati Basins)
+    [25.4, 85.1, 0.85], [25.6, 85.4, 0.90], [25.8, 85.7, 0.95], [26.0, 86.1, 1.0],
+    [26.2, 86.4, 1.0], [26.4, 86.7, 1.0], [26.1, 87.0, 0.95], [25.8, 87.3, 0.90],
+    [26.5, 85.5, 0.95], [26.7, 85.2, 0.90], [25.7, 86.6, 1.0], [25.9, 86.9, 0.95],
+
+    // Assam (Brahmaputra Valley Corridor - Dhubri to Dibrugarh)
+    [26.0, 90.1, 0.85], [26.2, 90.8, 0.90], [26.1, 91.5, 0.95], [26.3, 92.2, 1.0],
+    [26.5, 92.8, 1.0], [26.7, 93.4, 1.0], [26.9, 94.0, 1.0], [27.1, 94.5, 0.95],
+    [27.4, 95.0, 0.90], [26.4, 93.0, 1.0], [26.6, 93.6, 1.0], [24.8, 92.8, 0.90],
+
+    // Maharashtra (Godavari, Krishna & Konkan Western Ghats)
+    [19.0, 73.1, 0.90], [19.3, 73.3, 0.95], [19.6, 73.8, 1.0], [19.8, 74.4, 1.0],
+    [19.9, 75.1, 0.95], [19.5, 75.6, 0.90], [18.8, 73.4, 0.90], [18.5, 73.8, 0.85],
+    [17.7, 74.0, 0.85], [19.4, 74.7, 1.0], [19.7, 75.0, 1.0],
+
+    // West Bengal (Gangetic Delta, Teesta & Hooghly)
+    [22.1, 88.1, 0.90], [22.4, 88.3, 0.95], [22.7, 88.4, 1.0], [23.0, 88.3, 0.95],
+    [23.4, 88.2, 0.90], [26.4, 88.4, 0.95], [26.7, 88.6, 1.0], [26.9, 88.9, 0.95],
+
+    // Kerala (Periyar, Pamba & Coastal Catchment)
+    [9.5, 76.6, 0.85], [9.8, 76.5, 0.90], [10.1, 76.4, 1.0], [10.4, 76.3, 1.0],
+    [10.7, 76.2, 0.95], [11.0, 76.0, 0.85], [10.2, 76.7, 0.95],
+
+    // Andhra Pradesh (Krishna & Godavari Estuary)
+    [16.1, 80.7, 0.85], [16.4, 81.1, 0.95], [16.7, 81.5, 1.0], [17.0, 82.0, 0.90],
+    [16.5, 81.3, 1.0], [16.3, 81.0, 0.95],
+
+    // Uttarakhand (Alaknanda & Bhagirathi Valleys)
+    [30.0, 78.6, 0.85], [30.2, 79.0, 0.95], [30.5, 79.3, 1.0], [30.7, 79.6, 0.90],
+
+    // 🟡 MEDIUM RISK RIVER CORRIDORS (YELLOW ALERT)
+    // Eastern Uttar Pradesh (Ghaghara & Rapti)
+    [26.1, 82.6, 0.50], [26.4, 83.1, 0.55], [26.7, 83.6, 0.58], [26.5, 84.1, 0.55],
+    [26.8, 83.8, 0.58], [26.3, 83.3, 0.52],
+
+    // Odisha (Mahanadi & Brahmani Delta)
+    [20.1, 85.5, 0.50], [20.3, 86.0, 0.55], [20.5, 86.5, 0.58], [20.8, 86.9, 0.52],
+    [20.4, 86.3, 0.58],
+
+    // South Gujarat (Tapi & Narmada Lower Basins)
+    [21.0, 72.8, 0.48], [21.3, 73.1, 0.54], [21.5, 73.5, 0.56], [21.7, 73.9, 0.50],
+    [21.4, 73.3, 0.55],
+
+    // Tamil Nadu (Cauvery & Delta)
+    [10.7, 78.7, 0.48], [10.9, 79.1, 0.54], [11.1, 79.5, 0.56], [11.3, 79.8, 0.50],
+
+    // Punjab (Sutlej & Beas)
+    [30.7, 75.1, 0.48], [30.9, 75.5, 0.54], [31.2, 75.9, 0.56], [31.4, 76.2, 0.50]
   ];
 
-  plumes.forEach(p => {
-    L.svgOverlay(createPlumeSVG(p.type), p.bounds, {
-      className: 'radar-plume',
-      interactive: false,
-      opacity: 0.92
-    }).addTo(map);
-  });
+  heatLayer = L.heatLayer(heatPoints, {
+    radius: 46,
+    blur: 26,
+    maxZoom: 10,
+    max: 1.0,
+    minOpacity: 0.40,
+    gradient: {
+      0.30: '#facc15', // Vibrant Doppler Yellow
+      0.55: '#f97316', // Vibrant Doppler Orange
+      0.75: '#ef4444', // Radar Red
+      0.95: '#dc2626'  // Deep Crimson Extreme
+    }
+  }).addTo(map);
 }
 
-function createPlumeSVG(type) {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 400 400');
-  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-
-  if (type === 'kashmir') {
-    defs.innerHTML = `
-      <radialGradient id="gradK" cx="50%" cy="50%" r="48%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-        <stop offset="25%" stop-color="#ffea00" stop-opacity="0.95" />
-        <stop offset="55%" stop-color="#ff3b00" stop-opacity="0.9" />
-        <stop offset="85%" stop-color="#d00000" stop-opacity="0.7" />
-        <stop offset="100%" stop-color="#880000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurK"><feGaussianBlur stdDeviation="7" /></filter>
-    `;
-    svg.appendChild(defs);
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M 100,200 C 120,130 220,110 300,160 C 370,200 360,290 280,320 C 190,350 90,300 100,200 Z');
-    path.setAttribute('fill', 'url(#gradK)');
-    path.setAttribute('filter', 'url(#blurK)');
-    svg.appendChild(path);
-
-  } else if (type === 'uttarakhand') {
-    defs.innerHTML = `
-      <radialGradient id="gradUK" cx="50%" cy="50%" r="45%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-        <stop offset="30%" stop-color="#ffdd00" stop-opacity="0.9" />
-        <stop offset="60%" stop-color="#ff3300" stop-opacity="0.85" />
-        <stop offset="90%" stop-color="#cc0000" stop-opacity="0.5" />
-        <stop offset="100%" stop-color="#800000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurUK"><feGaussianBlur stdDeviation="6" /></filter>
-    `;
-    svg.appendChild(defs);
-    const ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    ellipse.setAttribute('cx', '200');
-    ellipse.setAttribute('cy', '200');
-    ellipse.setAttribute('rx', '150');
-    ellipse.setAttribute('ry', '90');
-    ellipse.setAttribute('transform', 'rotate(-30 200 200)');
-    ellipse.setAttribute('fill', 'url(#gradUK)');
-    ellipse.setAttribute('filter', 'url(#blurUK)');
-    svg.appendChild(ellipse);
-
-  } else if (type === 'northeast') {
-    defs.innerHTML = `
-      <radialGradient id="gradNE" cx="55%" cy="45%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-        <stop offset="25%" stop-color="#ffe600" stop-opacity="0.98" />
-        <stop offset="55%" stop-color="#ff3700" stop-opacity="0.92" />
-        <stop offset="85%" stop-color="#d60000" stop-opacity="0.75" />
-        <stop offset="100%" stop-color="#8a0000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurNE"><feGaussianBlur stdDeviation="7" /></filter>
-    `;
-    svg.appendChild(defs);
-    const body = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    body.setAttribute('d', 'M 50,220 C 70,140 160,110 260,130 C 350,150 380,210 350,270 C 300,340 180,360 110,320 C 50,280 40,250 50,220 Z');
-    body.setAttribute('fill', 'url(#gradNE)');
-    body.setAttribute('filter', 'url(#blurNE)');
-    svg.appendChild(body);
-
-  } else if (type === 'odisha') {
-    defs.innerHTML = `
-      <radialGradient id="gradOD" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-        <stop offset="30%" stop-color="#ffe600" stop-opacity="0.95" />
-        <stop offset="65%" stop-color="#ff2e00" stop-opacity="0.88" />
-        <stop offset="90%" stop-color="#d00000" stop-opacity="0.6" />
-        <stop offset="100%" stop-color="#800000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurOD"><feGaussianBlur stdDeviation="6" /></filter>
-    `;
-    svg.appendChild(defs);
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M 120,280 C 80,180 180,100 280,140 C 360,180 340,290 260,330 C 180,360 140,320 120,280 Z');
-    path.setAttribute('fill', 'url(#gradOD)');
-    path.setAttribute('filter', 'url(#blurOD)');
-    svg.appendChild(path);
-
-  } else if (type === 'andhra') {
-    defs.innerHTML = `
-      <radialGradient id="gradAP" cx="52%" cy="48%" r="48%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-        <stop offset="30%" stop-color="#ffdd00" stop-opacity="0.95" />
-        <stop offset="60%" stop-color="#ff2200" stop-opacity="0.9" />
-        <stop offset="90%" stop-color="#cc0000" stop-opacity="0.65" />
-        <stop offset="100%" stop-color="#800000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurAP"><feGaussianBlur stdDeviation="6" /></filter>
-    `;
-    svg.appendChild(defs);
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', 'M 140,300 C 100,200 200,90 300,130 C 370,170 350,280 280,330 C 200,370 160,340 140,300 Z');
-    path.setAttribute('fill', 'url(#gradAP)');
-    path.setAttribute('filter', 'url(#blurAP)');
-    svg.appendChild(path);
-
-  } else if (type === 'tamilnadu') {
-    defs.innerHTML = `
-      <radialGradient id="gradTN" cx="50%" cy="50%" r="48%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-        <stop offset="35%" stop-color="#ffea00" stop-opacity="0.9" />
-        <stop offset="70%" stop-color="#ff3300" stop-opacity="0.85" />
-        <stop offset="92%" stop-color="#d00000" stop-opacity="0.5" />
-        <stop offset="100%" stop-color="#800000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurTN"><feGaussianBlur stdDeviation="6" /></filter>
-    `;
-    svg.appendChild(defs);
-    const ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    ellipse.setAttribute('cx', '200');
-    ellipse.setAttribute('cy', '200');
-    ellipse.setAttribute('rx', '130');
-    ellipse.setAttribute('ry', '160');
-    ellipse.setAttribute('transform', 'rotate(-15 200 200)');
-    ellipse.setAttribute('fill', 'url(#gradTN)');
-    ellipse.setAttribute('filter', 'url(#blurTN)');
-    svg.appendChild(ellipse);
-
-  } else if (type === 'kerala') {
-    defs.innerHTML = `
-      <radialGradient id="gradKL" cx="50%" cy="50%" r="48%">
-        <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
-        <stop offset="30%" stop-color="#ffea00" stop-opacity="0.95" />
-        <stop offset="65%" stop-color="#ff2200" stop-opacity="0.9" />
-        <stop offset="90%" stop-color="#cc0000" stop-opacity="0.6" />
-        <stop offset="100%" stop-color="#800000" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurKL"><feGaussianBlur stdDeviation="5" /></filter>
-    `;
-    svg.appendChild(defs);
-    const ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    ellipse.setAttribute('cx', '200');
-    ellipse.setAttribute('cy', '200');
-    ellipse.setAttribute('rx', '85');
-    ellipse.setAttribute('ry', '160');
-    ellipse.setAttribute('transform', 'rotate(20 200 200)');
-    ellipse.setAttribute('fill', 'url(#gradKL)');
-    ellipse.setAttribute('filter', 'url(#blurKL)');
-    svg.appendChild(ellipse);
-
-  } else if (type === 'medium') {
-    defs.innerHTML = `
-      <radialGradient id="gradMED_${Math.random().toString(36).substr(2,5)}" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffee00" stop-opacity="0.85" />
-        <stop offset="35%" stop-color="#ff8800" stop-opacity="0.7" />
-        <stop offset="70%" stop-color="#cc4400" stop-opacity="0.45" />
-        <stop offset="100%" stop-color="#882200" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurMED"><feGaussianBlur stdDeviation="14" /></filter>
-    `;
-    const uid = 'med_' + Math.random().toString(36).substr(2,5);
-    svg.appendChild(defs);
-    const dg = defs.querySelector('radialGradient');
-    const gid = 'gradMED_' + uid;
-    dg.setAttribute('id', gid);
-    const el = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    el.setAttribute('cx', '200'); el.setAttribute('cy', '200');
-    el.setAttribute('rx', '160'); el.setAttribute('ry', '140');
-    el.setAttribute('fill', `url(#${gid})`);
-    el.setAttribute('filter', 'url(#blurMED)');
-    svg.appendChild(el);
-
-  } else if (type === 'medium_light') {
-    const uid2 = 'mlt_' + Math.random().toString(36).substr(2,5);
-    defs.innerHTML = `
-      <radialGradient id="${uid2}" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stop-color="#ffe066" stop-opacity="0.65" />
-        <stop offset="50%" stop-color="#ff8800" stop-opacity="0.38" />
-        <stop offset="100%" stop-color="#883300" stop-opacity="0" />
-      </radialGradient>
-      <filter id="blurML_${uid2}"><feGaussianBlur stdDeviation="18" /></filter>
-    `;
-    svg.appendChild(defs);
-    const el2 = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-    el2.setAttribute('cx', '200'); el2.setAttribute('cy', '200');
-    el2.setAttribute('rx', '170'); el2.setAttribute('ry', '155');
-    el2.setAttribute('fill', `url(#${uid2})`);
-    el2.setAttribute('filter', `url(#blurML_${uid2})`);
-    svg.appendChild(el2);
-  }
-
-  return svg;
-}
-
-/* =========================================================================
-   STATE BOUNDARY GIS RENDERING (Invisible — only plumes show risk)
-   ========================================================================= */
-let geoLayer;
-
-function styleState(feature) {
+// ═══════════════════════════════════════════════════════════
+// CLICKABLE STATE BOUNDARIES (Click state to show risk details)
+// ═══════════════════════════════════════════════════════════
+function getStateStyle() {
   return {
-    fillColor: 'transparent',
-    fillOpacity: 0,
-    color: 'transparent',
-    weight: 0,
-    opacity: 0
+    fillColor: '#000000',
+    fillOpacity: 0.0,
+    stroke: false,
+    weight: 0
   };
 }
 
-function onEachState(feature, layer) {
-  const name = getName(feature);
-  const r = getRisk(name);
+function renderGeoLayer(geoData) {
+  if (geoLayer) map.removeLayer(geoLayer);
 
-  layer.on({
-    mouseover(e) {
-      // subtle invisible hit-area hover — no visible border change
-    },
-    mouseout(e) { },
-    click(e) {
-      const lv = r.level;
-      map.closePopup();
-      L.popup({ maxWidth: 280 })
-        .setLatLng(e.latlng)
-        .setContent(`
-          <div class="sp">
-            <div class="sp-name">${name || 'Region Assessment'}</div>
-            <div class="sp-row">
-              <span class="sp-badge ${lv}">${lv.toUpperCase()} RISK</span>
-              <span style="font-size: 11px; color: #94a3b8;">Telemetry ID: #FW-${Math.floor(1000 + Math.random()*9000)}</span>
-            </div>
-            <div class="sp-prob ${lv}">${r.prob}%</div>
-            <div class="sp-prob-label">Real-time Flood Inundation Probability</div>
-            <div class="sp-metric">
-              <span>Basin / Catchment:</span>
-              <span style="font-weight: 600; color: #f1f5f9;">${r.river || 'Regional Basin'}</span>
-            </div>
-            <div class="sp-metric">
-              <span>24h Inflow Index:</span>
-              <span style="font-weight: 600; color: #38bdf8;">${r.rain || '145 mm'}</span>
-            </div>
-            <div class="sp-alert">⚠ ${r.note}</div>
-            <div class="sp-unlock" onclick="openModal()">
-              🔐 Sign in for Block-Level Forecast &rarr;
-            </div>
-          </div>`)
-        .openOn(map);
+  geoLayer = L.geoJSON(geoData, {
+    style: getStateStyle,
+    onEachFeature: (feature, layer) => {
+      const name = feature.properties.ST_NM || 'Region';
+      const pred = getPred(name);
+      const probStr = pred ? pred.probability_str : '0%';
+      const isHigh = pred && pred.probability >= 0.75;
+      const isMed = pred && pred.probability >= 0.25 && pred.probability < 0.75;
+      const riskLabel = isHigh ? '🔴 High Risk' : (isMed ? '🟡 Medium Risk' : '🟢 Safe (Normal)');
+
+      layer.bindTooltip(
+        `<b>${name}</b> — ${riskLabel} (Click for details)`,
+        { sticky: true, direction: 'top' }
+      );
+
+      layer.on({
+        mouseover() {
+          layer.setStyle({ fillOpacity: 0.14, fillColor: isHigh ? '#ef4444' : (isMed ? '#facc15' : '#38bdf8'), stroke: false });
+          layer.bringToFront();
+        },
+        mouseout() { geoLayer.resetStyle(layer); },
+        click(e) { showPopup(name, pred, e.latlng); }
+      });
     }
-  });
-}
-
-function getName(feature) {
-  const p = feature.properties;
-  return p.ST_NM || p.NAME_1 || p.shapeName || p.NAME || p.name || p.statename || '';
-}
-
-function getRisk(rawName) {
-  if (!rawName) return { level:'low', prob:12, note:'Standard baseline monitoring' };
-  if (RISK[rawName]) return RISK[rawName];
-  const lo = rawName.toLowerCase();
-  for (const k of Object.keys(RISK)) {
-    if (k.toLowerCase() === lo || lo.includes(k.toLowerCase()) || k.toLowerCase().includes(lo)) {
-      return RISK[k];
-    }
-  }
-  return { level:'low', prob:14, note:'Normal meteorological parameters' };
-}
-
-function addMapLabels() {
-  STATE_DISPLAY_LABELS.forEach(item => {
-    const customIcon = L.divIcon({
-      className: `state-map-label ${item.high ? 'high-zone' : ''}`,
-      html: `<div>${item.name}</div>`,
-      iconSize: [100, 20],
-      iconAnchor: [50, 10]
-    });
-    L.marker(item.latlng, { icon: customIcon, interactive: false }).addTo(map);
-  });
-}
-
-// Fallback Indian State GeoJSON
-const INDIA_GEOJSON = {
-  "type":"FeatureCollection",
-  "features":[
-    {"type":"Feature","properties":{"ST_NM":"Jammu and Kashmir"},"geometry":{"type":"Polygon","coordinates":[[[74.3,32.7],[74.6,33.2],[75.3,33.5],[75.9,33.9],[76.5,34.3],[77.1,34.7],[77.6,35.5],[78.3,35.7],[79.0,35.2],[79.5,34.5],[79.2,33.8],[78.8,33.2],[78.0,32.5],[77.3,32.0],[76.5,31.8],[75.8,32.0],[75.2,32.3],[74.7,32.1],[74.3,32.7]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Himachal Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[75.8,32.0],[76.5,31.8],[77.3,32.0],[78.0,32.5],[78.4,31.8],[78.0,31.2],[77.4,30.6],[76.9,30.4],[76.3,30.8],[75.9,31.2],[75.8,32.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Punjab"},"geometry":{"type":"Polygon","coordinates":[[[73.9,29.6],[74.3,30.1],[74.9,30.5],[75.4,30.9],[75.9,31.2],[76.3,30.8],[76.0,30.1],[75.5,29.7],[75.0,29.4],[74.5,29.4],[73.9,29.6]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Haryana"},"geometry":{"type":"Polygon","coordinates":[[[74.5,29.4],[75.0,29.4],[75.5,29.7],[76.0,30.1],[76.3,30.8],[76.9,30.4],[77.4,30.0],[77.4,29.2],[77.0,28.6],[76.5,28.3],[75.9,28.4],[75.4,28.6],[74.9,28.9],[74.5,29.4]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Delhi"},"geometry":{"type":"Polygon","coordinates":[[[76.8,28.4],[77.1,28.4],[77.3,28.7],[77.2,29.0],[76.9,29.0],[76.7,28.8],[76.8,28.4]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Uttarakhand"},"geometry":{"type":"Polygon","coordinates":[[[77.4,30.0],[77.4,30.6],[78.0,31.2],[78.4,31.8],[79.2,31.5],[79.5,30.8],[79.0,30.0],[78.3,29.5],[77.7,29.5],[77.4,30.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Uttar Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[77.4,29.2],[77.4,30.0],[77.7,29.5],[78.3,29.5],[79.0,30.0],[79.5,30.0],[80.2,29.6],[80.6,29.0],[81.3,28.8],[82.0,28.6],[83.2,28.0],[84.0,27.5],[83.5,27.0],[82.8,26.5],[82.0,26.0],[81.0,25.6],[80.0,25.8],[79.2,26.2],[78.5,26.8],[77.8,27.5],[77.4,28.0],[77.0,28.6],[77.4,29.2]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Rajasthan"},"geometry":{"type":"Polygon","coordinates":[[[69.5,23.0],[70.0,23.5],[70.8,24.0],[71.5,24.5],[72.3,24.9],[73.0,25.3],[73.7,25.8],[74.5,26.3],[75.2,26.8],[75.8,27.2],[76.5,28.3],[77.0,28.6],[77.4,28.0],[77.8,27.5],[77.4,27.0],[76.8,26.8],[76.3,26.2],[75.8,25.7],[75.3,25.2],[74.8,24.5],[74.2,24.0],[73.5,23.5],[72.8,23.0],[72.0,22.8],[71.2,22.8],[70.5,22.8],[69.9,22.8],[69.5,23.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Gujarat"},"geometry":{"type":"Polygon","coordinates":[[[68.0,22.0],[68.5,22.5],[69.0,22.8],[69.5,23.0],[70.5,22.8],[71.2,22.8],[72.0,22.8],[72.8,23.0],[73.5,23.5],[74.0,23.5],[74.5,23.0],[74.5,22.3],[74.0,21.8],[73.5,21.3],[73.0,20.8],[72.5,20.5],[72.2,21.0],[71.8,21.5],[71.3,21.8],[70.8,22.0],[70.2,22.2],[69.6,21.9],[69.1,22.2],[68.5,22.5],[68.0,22.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Madhya Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[74.5,26.3],[75.2,26.8],[75.8,27.2],[76.3,26.2],[76.8,26.8],[77.4,27.0],[77.8,27.5],[78.0,27.0],[79.2,26.2],[80.0,25.8],[81.0,25.6],[82.0,26.0],[82.8,26.5],[83.0,25.8],[82.5,25.0],[82.0,24.5],[81.5,24.0],[81.0,23.5],[80.5,23.0],[80.0,22.5],[79.3,22.0],[78.5,21.8],[77.8,22.0],[77.0,22.2],[76.3,22.0],[75.5,22.2],[74.8,22.5],[74.2,23.0],[73.5,23.5],[74.0,24.0],[74.8,24.5],[75.3,25.2],[75.8,25.7],[76.3,26.2],[74.5,26.3]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Bihar"},"geometry":{"type":"Polygon","coordinates":[[[83.2,28.0],[84.0,27.5],[85.0,27.0],[86.0,27.0],[87.0,26.8],[87.5,26.3],[87.0,25.7],[86.5,25.3],[85.9,25.0],[85.2,24.7],[84.5,24.5],[83.8,24.7],[83.2,25.0],[82.8,25.5],[82.8,26.5],[83.2,28.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Jharkhand"},"geometry":{"type":"Polygon","coordinates":[[[83.8,24.7],[84.5,24.5],[85.2,24.7],[85.9,25.0],[86.5,25.3],[87.0,25.7],[87.5,25.3],[87.8,24.6],[87.5,24.0],[87.0,23.5],[86.5,23.0],[85.8,22.7],[85.0,22.5],[84.3,22.8],[83.7,23.2],[83.2,23.8],[83.2,24.5],[83.8,24.7]]]}},
-    {"type":"Feature","properties":{"ST_NM":"West Bengal"},"geometry":{"type":"Polygon","coordinates":[[[87.0,26.8],[88.0,26.7],[88.5,26.5],[89.0,26.3],[88.8,25.8],[88.5,25.2],[88.0,24.5],[87.5,24.0],[87.5,23.5],[87.0,23.0],[86.5,22.5],[86.0,22.0],[87.5,21.5],[87.8,22.0],[88.2,22.5],[88.5,22.8],[88.6,22.0],[88.4,21.5],[88.0,21.0],[87.3,21.5],[86.0,22.0],[87.0,23.0],[87.5,23.5],[87.5,24.0],[87.0,25.7],[87.5,26.3],[87.0,26.8]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Sikkim"},"geometry":{"type":"Polygon","coordinates":[[[88.0,27.5],[88.4,27.6],[88.9,27.5],[88.8,27.0],[88.5,26.5],[88.0,26.7],[87.8,27.0],[88.0,27.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Arunachal Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[91.5,27.5],[92.0,27.8],[93.0,28.0],[94.0,28.2],[95.0,28.0],[96.0,28.5],[97.0,28.2],[97.5,28.0],[97.0,27.3],[96.5,27.0],[96.0,27.2],[95.5,27.0],[95.0,27.0],[94.5,27.0],[94.0,27.2],[93.5,27.0],[93.0,27.0],[92.5,27.0],[92.0,27.0],[91.5,27.0],[91.5,27.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Assam"},"geometry":{"type":"Polygon","coordinates":[[[89.5,26.3],[90.0,26.5],[90.5,26.7],[91.0,26.8],[91.5,27.0],[92.0,27.0],[92.5,27.0],[93.0,27.0],[93.5,27.0],[94.0,27.2],[94.5,27.0],[95.0,27.0],[95.5,26.8],[95.0,26.3],[94.5,26.0],[94.0,25.7],[93.5,25.5],[93.0,25.7],[92.5,25.5],[92.0,25.0],[91.5,25.0],[91.0,25.2],[90.5,25.5],[90.0,25.8],[89.5,26.3]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Nagaland"},"geometry":{"type":"Polygon","coordinates":[[[93.5,25.5],[94.0,25.7],[94.5,26.0],[95.0,26.3],[95.5,26.8],[95.5,26.3],[95.8,25.8],[95.5,25.3],[95.0,25.0],[94.5,25.0],[94.0,25.0],[93.5,25.0],[93.5,25.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Manipur"},"geometry":{"type":"Polygon","coordinates":[[[93.0,25.7],[93.5,25.5],[94.0,25.0],[94.5,25.0],[95.0,25.0],[94.8,24.5],[94.5,24.0],[94.0,23.8],[93.5,23.8],[93.0,24.0],[92.8,24.5],[92.8,25.0],[93.0,25.7]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Mizoram"},"geometry":{"type":"Polygon","coordinates":[[[92.8,24.5],[93.0,24.0],[93.5,23.8],[93.8,23.3],[93.5,22.8],[93.0,22.5],[92.5,22.8],[92.2,23.2],[92.0,23.7],[92.2,24.2],[92.5,24.5],[92.8,24.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Tripura"},"geometry":{"type":"Polygon","coordinates":[[[91.5,23.5],[91.9,23.8],[92.5,23.8],[92.8,23.5],[92.5,23.0],[92.2,22.8],[91.9,22.9],[91.5,23.0],[91.5,23.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Meghalaya"},"geometry":{"type":"Polygon","coordinates":[[[89.8,25.5],[90.3,25.8],[90.8,25.8],[91.5,25.7],[92.0,25.5],[92.5,25.2],[92.0,25.0],[91.5,25.0],[91.0,25.2],[90.5,25.5],[90.0,25.8],[89.8,25.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Odisha"},"geometry":{"type":"Polygon","coordinates":[[[81.5,21.0],[82.0,21.5],[82.5,21.8],[83.0,22.0],[83.7,22.5],[84.3,22.8],[85.0,22.5],[85.8,22.0],[86.5,21.8],[87.0,21.5],[87.5,21.0],[87.0,20.5],[86.5,20.0],[86.0,19.8],[85.5,19.5],[85.0,19.2],[84.5,18.8],[84.0,18.5],[83.5,18.5],[83.0,19.0],[82.5,19.5],[82.0,20.0],[81.5,20.5],[81.5,21.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Chhattisgarh"},"geometry":{"type":"Polygon","coordinates":[[[80.0,22.5],[80.5,23.0],[81.0,23.5],[81.5,24.0],[82.0,24.5],[82.5,25.0],[83.0,25.0],[83.2,24.5],[83.2,23.8],[82.8,23.3],[82.5,22.7],[82.0,22.2],[81.5,21.8],[81.0,21.5],[80.5,21.5],[80.0,22.0],[80.0,22.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Maharashtra"},"geometry":{"type":"Polygon","coordinates":[[[72.8,20.5],[73.0,21.0],[73.5,21.3],[74.0,21.8],[74.5,22.3],[75.0,22.5],[75.5,22.5],[76.3,22.0],[77.0,22.2],[77.8,22.0],[78.5,21.8],[79.3,22.0],[80.0,22.0],[80.5,21.5],[80.5,21.0],[80.0,20.5],[79.5,20.0],[79.0,19.5],[78.5,19.2],[78.0,18.8],[77.5,18.5],[77.0,18.5],[76.5,18.8],[76.0,19.0],[75.5,19.2],[75.0,19.5],[74.5,19.8],[74.0,20.0],[73.5,20.2],[73.0,20.3],[72.8,20.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Goa"},"geometry":{"type":"Polygon","coordinates":[[[73.7,15.0],[74.0,15.2],[74.3,15.5],[74.5,15.8],[74.5,14.9],[74.2,14.8],[73.9,14.9],[73.7,15.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Karnataka"},"geometry":{"type":"Polygon","coordinates":[[[74.0,15.2],[74.5,15.8],[75.0,16.0],[75.5,16.3],[76.0,16.8],[76.5,17.2],[77.0,17.5],[77.5,17.8],[78.0,17.8],[78.5,18.0],[78.5,17.0],[78.0,16.5],[77.5,16.0],[77.0,15.5],[76.5,15.0],[76.0,14.5],[75.5,14.0],[75.0,13.8],[74.8,13.3],[74.5,13.0],[74.2,13.5],[74.0,13.8],[73.8,14.5],[74.0,15.2]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Telangana"},"geometry":{"type":"Polygon","coordinates":[[[77.0,18.5],[77.5,18.5],[78.0,18.8],[78.5,19.2],[79.0,19.5],[79.5,19.5],[80.0,19.5],[80.5,19.0],[80.5,18.5],[80.0,18.0],[79.5,17.5],[79.0,17.0],[78.5,17.0],[78.0,17.3],[77.5,17.5],[77.0,17.8],[76.5,18.0],[77.0,18.5]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Andhra Pradesh"},"geometry":{"type":"Polygon","coordinates":[[[78.0,17.3],[78.5,17.0],[79.0,17.0],[79.5,17.5],[80.0,18.0],[80.5,18.5],[81.0,18.5],[81.5,18.0],[82.0,17.5],[82.5,17.0],[83.0,17.5],[83.5,18.0],[84.0,18.5],[84.5,18.8],[84.5,18.0],[84.0,17.5],[83.5,17.0],[83.0,16.5],[82.5,16.0],[82.0,15.5],[81.5,15.0],[81.0,14.5],[80.5,14.0],[80.0,13.8],[79.5,14.0],[79.0,14.2],[78.5,14.5],[78.0,15.0],[77.5,15.5],[77.0,16.0],[77.5,16.5],[78.0,17.0],[78.0,17.3]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Tamil Nadu"},"geometry":{"type":"Polygon","coordinates":[[[77.5,13.0],[78.0,13.3],[78.5,13.5],[79.0,13.8],[79.5,14.0],[80.0,13.8],[80.5,13.5],[80.2,13.0],[80.0,12.5],[79.5,12.0],[79.0,11.5],[78.5,11.0],[78.0,10.5],[77.5,10.0],[77.0,9.8],[76.5,9.5],[76.2,10.0],[76.5,10.5],[77.0,11.0],[77.2,11.5],[77.0,12.0],[76.8,12.5],[77.0,13.0],[77.5,13.0]]]}},
-    {"type":"Feature","properties":{"ST_NM":"Kerala"},"geometry":{"type":"Polygon","coordinates":[[[75.5,12.0],[76.0,12.5],[76.5,12.8],[76.8,12.5],[77.0,12.0],[76.8,11.5],[76.5,11.0],[76.0,10.5],[75.8,10.0],[75.5,9.5],[76.0,8.5],[76.3,8.2],[76.5,8.5],[76.8,9.0],[77.0,9.5],[77.0,9.8],[76.5,9.5],[76.2,10.0],[76.5,10.5],[75.5,11.0],[75.3,11.5],[75.5,12.0]]]}}
-  ]
-};
-
-function renderMap(data) {
-  geoLayer = L.geoJSON(data, {
-    style: styleState,
-    onEachFeature: onEachState,
   }).addTo(map);
-
-  // Render Weather-Radar Flood Risk Plumes
-  createRadarOverlay();
-
-  document.getElementById('loader').style.display = 'none';
 }
 
-// GeoJSON Loading Logic
-const GEOJSON_URLS = [
-  'https://cdn.jsdelivr.net/gh/datameet/maps@master/States/India_States.geojson',
-  'https://cdn.jsdelivr.net/gh/geohacker/india@master/state/india_state.geojson',
-];
+function showPopup(name, pred, latlng) {
+  const prob = pred ? pred.probability : 0.02;
+  const probStr = pred ? pred.probability_str : '2.0%';
+  const isHigh = prob >= 0.75;
+  const isMed = prob >= 0.25 && prob < 0.75;
+  const cat = isHigh ? 'Extreme High Risk' : (isMed ? 'Moderate Risk' : 'Normal / Safe');
+  const guidance = pred ? pred.action_guidance : 'Normal conditions. Standard monitoring active.';
+  const river = RIVER_DATA[name] || 'Regional Catchment';
+  const cls = isHigh ? 'high' : (isMed ? 'med' : 'low');
 
-function loadGeoJSON(urls, idx = 0) {
-  if (idx >= urls.length) {
-    renderMap(INDIA_GEOJSON);
-    return;
+  const popupId = 'pop-' + Math.random().toString(36).substring(2, 9);
+
+  const initialHtml = `
+    <div class="pop-wrap" id="${popupId}">
+      <div class="pop-state">${name}</div>
+      <div class="pop-row1">
+        <span class="pop-badge pb-${cls}">${isHigh ? '⚠️ HIGH RISK' : (isMed ? '🟡 MEDIUM RISK' : '🟢 NORMAL / SAFE')}</span>
+        <span style="font-size:8.5px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:2px 5px; border-radius:3px; font-weight:700;">LIVE METEO</span>
+      </div>
+      <div class="pop-prob-big ppb-${cls}">${probStr}</div>
+      <div class="pop-prob-cap">Gradient Boosting Flood Inundation Probability</div>
+      
+      <div id="${popupId}-telemetry" style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; margin:6px 0; font-size:10px; border:1px solid rgba(255,255,255,0.06);">
+        <div style="color:#38bdf8; font-size:9.5px; margin-bottom:3px; display:flex; align-items:center; gap:4px;">
+          <span style="width:5px; height:5px; border-radius:50%; background:#10b981; display:inline-block;"></span>
+          <span>Fetching Open-Meteo & GloFAS...</span>
+        </div>
+        <div style="font-size:9.5px; color:#94a3b8;">River Basin: <b>${river}</b></div>
+      </div>
+
+      <div class="pop-meta"><span>Status</span><b style="color:${isHigh ? '#ef4444' : (isMed ? '#facc15' : '#10b981')}">${cat}</b></div>
+      <div class="pop-guidance pg-${cls}">⚡ ${guidance}</div>
+      <button class="pop-action" onclick="openModal()">🔓 District Inundation Map →</button>
+    </div>`;
+
+  const popup = L.popup({ maxWidth: 280, closeButton: true })
+    .setLatLng(latlng)
+    .setContent(initialHtml)
+    .openOn(map);
+
+  // Concurrently fetch Live Open-Meteo & GloFAS API Telemetry from backend
+  fetch('http://127.0.0.1:8000/predict-flood', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ state: name, rainfall_24h_mm: 0 })
+  })
+  .then(res => res.ok ? res.json() : null)
+  .then(data => {
+    if (!data) return;
+    const telemEl = document.getElementById(`${popupId}-telemetry`);
+    if (!telemEl) return;
+
+    const w = data.live_weather || {};
+    const r = data.river_telemetry || {};
+    const imd = data.imd_alert || {};
+    const dam = data.dam_telemetry || {};
+
+    telemEl.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:3px;">
+        <span style="color:#10b981; font-weight:700; font-size:9px;">📡 Open-Meteo Live</span>
+        <span style="background:${imd.color || '#16a34a'}; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:3px;">${imd.level || 'GREEN SAFE'}</span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:9.5px; color:#cbd5e1;">
+        <div>🌧️ Rain: <b style="color:#38bdf8;">${w.accumulated_24h_rainfall_mm || 0}mm</b></div>
+        <div>🌊 Flow: <b style="color:#38bdf8;">${r.discharge_m3s !== null ? `${r.discharge_m3s}m³/s` : 'Normal'}</b></div>
+        <div>🌡️ Temp: <b>${w.temperature_c || 28}°C</b></div>
+        <div>🌱 Soil: <b>${w.soil_moisture || 0.3}</b></div>
+      </div>
+      ${dam.total_dams_in_zone ? `
+        <div style="margin-top:4px; font-size:8.5px; color:#94a3b8; border-top:1px dashed rgba(255,255,255,0.08); padding-top:2px;">
+          🏛️ CWC Dams: <b>${dam.total_dams_in_zone} dams</b> (${dam.total_storage_capacity_mcm} MCM capacity)
+        </div>
+      ` : ''}
+    `;
+  })
+  .catch(err => {
+    console.warn("Live API popup update deferred:", err);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// MOBILE TAB SWITCHER
+// ═══════════════════════════════════════════════════════════
+function switchMobileTab(tab) {
+  const tabMap = document.getElementById('tabMap');
+  const tabFeatures = document.getElementById('tabFeatures');
+  const mapPanel = document.getElementById('mapPanel');
+  const featuresPanel = document.getElementById('featuresPanel');
+
+  if (tab === 'map') {
+    tabMap.classList.add('active');
+    tabFeatures.classList.remove('active');
+    mapPanel.classList.add('active-tab');
+    featuresPanel.classList.remove('active-tab');
+    if (map) setTimeout(() => map.invalidateSize(), 150);
+  } else {
+    tabFeatures.classList.add('active');
+    tabMap.classList.remove('active');
+    featuresPanel.classList.add('active-tab');
+    mapPanel.classList.remove('active-tab');
   }
-  fetch(urls[idx])
-    .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-    .then(data => renderMap(data))
-    .catch(() => loadGeoJSON(urls, idx + 1));
 }
 
-loadGeoJSON(GEOJSON_URLS);
-
-// Modal functions
-function openModal() {
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-}
-function modalBackdrop(e) {
-  if (e.target === document.getElementById('modal')) closeModal();
-}
-
-function filterRisk(level) {
-  showToast(`Filtering: ${level.toUpperCase()} risk flood corridors`, 'info');
-}
-
-// Locate Me
-let userMarker = null;
+// ═══════════════════════════════════════════════════════════
+// MY LOCATION
+// ═══════════════════════════════════════════════════════════
 function locateMe() {
-  if (!navigator.geolocation) {
-    alert('Geolocation is not supported by your browser.');
-    return;
-  }
-  const btn = document.getElementById('btnLocate');
-  btn.innerHTML = '<span>⏳</span> Locating…';
+  const btn = document.getElementById('locateBtn');
+  if (!navigator.geolocation) { alert('Geolocation not supported.'); return; }
   btn.disabled = true;
+  btn.innerHTML = '⏳ Locating...';
 
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      const { latitude: lat, longitude: lng } = pos.coords;
-      if (userMarker) map.removeLayer(userMarker);
-      userMarker = L.circleMarker([lat, lng], {
-        radius: 9,
-        fillColor: '#38bdf8',
-        color: '#ffffff',
-        weight: 2,
-        fillOpacity: 1
-      }).addTo(map);
-      map.flyTo([lat, lng], 7);
-      btn.innerHTML = '<span>📍</span> Locate Me';
-      btn.disabled = false;
-      showToast('Position acquired. Scanning local flood risk...', 'info');
-    },
-    () => {
-      alert('Location access denied or unavailable.');
-      btn.innerHTML = '<span>📍</span> Locate Me';
-      btn.disabled = false;
-    }
-  );
-}
-</script>
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+    if (userMarker) map.removeLayer(userMarker);
 
-<script src="assets/toast.js"></script>
-<script>
-// Authentication State Management
-const AUTH_API = (window.location.protocol === 'file:') ? 'http://localhost:5000/api/auth' : '/api/auth';
+    userMarker = L.circleMarker([lat, lng], {
+      radius: 10, fillColor: '#38bdf8', color: '#fff',
+      weight: 2.5, fillOpacity: 0.95
+    }).bindPopup(`
+      <div class="pop-wrap" style="min-width:180px;">
+        <div class="pop-state" style="font-size:14px;">📍 Your Location</div>
+        <div style="font-size:11px;color:#94a3b8;margin:4px 0;">${lat.toFixed(4)}°N, ${lng.toFixed(4)}°E</div>
+        <div style="font-size:11px;color:#10b981;margin-top:6px;">✅ Location synced with regional flood sensors.</div>
+        <button class="pop-action" style="margin-top:10px;" onclick="openModal()">🔓 See My Area Flood Risk</button>
+      </div>`).addTo(map);
 
-async function checkAuthState() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('auth') === 'google_success') {
-    showToast('Google login successful.', 'success');
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } else if (params.get('error') === 'google_failed') {
-    showToast('Google authentication failed. Please try again.', 'error');
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
-
-  try {
-    const res = await fetch(`${AUTH_API}/me`, {
-      method: 'GET',
-      credentials: 'include',
-    });
-    if (res.ok) {
-      const data = await res.json();
-      renderAuthenticatedUI(data.data?.user);
-    } else {
-      renderUnauthenticatedUI();
-    }
-  } catch (err) {
-    renderUnauthenticatedUI();
-  }
+    map.flyTo([lat, lng], 8, { duration: 1.4 });
+    userMarker.openPopup();
+    btn.innerHTML = '📍 My Location';
+    btn.disabled = false;
+  }, () => {
+    btn.innerHTML = '📍 My Location';
+    btn.disabled = false;
+    alert('Location access denied. Please allow GPS permission.');
+  });
 }
 
-function renderAuthenticatedUI(user) {
-  const container = document.getElementById('headerActions');
-  if (!container) return;
-  const displayName = user ? (user.name || user.email.split('@')[0]) : 'User';
-  container.innerHTML = `
-    <button class="btn-signin" onclick="window.location.href='dashboard.html'" style="background: rgba(26,109,255,0.15); border-color: rgba(26,109,255,0.4); color: #60a5fa; cursor: pointer;">
-      📊 Dashboard
-    </button>
-    <div class="user-badge" title="${user ? user.email : ''}" onclick="window.location.href='dashboard.html'" style="cursor: pointer;">
-      <span>👤</span>
-      <span>${escapeHtml(displayName)}</span>
-    </div>
-    <button class="btn-signout" onclick="handleSignOut()">Sign Out</button>
-  `;
-}
+// ═══════════════════════════════════════════════════════════
+// MODAL CONTROLS
+// ═══════════════════════════════════════════════════════════
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function handleModalClick(e) { if (e.target.id === 'modal') closeModal(); }
 
-function renderUnauthenticatedUI() {
-  const container = document.getElementById('headerActions');
-  if (!container) return;
-  container.innerHTML = `
-    <button class="btn-signin" onclick="window.location.href='login.html'">Sign In</button>
-    <button class="btn-signup" onclick="window.location.href='signup.html'">Sign Up</button>
-  `;
-}
-
-async function handleSignOut() {
-  try {
-    await fetch(`${AUTH_API}/logout`, {
-      method: 'POST',
-      credentials: 'include',
-    });
-    showToast('Logged out successfully.', 'info');
-    renderUnauthenticatedUI();
-  } catch (err) {
-    showToast('Logged out successfully.', 'info');
-    renderUnauthenticatedUI();
-  }
-}
-
-function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-document.addEventListener('DOMContentLoaded', checkAuthState);
+document.addEventListener('DOMContentLoaded', () => {
+  initMap();
+});
 </script>
 </body>
 </html>

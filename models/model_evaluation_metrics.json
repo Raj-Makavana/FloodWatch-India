@@ -1,0 +1,1001 @@
+{
+    "national_model": {
+        "state": "National_All_India",
+        "test_accuracy": 0.8293,
+        "precision": 0.7838,
+        "recall": 0.5918,
+        "f1_score": 0.6744,
+        "roc_auc": 0.8836,
+        "train_samples": 652,
+        "test_samples": 164,
+        "feature_importances": {
+            "Percent_Flooded_Area": 0.0714,
+            "Parmanent_Water": 0.0731,
+            "Corrected_Percent_Flooded_Area": 0.138,
+            "Population": 0.3661,
+            "Mean_Flood_Duration": 0.1469,
+            "Total_Dams_Count": 0.0182,
+            "Total_Gross_Storage_Capacity_mcm": 0.0315,
+            "Max_Dam_Height_m": 0.0466,
+            "Total_Waterbodies_Count": 0.0581,
+            "Total_Waterbody_GIS_Area_ha": 0.0162,
+            "Avg_Waterbody_Perimeter_m": 0.034
+        }
+    },
+    "states": {
+        "Andaman & Nicobar": {
+            "state": "Andaman & Nicobar",
+            "training_strategy": "National_Master_Fallback",
+            "test_accuracy": 0.8293,
+            "f1_score": 0.6744,
+            "roc_auc": 0.8836
+        },
+        "Andhra Pradesh": {
+            "state": "Andhra Pradesh",
+            "test_accuracy": 0.7778,
+            "precision": 0.2857,
+            "recall": 0.4,
+            "f1_score": 0.3333,
+            "roc_auc": 0.7677,
+            "train_samples": 107,
+            "test_samples": 36,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0593,
+                "Parmanent_Water": 0.0892,
+                "Corrected_Percent_Flooded_Area": 0.2035,
+                "Population": 0.3533,
+                "Mean_Flood_Duration": 0.0263,
+                "Total_Dams_Count": 0.0356,
+                "Total_Gross_Storage_Capacity_mcm": 0.0996,
+                "Max_Dam_Height_m": 0.084,
+                "Total_Waterbodies_Count": 0.0079,
+                "Total_Waterbody_GIS_Area_ha": 0.0305,
+                "Avg_Waterbody_Perimeter_m": 0.0109
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Telangana, Tamil Nadu)",
+            "augmented_sample_count": 143
+        },
+        "Arunachal Pradesh": {
+            "state": "Arunachal Pradesh",
+            "test_accuracy": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "roc_auc": 1.0,
+            "train_samples": 51,
+            "test_samples": 18,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.3288,
+                "Parmanent_Water": 0.0453,
+                "Corrected_Percent_Flooded_Area": 0.1455,
+                "Population": 0.295,
+                "Mean_Flood_Duration": 0.1779,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0001,
+                "Total_Waterbody_GIS_Area_ha": 0.0071,
+                "Avg_Waterbody_Perimeter_m": 0.0003
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Assam, Nagaland)",
+            "augmented_sample_count": 69
+        },
+        "Assam": {
+            "state": "Assam",
+            "test_accuracy": 0.7778,
+            "precision": 0.7143,
+            "recall": 1.0,
+            "f1_score": 0.8333,
+            "roc_auc": 0.75,
+            "train_samples": 24,
+            "test_samples": 9,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.318,
+                "Parmanent_Water": 0.1299,
+                "Corrected_Percent_Flooded_Area": 0.321,
+                "Population": 0.1148,
+                "Mean_Flood_Duration": 0.1151,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0002,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0008
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Bihar": {
+            "state": "Bihar",
+            "test_accuracy": 0.8333,
+            "precision": 0.8182,
+            "recall": 1.0,
+            "f1_score": 0.9,
+            "roc_auc": 1.0,
+            "train_samples": 33,
+            "test_samples": 12,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0259,
+                "Parmanent_Water": 0.0228,
+                "Corrected_Percent_Flooded_Area": 0.0157,
+                "Population": 0.3377,
+                "Mean_Flood_Duration": 0.5103,
+                "Total_Dams_Count": 0.0158,
+                "Total_Gross_Storage_Capacity_mcm": 0.0277,
+                "Max_Dam_Height_m": 0.0128,
+                "Total_Waterbodies_Count": 0.0013,
+                "Total_Waterbody_GIS_Area_ha": 0.0001,
+                "Avg_Waterbody_Perimeter_m": 0.03
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Chandigarh": {
+            "state": "Chandigarh",
+            "test_accuracy": 0.8333,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 0.9091,
+            "train_samples": 33,
+            "test_samples": 12,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0372,
+                "Parmanent_Water": 0.0003,
+                "Corrected_Percent_Flooded_Area": 0.0468,
+                "Population": 0.4933,
+                "Mean_Flood_Duration": 0.2209,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.1119,
+                "Total_Waterbody_GIS_Area_ha": 0.0052,
+                "Avg_Waterbody_Perimeter_m": 0.0843
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Punjab, Haryana)",
+            "augmented_sample_count": 45
+        },
+        "Chhattisgarh": {
+            "state": "Chhattisgarh",
+            "test_accuracy": 0.6667,
+            "precision": 0.3333,
+            "recall": 0.3333,
+            "f1_score": 0.3333,
+            "roc_auc": 0.6296,
+            "train_samples": 36,
+            "test_samples": 12,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0005,
+                "Parmanent_Water": 0.0636,
+                "Corrected_Percent_Flooded_Area": 0.0811,
+                "Population": 0.1637,
+                "Mean_Flood_Duration": 0.1005,
+                "Total_Dams_Count": 0.0024,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0197,
+                "Total_Waterbodies_Count": 0.0324,
+                "Total_Waterbody_GIS_Area_ha": 0.3638,
+                "Avg_Waterbody_Perimeter_m": 0.1723
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Dadra & Nagar Have": {
+            "state": "Dadra & Nagar Have",
+            "training_strategy": "National_Master_Fallback",
+            "test_accuracy": 0.8293,
+            "f1_score": 0.6744,
+            "roc_auc": 0.8836
+        },
+        "Daman & Diu": {
+            "state": "Daman & Diu",
+            "test_accuracy": 0.9545,
+            "precision": 0.9167,
+            "recall": 1.0,
+            "f1_score": 0.9565,
+            "roc_auc": 0.9917,
+            "train_samples": 63,
+            "test_samples": 22,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.2864,
+                "Parmanent_Water": 0.0552,
+                "Corrected_Percent_Flooded_Area": 0.1146,
+                "Population": 0.1968,
+                "Mean_Flood_Duration": 0.1097,
+                "Total_Dams_Count": 0.0356,
+                "Total_Gross_Storage_Capacity_mcm": 0.0743,
+                "Max_Dam_Height_m": 0.0618,
+                "Total_Waterbodies_Count": 0.0483,
+                "Total_Waterbody_GIS_Area_ha": 0.0039,
+                "Avg_Waterbody_Perimeter_m": 0.0135
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Gujarat, Maharashtra)",
+            "augmented_sample_count": 85
+        },
+        "Delhi": {
+            "state": "Delhi",
+            "test_accuracy": 0.9394,
+            "precision": 0.9375,
+            "recall": 0.9375,
+            "f1_score": 0.9375,
+            "roc_auc": 0.9522,
+            "train_samples": 96,
+            "test_samples": 33,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0208,
+                "Parmanent_Water": 0.0295,
+                "Corrected_Percent_Flooded_Area": 0.026,
+                "Population": 0.2425,
+                "Mean_Flood_Duration": 0.6523,
+                "Total_Dams_Count": 0.0003,
+                "Total_Gross_Storage_Capacity_mcm": 0.0088,
+                "Max_Dam_Height_m": 0.01,
+                "Total_Waterbodies_Count": 0.0002,
+                "Total_Waterbody_GIS_Area_ha": 0.005,
+                "Avg_Waterbody_Perimeter_m": 0.0047
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Haryana, Uttar Pradesh)",
+            "augmented_sample_count": 129
+        },
+        "Goa": {
+            "state": "Goa",
+            "test_accuracy": 0.7619,
+            "precision": 0.7778,
+            "recall": 0.7,
+            "f1_score": 0.7368,
+            "roc_auc": 0.8,
+            "train_samples": 61,
+            "test_samples": 21,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.338,
+                "Parmanent_Water": 0.019,
+                "Corrected_Percent_Flooded_Area": 0.1339,
+                "Population": 0.1187,
+                "Mean_Flood_Duration": 0.1245,
+                "Total_Dams_Count": 0.1147,
+                "Total_Gross_Storage_Capacity_mcm": 0.0201,
+                "Max_Dam_Height_m": 0.0639,
+                "Total_Waterbodies_Count": 0.0582,
+                "Total_Waterbody_GIS_Area_ha": 0.0046,
+                "Avg_Waterbody_Perimeter_m": 0.0044
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Maharashtra, Karnataka)",
+            "augmented_sample_count": 82
+        },
+        "Gujarat": {
+            "state": "Gujarat",
+            "test_accuracy": 0.8889,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1_score": 0.6667,
+            "roc_auc": 0.7143,
+            "train_samples": 24,
+            "test_samples": 9,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1463,
+                "Parmanent_Water": 0.1102,
+                "Corrected_Percent_Flooded_Area": 0.1091,
+                "Population": 0.1226,
+                "Mean_Flood_Duration": 0.3762,
+                "Total_Dams_Count": 0.0252,
+                "Total_Gross_Storage_Capacity_mcm": 0.0644,
+                "Max_Dam_Height_m": 0.0281,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0106,
+                "Avg_Waterbody_Perimeter_m": 0.0073
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Haryana": {
+            "state": "Haryana",
+            "test_accuracy": 0.8333,
+            "precision": 0.7391,
+            "recall": 0.8947,
+            "f1_score": 0.8095,
+            "roc_auc": 0.931,
+            "train_samples": 143,
+            "test_samples": 48,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0538,
+                "Parmanent_Water": 0.1072,
+                "Corrected_Percent_Flooded_Area": 0.0268,
+                "Population": 0.327,
+                "Mean_Flood_Duration": 0.3051,
+                "Total_Dams_Count": 0.0748,
+                "Total_Gross_Storage_Capacity_mcm": 0.0304,
+                "Max_Dam_Height_m": 0.0631,
+                "Total_Waterbodies_Count": 0.0067,
+                "Total_Waterbody_GIS_Area_ha": 0.0021,
+                "Avg_Waterbody_Perimeter_m": 0.003
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Punjab, Rajasthan)",
+            "augmented_sample_count": 191
+        },
+        "Himachal Pradesh": {
+            "state": "Himachal Pradesh",
+            "test_accuracy": 0.7143,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1_score": 0.6667,
+            "roc_auc": 0.75,
+            "train_samples": 19,
+            "test_samples": 7,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0846,
+                "Parmanent_Water": 0.027,
+                "Corrected_Percent_Flooded_Area": 0.0963,
+                "Population": 0.1743,
+                "Mean_Flood_Duration": 0.4262,
+                "Total_Dams_Count": 0.0017,
+                "Total_Gross_Storage_Capacity_mcm": 0.0896,
+                "Max_Dam_Height_m": 0.0494,
+                "Total_Waterbodies_Count": 0.0253,
+                "Total_Waterbody_GIS_Area_ha": 0.0019,
+                "Avg_Waterbody_Perimeter_m": 0.0237
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Jammu & Kashmir": {
+            "state": "Jammu & Kashmir",
+            "test_accuracy": 1.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 1.0,
+            "train_samples": 16,
+            "test_samples": 6,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.054,
+                "Parmanent_Water": 0.0,
+                "Corrected_Percent_Flooded_Area": 0.076,
+                "Population": 0.0464,
+                "Mean_Flood_Duration": 0.0,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.2058,
+                "Total_Waterbody_GIS_Area_ha": 0.232,
+                "Avg_Waterbody_Perimeter_m": 0.3858
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Jharkhand": {
+            "state": "Jharkhand",
+            "test_accuracy": 0.8605,
+            "precision": 0.8571,
+            "recall": 0.75,
+            "f1_score": 0.8,
+            "roc_auc": 0.9282,
+            "train_samples": 127,
+            "test_samples": 43,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0706,
+                "Parmanent_Water": 0.0821,
+                "Corrected_Percent_Flooded_Area": 0.0681,
+                "Population": 0.5669,
+                "Mean_Flood_Duration": 0.0392,
+                "Total_Dams_Count": 0.0506,
+                "Total_Gross_Storage_Capacity_mcm": 0.0112,
+                "Max_Dam_Height_m": 0.0407,
+                "Total_Waterbodies_Count": 0.0266,
+                "Total_Waterbody_GIS_Area_ha": 0.016,
+                "Avg_Waterbody_Perimeter_m": 0.028
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Bihar, West Bengal)",
+            "augmented_sample_count": 170
+        },
+        "Karnataka": {
+            "state": "Karnataka",
+            "test_accuracy": 0.875,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1_score": 0.6667,
+            "roc_auc": 1.0,
+            "train_samples": 22,
+            "test_samples": 8,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0153,
+                "Parmanent_Water": 0.0686,
+                "Corrected_Percent_Flooded_Area": 0.1403,
+                "Population": 0.2015,
+                "Mean_Flood_Duration": 0.2192,
+                "Total_Dams_Count": 0.0731,
+                "Total_Gross_Storage_Capacity_mcm": 0.1269,
+                "Max_Dam_Height_m": 0.0669,
+                "Total_Waterbodies_Count": 0.0014,
+                "Total_Waterbody_GIS_Area_ha": 0.0542,
+                "Avg_Waterbody_Perimeter_m": 0.0325
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Kerala": {
+            "state": "Kerala",
+            "test_accuracy": 0.8571,
+            "precision": 0.8,
+            "recall": 0.6667,
+            "f1_score": 0.7273,
+            "roc_auc": 0.8667,
+            "train_samples": 60,
+            "test_samples": 21,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1789,
+                "Parmanent_Water": 0.0684,
+                "Corrected_Percent_Flooded_Area": 0.1403,
+                "Population": 0.1895,
+                "Mean_Flood_Duration": 0.1129,
+                "Total_Dams_Count": 0.0374,
+                "Total_Gross_Storage_Capacity_mcm": 0.0794,
+                "Max_Dam_Height_m": 0.0323,
+                "Total_Waterbodies_Count": 0.0268,
+                "Total_Waterbody_GIS_Area_ha": 0.0615,
+                "Avg_Waterbody_Perimeter_m": 0.0727
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Tamil Nadu, Karnataka)",
+            "augmented_sample_count": 81
+        },
+        "Ladakh": {
+            "state": "Ladakh",
+            "test_accuracy": 0.7692,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 0.7273,
+            "train_samples": 37,
+            "test_samples": 13,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0935,
+                "Parmanent_Water": 0.0885,
+                "Corrected_Percent_Flooded_Area": 0.1005,
+                "Population": 0.2342,
+                "Mean_Flood_Duration": 0.2681,
+                "Total_Dams_Count": 0.0013,
+                "Total_Gross_Storage_Capacity_mcm": 0.003,
+                "Max_Dam_Height_m": 0.0088,
+                "Total_Waterbodies_Count": 0.0594,
+                "Total_Waterbody_GIS_Area_ha": 0.1303,
+                "Avg_Waterbody_Perimeter_m": 0.0123
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Himachal Pradesh, Jammu & Kashmir)",
+            "augmented_sample_count": 50
+        },
+        "Lakshadweep": {
+            "state": "Lakshadweep",
+            "test_accuracy": 0.8333,
+            "precision": 0.7143,
+            "recall": 1.0,
+            "f1_score": 0.8333,
+            "roc_auc": 0.9143,
+            "train_samples": 33,
+            "test_samples": 12,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0026,
+                "Parmanent_Water": 0.0751,
+                "Corrected_Percent_Flooded_Area": 0.3421,
+                "Population": 0.0715,
+                "Mean_Flood_Duration": 0.3075,
+                "Total_Dams_Count": 0.0026,
+                "Total_Gross_Storage_Capacity_mcm": 0.0081,
+                "Max_Dam_Height_m": 0.0008,
+                "Total_Waterbodies_Count": 0.0003,
+                "Total_Waterbody_GIS_Area_ha": 0.1889,
+                "Avg_Waterbody_Perimeter_m": 0.0005
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Kerala, Karnataka)",
+            "augmented_sample_count": 45
+        },
+        "Madhya Pradesh": {
+            "state": "Madhya Pradesh",
+            "test_accuracy": 1.0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 1.0,
+            "train_samples": 39,
+            "test_samples": 13,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.032,
+                "Parmanent_Water": 0.3644,
+                "Corrected_Percent_Flooded_Area": 0.0588,
+                "Population": 0.0045,
+                "Mean_Flood_Duration": 0.0,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.5011,
+                "Max_Dam_Height_m": 0.0001,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0391
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Maharashtra": {
+            "state": "Maharashtra",
+            "test_accuracy": 0.7692,
+            "precision": 0.75,
+            "recall": 1.0,
+            "f1_score": 0.8571,
+            "roc_auc": 0.8056,
+            "train_samples": 37,
+            "test_samples": 13,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.3059,
+                "Parmanent_Water": 0.0584,
+                "Corrected_Percent_Flooded_Area": 0.4732,
+                "Population": 0.0449,
+                "Mean_Flood_Duration": 0.0111,
+                "Total_Dams_Count": 0.0164,
+                "Total_Gross_Storage_Capacity_mcm": 0.0304,
+                "Max_Dam_Height_m": 0.0202,
+                "Total_Waterbodies_Count": 0.0227,
+                "Total_Waterbody_GIS_Area_ha": 0.0042,
+                "Avg_Waterbody_Perimeter_m": 0.0126
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Manipur": {
+            "state": "Manipur",
+            "test_accuracy": 0.9412,
+            "precision": 0.8,
+            "recall": 1.0,
+            "f1_score": 0.8889,
+            "roc_auc": 0.9615,
+            "train_samples": 51,
+            "test_samples": 17,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1872,
+                "Parmanent_Water": 0.0369,
+                "Corrected_Percent_Flooded_Area": 0.1465,
+                "Population": 0.5641,
+                "Mean_Flood_Duration": 0.0523,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0005,
+                "Total_Waterbody_GIS_Area_ha": 0.0118,
+                "Avg_Waterbody_Perimeter_m": 0.0007
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Nagaland, Mizoram)",
+            "augmented_sample_count": 68
+        },
+        "Meghalaya": {
+            "state": "Meghalaya",
+            "test_accuracy": 0.9231,
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1_score": 0.8571,
+            "roc_auc": 1.0,
+            "train_samples": 39,
+            "test_samples": 13,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1921,
+                "Parmanent_Water": 0.016,
+                "Corrected_Percent_Flooded_Area": 0.3254,
+                "Population": 0.3202,
+                "Mean_Flood_Duration": 0.1462,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0002,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Assam, Tripura)",
+            "augmented_sample_count": 52
+        },
+        "Mizoram": {
+            "state": "Mizoram",
+            "test_accuracy": 0.8235,
+            "precision": 0.6667,
+            "recall": 0.8,
+            "f1_score": 0.7273,
+            "roc_auc": 0.9333,
+            "train_samples": 48,
+            "test_samples": 17,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1073,
+                "Parmanent_Water": 0.0102,
+                "Corrected_Percent_Flooded_Area": 0.1424,
+                "Population": 0.5599,
+                "Mean_Flood_Duration": 0.18,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0002,
+                "Avg_Waterbody_Perimeter_m": 0.0
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Manipur, Tripura)",
+            "augmented_sample_count": 65
+        },
+        "Nagaland": {
+            "state": "Nagaland",
+            "test_accuracy": 0.9091,
+            "precision": 0.8,
+            "recall": 0.8,
+            "f1_score": 0.8,
+            "roc_auc": 0.9529,
+            "train_samples": 63,
+            "test_samples": 22,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.069,
+                "Parmanent_Water": 0.0052,
+                "Corrected_Percent_Flooded_Area": 0.178,
+                "Population": 0.7468,
+                "Mean_Flood_Duration": 0.0008,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0002
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Assam, Manipur)",
+            "augmented_sample_count": 85
+        },
+        "Odisha": {
+            "state": "Odisha",
+            "test_accuracy": 0.875,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 1.0,
+            "train_samples": 22,
+            "test_samples": 8,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0507,
+                "Parmanent_Water": 0.0579,
+                "Corrected_Percent_Flooded_Area": 0.0286,
+                "Population": 0.6445,
+                "Mean_Flood_Duration": 0.0687,
+                "Total_Dams_Count": 0.0013,
+                "Total_Gross_Storage_Capacity_mcm": 0.1482,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Puducherry": {
+            "state": "Puducherry",
+            "test_accuracy": 0.6429,
+            "precision": 0.3333,
+            "recall": 0.25,
+            "f1_score": 0.2857,
+            "roc_auc": 0.7,
+            "train_samples": 41,
+            "test_samples": 14,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0757,
+                "Parmanent_Water": 0.0601,
+                "Corrected_Percent_Flooded_Area": 0.1263,
+                "Population": 0.4751,
+                "Mean_Flood_Duration": 0.0644,
+                "Total_Dams_Count": 0.0663,
+                "Total_Gross_Storage_Capacity_mcm": 0.0352,
+                "Max_Dam_Height_m": 0.0213,
+                "Total_Waterbodies_Count": 0.0151,
+                "Total_Waterbody_GIS_Area_ha": 0.0212,
+                "Avg_Waterbody_Perimeter_m": 0.0393
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Tamil Nadu, Kerala)",
+            "augmented_sample_count": 55
+        },
+        "Punjab": {
+            "state": "Punjab",
+            "test_accuracy": 1.0,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1_score": 1.0,
+            "roc_auc": 1.0,
+            "train_samples": 16,
+            "test_samples": 6,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.001,
+                "Parmanent_Water": 0.0079,
+                "Corrected_Percent_Flooded_Area": 0.0241,
+                "Population": 0.6157,
+                "Mean_Flood_Duration": 0.0341,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0541,
+                "Total_Waterbody_GIS_Area_ha": 0.0766,
+                "Avg_Waterbody_Perimeter_m": 0.1866
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Rajasthan": {
+            "state": "Rajasthan",
+            "test_accuracy": 0.7,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 0.7143,
+            "train_samples": 30,
+            "test_samples": 10,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1914,
+                "Parmanent_Water": 0.0015,
+                "Corrected_Percent_Flooded_Area": 0.2934,
+                "Population": 0.1599,
+                "Mean_Flood_Duration": 0.0118,
+                "Total_Dams_Count": 0.0013,
+                "Total_Gross_Storage_Capacity_mcm": 0.0043,
+                "Max_Dam_Height_m": 0.0005,
+                "Total_Waterbodies_Count": 0.1615,
+                "Total_Waterbody_GIS_Area_ha": 0.0903,
+                "Avg_Waterbody_Perimeter_m": 0.0841
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Sikkim": {
+            "state": "Sikkim",
+            "test_accuracy": 0.9333,
+            "precision": 0.8889,
+            "recall": 1.0,
+            "f1_score": 0.9412,
+            "roc_auc": 1.0,
+            "train_samples": 45,
+            "test_samples": 15,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.1244,
+                "Parmanent_Water": 0.1035,
+                "Corrected_Percent_Flooded_Area": 0.1387,
+                "Population": 0.3589,
+                "Mean_Flood_Duration": 0.2423,
+                "Total_Dams_Count": 0.0038,
+                "Total_Gross_Storage_Capacity_mcm": 0.0019,
+                "Max_Dam_Height_m": 0.0096,
+                "Total_Waterbodies_Count": 0.0065,
+                "Total_Waterbody_GIS_Area_ha": 0.0099,
+                "Avg_Waterbody_Perimeter_m": 0.0006
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (West Bengal, Assam)",
+            "augmented_sample_count": 60
+        },
+        "Tamil Nadu": {
+            "state": "Tamil Nadu",
+            "test_accuracy": 0.9,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1_score": 0.0,
+            "roc_auc": 0.7778,
+            "train_samples": 27,
+            "test_samples": 10,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.3061,
+                "Parmanent_Water": 0.0521,
+                "Corrected_Percent_Flooded_Area": 0.5427,
+                "Population": 0.0836,
+                "Mean_Flood_Duration": 0.0027,
+                "Total_Dams_Count": 0.0003,
+                "Total_Gross_Storage_Capacity_mcm": 0.0004,
+                "Max_Dam_Height_m": 0.0001,
+                "Total_Waterbodies_Count": 0.0002,
+                "Total_Waterbody_GIS_Area_ha": 0.0111,
+                "Avg_Waterbody_Perimeter_m": 0.0005
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Telangana": {
+            "state": "Telangana",
+            "test_accuracy": 0.8636,
+            "precision": 0.7647,
+            "recall": 0.8667,
+            "f1_score": 0.8125,
+            "roc_auc": 0.8759,
+            "train_samples": 130,
+            "test_samples": 44,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.2075,
+                "Parmanent_Water": 0.0752,
+                "Corrected_Percent_Flooded_Area": 0.0829,
+                "Population": 0.3309,
+                "Mean_Flood_Duration": 0.0399,
+                "Total_Dams_Count": 0.1391,
+                "Total_Gross_Storage_Capacity_mcm": 0.0152,
+                "Max_Dam_Height_m": 0.0447,
+                "Total_Waterbodies_Count": 0.0455,
+                "Total_Waterbody_GIS_Area_ha": 0.0082,
+                "Avg_Waterbody_Perimeter_m": 0.0109
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Andhra Pradesh, Maharashtra)",
+            "augmented_sample_count": 174
+        },
+        "Tripura": {
+            "state": "Tripura",
+            "test_accuracy": 0.7333,
+            "precision": 0.5,
+            "recall": 0.5,
+            "f1_score": 0.5,
+            "roc_auc": 0.8636,
+            "train_samples": 45,
+            "test_samples": 15,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.3349,
+                "Parmanent_Water": 0.1263,
+                "Corrected_Percent_Flooded_Area": 0.0853,
+                "Population": 0.441,
+                "Mean_Flood_Duration": 0.0122,
+                "Total_Dams_Count": 0.0,
+                "Total_Gross_Storage_Capacity_mcm": 0.0,
+                "Max_Dam_Height_m": 0.0,
+                "Total_Waterbodies_Count": 0.0,
+                "Total_Waterbody_GIS_Area_ha": 0.0001,
+                "Avg_Waterbody_Perimeter_m": 0.0001
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Assam, Mizoram)",
+            "augmented_sample_count": 60
+        },
+        "Uttar Pradesh": {
+            "state": "Uttar Pradesh",
+            "test_accuracy": 0.7917,
+            "precision": 0.8125,
+            "recall": 0.8667,
+            "f1_score": 0.8387,
+            "roc_auc": 0.9037,
+            "train_samples": 72,
+            "test_samples": 24,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0464,
+                "Parmanent_Water": 0.0746,
+                "Corrected_Percent_Flooded_Area": 0.0316,
+                "Population": 0.2078,
+                "Mean_Flood_Duration": 0.6002,
+                "Total_Dams_Count": 0.0046,
+                "Total_Gross_Storage_Capacity_mcm": 0.004,
+                "Max_Dam_Height_m": 0.0042,
+                "Total_Waterbodies_Count": 0.0081,
+                "Total_Waterbody_GIS_Area_ha": 0.009,
+                "Avg_Waterbody_Perimeter_m": 0.0096
+            },
+            "training_strategy": "Native_State_Data"
+        },
+        "Uttarakhand": {
+            "state": "Uttarakhand",
+            "test_accuracy": 0.7353,
+            "precision": 0.7778,
+            "recall": 0.7368,
+            "f1_score": 0.7568,
+            "roc_auc": 0.8123,
+            "train_samples": 101,
+            "test_samples": 34,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.0334,
+                "Parmanent_Water": 0.1243,
+                "Corrected_Percent_Flooded_Area": 0.0545,
+                "Population": 0.2008,
+                "Mean_Flood_Duration": 0.2673,
+                "Total_Dams_Count": 0.0019,
+                "Total_Gross_Storage_Capacity_mcm": 0.2513,
+                "Max_Dam_Height_m": 0.0281,
+                "Total_Waterbodies_Count": 0.007,
+                "Total_Waterbody_GIS_Area_ha": 0.0077,
+                "Avg_Waterbody_Perimeter_m": 0.0236
+            },
+            "training_strategy": "Regional_Neighbor_Fallback (Himachal Pradesh, Uttar Pradesh)",
+            "augmented_sample_count": 135
+        },
+        "West Bengal": {
+            "state": "West Bengal",
+            "test_accuracy": 0.6667,
+            "precision": 0.6667,
+            "recall": 1.0,
+            "f1_score": 0.8,
+            "roc_auc": 0.125,
+            "train_samples": 17,
+            "test_samples": 6,
+            "feature_importances": {
+                "Percent_Flooded_Area": 0.052,
+                "Parmanent_Water": 0.1177,
+                "Corrected_Percent_Flooded_Area": 0.0901,
+                "Population": 0.4581,
+                "Mean_Flood_Duration": 0.2267,
+                "Total_Dams_Count": 0.0042,
+                "Total_Gross_Storage_Capacity_mcm": 0.0095,
+                "Max_Dam_Height_m": 0.0347,
+                "Total_Waterbodies_Count": 0.0069,
+                "Total_Waterbody_GIS_Area_ha": 0.0,
+                "Avg_Waterbody_Perimeter_m": 0.0
+            },
+            "training_strategy": "Native_State_Data"
+        }
+    },
+    "fallback_mappings": {
+        "Andaman & Nicobar": [
+            "National_All_India"
+        ],
+        "Andhra Pradesh": [
+            "Telangana",
+            "Tamil Nadu",
+            "Karnataka",
+            "Odisha"
+        ],
+        "Arunachal Pradesh": [
+            "Assam",
+            "Nagaland"
+        ],
+        "Chandigarh": [
+            "Punjab",
+            "Haryana"
+        ],
+        "Dadra & Nagar Have": [
+            "National_All_India"
+        ],
+        "Daman & Diu": [
+            "Gujarat",
+            "Maharashtra"
+        ],
+        "Delhi": [
+            "Haryana",
+            "Uttar Pradesh"
+        ],
+        "Goa": [
+            "Maharashtra",
+            "Karnataka"
+        ],
+        "Haryana": [
+            "Punjab",
+            "Rajasthan",
+            "Uttar Pradesh",
+            "Delhi"
+        ],
+        "Jharkhand": [
+            "Bihar",
+            "West Bengal",
+            "Odisha",
+            "Chhattisgarh"
+        ],
+        "Kerala": [
+            "Tamil Nadu",
+            "Karnataka"
+        ],
+        "Ladakh": [
+            "Himachal Pradesh",
+            "Jammu & Kashmir"
+        ],
+        "Lakshadweep": [
+            "Kerala",
+            "Karnataka"
+        ],
+        "Manipur": [
+            "Nagaland",
+            "Mizoram",
+            "Assam"
+        ],
+        "Meghalaya": [
+            "Assam",
+            "Tripura"
+        ],
+        "Mizoram": [
+            "Manipur",
+            "Tripura",
+            "Assam"
+        ],
+        "Nagaland": [
+            "Assam",
+            "Manipur",
+            "Arunachal Pradesh"
+        ],
+        "Puducherry": [
+            "Tamil Nadu",
+            "Kerala"
+        ],
+        "Sikkim": [
+            "West Bengal",
+            "Assam"
+        ],
+        "Telangana": [
+            "Andhra Pradesh",
+            "Maharashtra",
+            "Karnataka",
+            "Chhattisgarh"
+        ],
+        "Tripura": [
+            "Assam",
+            "Mizoram",
+            "Meghalaya"
+        ],
+        "Uttarakhand": [
+            "Himachal Pradesh",
+            "Uttar Pradesh"
+        ]
+    }
+}

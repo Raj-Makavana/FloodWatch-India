@@ -1,0 +1,519 @@
+{
+  "Andaman & Nicobar": {
+    "state": "Andaman & Nicobar",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.007768604850988405,
+    "probability_str": "0.78%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Andhra Pradesh": {
+    "state": "Andhra Pradesh",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.8904575737697844,
+    "probability_str": "89.05%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Arunachal Pradesh": {
+    "state": "Arunachal Pradesh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.00010040559831008085,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Assam": {
+    "state": "Assam",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.9998228712288072,
+    "probability_str": "99.98%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Bihar": {
+    "state": "Bihar",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.9999197321350566,
+    "probability_str": "99.99%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Chandigarh": {
+    "state": "Chandigarh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 2.027958317390341e-05,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Chhattisgarh": {
+    "state": "Chhattisgarh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.00012160723338255328,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Dadra & Nagar Have": {
+    "state": "Dadra & Nagar Have",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.022680253259817342,
+    "probability_str": "2.27%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Daman & Diu": {
+    "state": "Daman & Diu",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.007642990097997565,
+    "probability_str": "0.76%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Delhi": {
+    "state": "Delhi",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0012199075337584408,
+    "probability_str": "0.12%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Goa": {
+    "state": "Goa",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.02729009741761046,
+    "probability_str": "2.73%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Gujarat": {
+    "state": "Gujarat",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.009853670889673946,
+    "probability_str": "0.99%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Haryana": {
+    "state": "Haryana",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.004989372995363964,
+    "probability_str": "0.5%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Himachal Pradesh": {
+    "state": "Himachal Pradesh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.001168160654163154,
+    "probability_str": "0.12%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Jammu & Kashmir": {
+    "state": "Jammu & Kashmir",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 2.0911606903235282e-05,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Jharkhand": {
+    "state": "Jharkhand",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0012151672085432186,
+    "probability_str": "0.12%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Karnataka": {
+    "state": "Karnataka",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.001996756391110942,
+    "probability_str": "0.2%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Kerala": {
+    "state": "Kerala",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.9900369324096642,
+    "probability_str": "99.0%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Ladakh": {
+    "state": "Ladakh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.017819912508272164,
+    "probability_str": "1.78%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Lakshadweep": {
+    "state": "Lakshadweep",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0023676158256906534,
+    "probability_str": "0.24%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Madhya Pradesh": {
+    "state": "Madhya Pradesh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 8.592554017946118e-06,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Maharashtra": {
+    "state": "Maharashtra",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.9995547180777331,
+    "probability_str": "99.96%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)",
+      "High Dam Catchment Water Inflow"
+    ]
+  },
+  "Manipur": {
+    "state": "Manipur",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 9.08591148429717e-05,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Meghalaya": {
+    "state": "Meghalaya",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0001646269785477989,
+    "probability_str": "0.02%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Mizoram": {
+    "state": "Mizoram",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 8.969193160308624e-05,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Nagaland": {
+    "state": "Nagaland",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 6.857465410683476e-05,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Odisha": {
+    "state": "Odisha",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 3.0378765791522517e-05,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Puducherry": {
+    "state": "Puducherry",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0004148386044222354,
+    "probability_str": "0.04%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Punjab": {
+    "state": "Punjab",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 4.170616310884785e-05,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Rajasthan": {
+    "state": "Rajasthan",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0006779543771479754,
+    "probability_str": "0.07%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Sikkim": {
+    "state": "Sikkim",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0012222377114446382,
+    "probability_str": "0.12%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Tamil Nadu": {
+    "state": "Tamil Nadu",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 3.709557840523958e-05,
+    "probability_str": "0.0%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Telangana": {
+    "state": "Telangana",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.00404182202556155,
+    "probability_str": "0.4%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Tripura": {
+    "state": "Tripura",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.00010279303117984014,
+    "probability_str": "0.01%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Uttar Pradesh": {
+    "state": "Uttar Pradesh",
+    "risk_category": "Low Risk",
+    "risk_level": "low",
+    "probability": 0.0926104184251666,
+    "probability_str": "9.26%",
+    "alert_level": "GREEN SAFE",
+    "color_code": "#16a34a",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "Uttarakhand": {
+    "state": "Uttarakhand",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.8839664361201828,
+    "probability_str": "88.4%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  },
+  "West Bengal": {
+    "state": "West Bengal",
+    "risk_category": "Extreme High Risk",
+    "risk_level": "high",
+    "probability": 0.9980617591333739,
+    "probability_str": "99.81%",
+    "alert_level": "RED EMERGENCY ALERT",
+    "color_code": "#dc2626",
+    "action_guidance": "Immediate evacuation warning for low-lying areas. River overflow imminent.",
+    "key_risk_drivers": [
+      "High Historical Flood Inundation Index",
+      "Heavy 24h Rainfall Intensity (75.0 mm)"
+    ]
+  }
+}
