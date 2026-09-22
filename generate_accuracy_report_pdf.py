@@ -303,8 +303,8 @@ def generate_pdf():
         Paragraph("<b>AVERAGE (ALL 37 STATES)</b>", td_bold),
         Paragraph(f"<b>{avg_acc:.1f}%</b>", td_green),
         Paragraph(f"<b>{avg_auc:.3f}</b>", td_center),
-        Paragraph("<b>79.1%</b>", td_center),
-        Paragraph("<b>64.8%</b>", td_center),
+        Paragraph(f"<b>{(sum(v.get('precision', 0) for v in states.values() if v.get('precision') is not None) / max(1, len([v for v in states.values() if v.get('precision') is not None])) * 100):.1f}%</b>", td_center),
+        Paragraph(f"<b>{(sum(v.get('recall', 0) for v in states.values() if v.get('recall') is not None) / max(1, len([v for v in states.values() if v.get('recall') is not None])) * 100):.1f}%</b>", td_center),
         Paragraph(f"<b>{avg_f1:.3f}</b>", td_center),
         Paragraph("<b>Ensemble GBDT Protocol</b>", td_bold)
     ])
@@ -336,6 +336,96 @@ def generate_pdf():
     # Build Document
     doc.build(story, canvasmaker=NumberedCanvas)
     print(f"PDF successfully generated at: {pdf_path}")
+    generate_html_report(data, avg_acc, avg_auc, avg_f1, nat, states)
+
+
+def generate_html_report(data, avg_acc, avg_auc, avg_f1, nat, states):
+    html_path = r'C:\Users\Lenovo\Desktop\FRP\public\accuracy-report.html'
+    prec_vals = [v['precision'] for v in states.values() if v.get('precision') is not None]
+    rec_vals = [v['recall'] for v in states.values() if v.get('recall') is not None]
+    avg_prec = (sum(prec_vals) / len(prec_vals) * 100) if prec_vals else 0
+    avg_rec = (sum(rec_vals) / len(rec_vals) * 100) if rec_vals else 0
+
+    body_rows = []
+    for i, name in enumerate(sorted(states.keys()), 1):
+        s = states[name]
+        acc = s.get('test_accuracy', 0) * 100
+        auc = s.get('roc_auc', 0)
+        prec = s.get('precision')
+        rec = s.get('recall')
+        f1 = s.get('f1_score', 0)
+        strategy = s.get('training_strategy', 'Dedicated State Model')
+        acc_cls = 'good' if acc >= 75 else 'warn'
+        prec_str = f"{prec * 100:.1f}%" if prec is not None else "N/A"
+        rec_str = f"{rec * 100:.1f}%" if rec is not None else "N/A"
+        body_rows.append(
+            "<tr>"
+            f"<td>{i}</td><td><b>{name}</b></td>"
+            f"<td class='{acc_cls}'>{acc:.1f}%</td>"
+            f"<td>{auc:.3f}</td><td>{prec_str}</td><td>{rec_str}</td>"
+            f"<td>{f1:.3f}</td><td>{strategy}</td>"
+            "</tr>"
+        )
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FloodWatch India — Model Accuracy Report (All States & UTs)</title>
+  <style>
+    body {{ font-family: Segoe UI, Arial, sans-serif; background:#f8fafc; color:#0f172a; margin:0; padding:32px; }}
+    h1 {{ margin:0 0 6px; font-size:26px; }}
+    .sub {{ color:#475569; margin-bottom:22px; }}
+    .cards {{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }}
+    .card {{ background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }}
+    .card b {{ display:block; font-size:22px; color:#047857; }}
+    table {{ width:100%; border-collapse:collapse; background:#fff; }}
+    th {{ background:#0f172a; color:#fff; text-align:left; padding:8px; font-size:13px; }}
+    td {{ border-bottom:1px solid #e2e8f0; padding:7px 8px; font-size:13px; }}
+    tr:nth-child(even) td {{ background:#f8fafc; }}
+    .good {{ color:#047857; font-weight:700; }}
+    .warn {{ color:#b45309; font-weight:700; }}
+    .note {{ margin-top:18px; color:#475569; font-size:13px; line-height:1.5; }}
+  </style>
+</head>
+<body>
+  <h1>FloodWatch India — ML Model Accuracy Report</h1>
+  <div class="sub">Project: Flood Risk Prediction Using Weather and GIS Data &nbsp;|&nbsp; 80:20 stratified train-test split &nbsp;|&nbsp; 37 States &amp; UTs</div>
+  <div class="cards">
+    <div class="card">Average Test Accuracy<b>{avg_acc:.2f}%</b></div>
+    <div class="card">National ROC-AUC<b style="color:#1d4ed8">{nat['roc_auc']:.4f}</b></div>
+    <div class="card">National Accuracy<b style="color:#1d4ed8">{nat['test_accuracy']*100:.2f}%</b></div>
+    <div class="card">Coverage<b style="color:#7c3aed">37 States & UTs</b></div>
+  </div>
+  <h2>National Benchmark</h2>
+  <p>Accuracy {nat['test_accuracy']*100:.2f}% &nbsp; Precision {nat['precision']*100:.2f}% &nbsp; Recall {nat['recall']*100:.2f}% &nbsp; F1 {nat['f1_score']:.4f} &nbsp; Train/Test {nat['train_samples']}/{nat['test_samples']}</p>
+  <h2>State / UT Gradient Boosting Models</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>State / UT</th><th>Test Accuracy</th><th>ROC-AUC</th><th>Precision</th><th>Recall</th><th>F1</th><th>Training Strategy</th></tr>
+    </thead>
+    <tbody>
+      {''.join(body_rows)}
+      <tr>
+        <td>--</td><td><b>AVERAGE (ALL 37)</b></td>
+        <td class="good">{avg_acc:.1f}%</td><td><b>{avg_auc:.3f}</b></td>
+        <td><b>{avg_prec:.1f}%</b></td><td><b>{avg_rec:.1f}%</b></td>
+        <td><b>{avg_f1:.3f}</b></td><td><b>Ensemble GBDT Protocol</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    Models with fewer native district samples use regional-neighbour augmentation or the national master fallback.
+    Accuracy is evaluated on held-out test districts, not on the live map heatmap.
+    Feature importance (national): Population 36.61%, Mean Flood Duration 14.69%, Corrected Flooded Area 13.80%.
+  </p>
+</body>
+</html>
+"""
+    with open(html_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+    print(f"HTML report generated at: {html_path}")
+
 
 if __name__ == '__main__':
     generate_pdf()

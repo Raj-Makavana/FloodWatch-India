@@ -4,26 +4,28 @@ import pandas as pd
 import numpy as np
 
 def prepare_master_dataset():
-    data_dir = r'C:\Users\Lenovo\Desktop\FRP\data\cleaned'
-    output_dir = r'C:\Users\Lenovo\Desktop\FRP\data'
-    os.makedirs(output_dir, exist_ok=True)
+    divided_root = r'C:\Users\Lenovo\Desktop\FRP\data\divideddata'
+    master_dir = os.path.join(divided_root, 'All_India_National_Masters')
+    os.makedirs(master_dir, exist_ok=True)
     
     print("="*65)
-    print(">>> FLOODWATCH INDIA - MASTER TRAINING DATASET GENERATOR <<<")
+    print(">>> FLOODWATCH INDIA - DIVIDEDDATA MASTER TRAINING GENERATOR <<<")
     print("="*65)
 
-    # 1. Base District Elevation & Flood Summary
-    elevation_file = os.path.join(data_dir, 'cleaned_district_flood_elevation_summary.csv')
-    dfsi_file = os.path.join(data_dir, 'cleaned_dfsi.csv')
-    metrics_file = os.path.join(data_dir, 'cleaned_district_flood_metrics.csv')
+    # 1. Base District Elevation & Flood Summary from All_India_National_Masters
+    elevation_file = os.path.join(master_dir, 'cleaned_district_flood_elevation_summary.csv')
+    dfsi_file = os.path.join(master_dir, 'cleaned_dfsi.csv')
+    metrics_file = os.path.join(master_dir, 'cleaned_district_flood_metrics.csv')
     
-    print("\n[Step 1/5] Loading Base District Elevation & Flood Metrics...")
+    print("\n[Step 1/5] Loading Base District Elevation & Flood Metrics from divideddata/All_India_National_Masters...")
     if os.path.exists(elevation_file):
         df_base = pd.read_csv(elevation_file)
     elif os.path.exists(dfsi_file):
         df_base = pd.read_csv(dfsi_file)
+    elif os.path.exists(metrics_file):
+        df_base = pd.read_csv(metrics_file)
     else:
-        raise FileNotFoundError("Base district flood elevation files not found in data/cleaned!")
+        raise FileNotFoundError("Base district flood elevation files not found in data/divideddata/All_India_National_Masters!")
 
     # Normalize district and state column names
     col_rename = {}
@@ -47,9 +49,9 @@ def prepare_master_dataset():
         df_dfsi['State_Clean'] = df_dfsi['State_Name'].astype(str).str.strip().str.upper()
         df_base = pd.merge(df_base, df_dfsi[['District_Clean', 'State_Clean', 'DFSI']], on=['District_Clean', 'State_Clean'], how='left')
 
-    # 2. Dam Aggregation per District
-    dam_file = os.path.join(data_dir, 'cleaned_dam_master_india.csv')
-    print("\n[Step 2/5] Aggregating Dam & Reservoir Capacity...")
+    # 2. Dam Aggregation per District from All_India_National_Masters
+    dam_file = os.path.join(master_dir, 'cleaned_dam_master_india.csv')
+    print("\n[Step 2/5] Aggregating Dam & Reservoir Capacity from divideddata/All_India_National_Masters...")
     if os.path.exists(dam_file):
         try:
             df_dams = pd.read_csv(dam_file, low_memory=False)
@@ -78,9 +80,9 @@ def prepare_master_dataset():
             df_base['Total_Gross_Storage_Capacity_mcm'] = 0
             df_base['Max_Dam_Height_m'] = 0
 
-    # 3. Waterbody Census (DWA) Aggregation
-    print("\n[Step 3/5] Aggregating Satellite Waterbody Census (DWA)...")
-    dwa_files = glob.glob(os.path.join(data_dir, "cleaned_dwa_ph1_*.csv")) + glob.glob(os.path.join(data_dir, "cleaned_dwa_ph2_*.csv"))
+    # 3. Waterbody Census (DWA) Aggregation from State Subfolders in divideddata
+    print("\n[Step 3/5] Aggregating Satellite Waterbody Census (DWA) across State Folders in divideddata...")
+    dwa_files = glob.glob(os.path.join(divided_root, "*", "cleaned_dwa_ph*.csv")) + glob.glob(os.path.join(divided_root, "*", "cleaned_wb_*.csv"))
     dwa_list = []
     
     for f in dwa_files:
@@ -148,13 +150,13 @@ def prepare_master_dataset():
     for col in num_cols:
         df_base[col] = df_base[col].fillna(df_base[col].median())
 
-    # 5. Export Master Training CSV
-    print("\n[Step 5/5] Exporting Master Training Dataset...")
-    output_path = os.path.join(output_dir, 'master_flood_training_data.csv')
+    # 5. Export Master Training CSV inside divideddata
+    print("\n[Step 5/5] Exporting Master Training Dataset to divideddata...")
+    output_path = os.path.join(master_dir, 'master_training_dataset_divided.csv')
     df_base.to_csv(output_path, index=False)
     
     print("\n" + "="*65)
-    print(f"[SUCCESS] MASTER TRAINING DATASET READY FOR GRADIENT BOOSTING!")
+    print(f"[SUCCESS] DIVIDED DATASET CREATED SUCCESSFULLY!")
     print(f"Output File: {output_path}")
     print(f"Total Samples (Districts): {df_base.shape[0]}")
     print(f"Total Features: {df_base.shape[1]}")

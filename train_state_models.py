@@ -29,7 +29,7 @@ from sklearn.metrics import (
 # 1. PATH CONFIGURATION & REGIONAL GEOGRAPHICAL NEIGHBOR MAPPING
 # --------------------------------------------------------------------------------------
 BASE_DIR = r"C:\Users\Lenovo\Desktop\FRP"
-DATA_FILE = os.path.join(BASE_DIR, "data", "master_flood_training_data.csv")
+DATA_FILE = os.path.join(BASE_DIR, "data", "divideddata", "All_India_National_Masters", "master_training_dataset_divided.csv")
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 METRICS_FILE = os.path.join(MODELS_DIR, "model_evaluation_metrics.json")
 
@@ -224,7 +224,7 @@ def run_pipeline():
 
             stratify_option = y if y.value_counts().min() >= 2 else None
             X_train, X_test, y_train, y_test = train_test_split(
-                X, y, test_size=0.25, random_state=42, stratify=stratify_option
+                X, y, test_size=0.20, random_state=42, stratify=stratify_option
             )
 
             model, metrics = train_single_model(X_train, y_train, X_test, y_test, state)
@@ -247,7 +247,7 @@ def run_pipeline():
 
                 stratify_option = y if y.value_counts().min() >= 2 else None
                 X_train, X_test, y_train, y_test = train_test_split(
-                    X, y, test_size=0.25, random_state=42, stratify=stratify_option
+                    X, y, test_size=0.20, random_state=42, stratify=stratify_option
                 )
 
                 model, metrics = train_single_model(X_train, y_train, X_test, y_test, state)
@@ -285,6 +285,13 @@ def run_pipeline():
     print(f"Evaluation Metrics JSON  : {METRICS_FILE}")
     print(f"Total State Models Saved : {len(all_metrics['states']) + 1}")
     print("=" * 80)
+
+    print("\n[Map Sync] Refreshing public/state_predictions.json for the live heatmap...")
+    try:
+        from export_map_predictions import export_map_predictions
+        export_map_predictions()
+    except Exception as export_err:
+        print(f"[Map Sync] Warning: could not refresh map predictions: {export_err}")
 
 
 if __name__ == "__main__":

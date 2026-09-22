@@ -452,6 +452,7 @@ def root():
         "model_architecture": "37 State-Specific Gradient Boosting Classifiers with Regional Fallbacks",
         "endpoints": {
             "predict_flood": "POST /predict-flood  (Live APIs + ML inference)",
+            "map_predictions": "GET  /map-predictions  (All-state live heatmap)",
             "live_weather":  "GET  /live-weather/{state_name}?district={district}",
             "list_states":   "GET  /states",
             "list_districts":"GET  /districts/{state_name}",
@@ -635,6 +636,51 @@ def get_districts_by_state(state_name: str):
             "districts": districts
         }
     return {"state": state_name, "total_districts": 0, "districts": []}
+
+
+@app.get("/map-predictions", tags=["Prediction Engine"])
+async def get_map_predictions():
+    """Live all-state flood risk snapshot used by the pre-login radar heatmap."""
+    from datetime import datetime, timezone
+
+    sem = asyncio.Semaphore(8)
+
+    async def one_state(state: str):
+        async with sem:
+            coords = get_state_coordinates(state)
+            weather = await fetch_live_weather(coords["lat"], coords["lon"])
+            rain = float(weather.get("rainfall_24h_mm") or 0.0)
+            result = predictor.predict(state=state, rainfall_24h_mm=rain)
+            pred = result["prediction"]
+            raw = float(pred["risk_probability_raw"])
+            if raw >= 0.75 or "Extreme" in pred["risk_category"]:
+                level = "high"
+            elif raw >= 0.25:
+                level = "medium"
+            else:
+                level = "low"
+            return state, {
+                "state": state,
+                "risk_category": pred["risk_category"],
+                "risk_level": level,
+                "probability": raw,
+                "probability_str": pred["flood_risk_probability"],
+                "alert_level": pred["alert_level"],
+                "color_code": pred["color_code"],
+                "action_guidance": pred["action_guidance"],
+                "key_risk_drivers": pred["key_risk_drivers"],
+                "rainfall_24h_mm": rain,
+                "model_used": result["meta"]["model_used"],
+            }
+
+    pairs = await asyncio.gather(*[one_state(s) for s in STATE_COORDINATES.keys()])
+    states = {name: payload for name, payload in pairs}
+    return {
+        "status": "success",
+        "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "total_states": len(states),
+        "states": states,
+    }
 
 
 @app.get("/metrics", tags=["Evaluation & Analytics"])

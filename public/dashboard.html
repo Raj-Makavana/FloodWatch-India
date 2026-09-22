@@ -967,20 +967,12 @@
     /* ══════════════════════════════════════════
        Flood Zone Data
     ══════════════════════════════════════════ */
-    const floodZones = [
-      // HIGH RISK
+    const DEFAULT_FLOOD_ZONES = [
       { name: 'Assam — Brahmaputra Valley', lat: 26.2, lng: 92.5, risk: 'high', radius: 120000, waterLevel: '9.8m (Danger: 8.5m)', affected: '~2.4M people', alerts: 3 },
       { name: 'Bihar — Kosi–Gandak Plains', lat: 25.8, lng: 86.0, risk: 'high', radius: 100000, waterLevel: '7.2m (Danger: 6.5m)', affected: '~1.8M people', alerts: 2 },
-      { name: 'West Bengal — Hooghly Delta', lat: 22.8, lng: 88.3, risk: 'high', radius: 80000, waterLevel: '6.4m (Danger: 5.8m)', affected: '~950K people', alerts: 2 },
-      { name: 'Kerala — Western Ghats', lat: 10.2, lng: 76.5, risk: 'high', radius: 65000, waterLevel: '5.6m (Danger: 5.0m)', affected: '~620K people', alerts: 1 },
-      { name: 'Uttarakhand — Himalayan Rivers', lat: 30.3, lng: 79.3, risk: 'high', radius: 55000, waterLevel: '4.8m (Danger: 4.2m)', affected: '~310K people', alerts: 1 },
-      // MEDIUM RISK
-      { name: 'Odisha — Mahanadi Delta', lat: 20.5, lng: 84.5, risk: 'medium', radius: 75000, waterLevel: '4.1m (Warning: 3.8m)', affected: '~780K people', alerts: 1 },
-      { name: 'Gujarat — Tapi–Narmada Basin', lat: 21.5, lng: 72.5, risk: 'medium', radius: 85000, waterLevel: '3.9m (Warning: 3.5m)', affected: '~540K people', alerts: 1 },
-      { name: 'Andhra Pradesh — Krishna–Godavari', lat: 16.5, lng: 80.5, risk: 'medium', radius: 80000, waterLevel: '3.6m (Warning: 3.2m)', affected: '~420K people', alerts: 1 },
-      { name: 'Uttar Pradesh — Ganga Flood Plain', lat: 26.8, lng: 81.0, risk: 'medium', radius: 85000, waterLevel: '5.1m (Warning: 4.8m)', affected: '~1.1M people', alerts: 1 },
-      { name: 'Maharashtra — Konkan Coast', lat: 18.0, lng: 73.5, risk: 'medium', radius: 55000, waterLevel: '3.2m (Warning: 2.9m)', affected: '~290K people', alerts: 1 },
+      { name: 'West Bengal — Hooghly Delta', lat: 22.8, lng: 88.3, risk: 'high', radius: 80000, waterLevel: '6.4m (Danger: 5.8m)', affected: '~950K people', alerts: 2 }
     ];
+    let floodZones = DEFAULT_FLOOD_ZONES.slice();
 
     const alertsData = [
       { severity: 'severe', title: 'Bihar — Kosi River breach warning', meta: 'Supaul District • 2h ago' },
@@ -1014,6 +1006,40 @@
     /* ══════════════════════════════════════════
        Map
     ══════════════════════════════════════════ */
+    async function loadFloodZonesFromModels() {
+      try {
+        const res = await fetch('state_predictions.json?t=' + Date.now());
+        if (!res.ok) return;
+        const preds = await res.json();
+        const zones = [];
+        Object.values(preds).forEach((p) => {
+          if (!p || p.probability == null) return;
+          const coords = {
+            'Assam': [26.2, 92.5], 'Bihar': [25.8, 86.0], 'West Bengal': [22.8, 88.3],
+            'Kerala': [10.2, 76.5], 'Uttarakhand': [30.3, 79.3], 'Odisha': [20.5, 84.5],
+            'Gujarat': [21.5, 72.5], 'Andhra Pradesh': [16.5, 80.5], 'Uttar Pradesh': [26.8, 81.0],
+            'Maharashtra': [18.0, 73.5], 'Tamil Nadu': [11.1, 78.7], 'Punjab': [31.1, 75.5]
+          }[p.state];
+          if (!coords) return;
+          const risk = p.probability >= 0.75 ? 'high' : (p.probability >= 0.25 ? 'medium' : 'low');
+          if (risk === 'low') return;
+          zones.push({
+            name: p.state + ' — ' + p.risk_category,
+            lat: coords[0],
+            lng: coords[1],
+            risk,
+            radius: risk === 'high' ? 100000 : 70000,
+            waterLevel: p.probability_str + ' inundation probability',
+            affected: p.alert_level,
+            alerts: risk === 'high' ? 2 : 1
+          });
+        });
+        if (zones.length) floodZones = zones;
+      } catch (err) {
+        console.warn('Could not refresh dashboard zones from trained models', err);
+      }
+    }
+
     function initMap() {
       const map = L.map('floodMap', {
         center: [22.5, 82.0],
@@ -1233,8 +1259,9 @@
     /* ══════════════════════════════════════════
        Init
     ══════════════════════════════════════════ */
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       checkAuth();
+      await loadFloodZonesFromModels();
       initMap();
       renderAlerts();
       renderChart();

@@ -12,7 +12,7 @@ import numpy as np
 
 BASE_DIR = r"C:\Users\Lenovo\Desktop\FRP"
 MODELS_DIR = os.path.join(BASE_DIR, "models")
-DATA_FILE = os.path.join(BASE_DIR, "data", "master_flood_training_data.csv")
+DATA_FILE = os.path.join(BASE_DIR, "data", "divideddata", "All_India_National_Masters", "master_training_dataset_divided.csv")
 
 FEATURE_COLUMNS = [
     "Percent_Flooded_Area",

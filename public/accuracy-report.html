@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FloodWatch India — Model Accuracy Report (All States & UTs)</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; background:#f8fafc; color:#0f172a; margin:0; padding:32px; }
+    h1 { margin:0 0 6px; font-size:26px; }
+    .sub { color:#475569; margin-bottom:22px; }
+    .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:22px; }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:14px; }
+    .card b { display:block; font-size:22px; color:#047857; }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th { background:#0f172a; color:#fff; text-align:left; padding:8px; font-size:13px; }
+    td { border-bottom:1px solid #e2e8f0; padding:7px 8px; font-size:13px; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    .good { color:#047857; font-weight:700; }
+    .warn { color:#b45309; font-weight:700; }
+    .note { margin-top:18px; color:#475569; font-size:13px; line-height:1.5; }
+  </style>
+</head>
+<body>
+  <h1>FloodWatch India — ML Model Accuracy Report</h1>
+  <div class="sub">Project: Flood Risk Prediction Using Weather and GIS Data &nbsp;|&nbsp; 80:20 stratified train-test split &nbsp;|&nbsp; 37 States &amp; UTs</div>
+  <div class="cards">
+    <div class="card">Average Test Accuracy<b>84.12%</b></div>
+    <div class="card">National ROC-AUC<b style="color:#1d4ed8">0.8836</b></div>
+    <div class="card">National Accuracy<b style="color:#1d4ed8">82.93%</b></div>
+    <div class="card">Coverage<b style="color:#7c3aed">37 States & UTs</b></div>
+  </div>
+  <h2>National Benchmark</h2>
+  <p>Accuracy 82.93% &nbsp; Precision 78.38% &nbsp; Recall 59.18% &nbsp; F1 0.6744 &nbsp; Train/Test 652/164</p>
+  <h2>State / UT Gradient Boosting Models</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>State / UT</th><th>Test Accuracy</th><th>ROC-AUC</th><th>Precision</th><th>Recall</th><th>F1</th><th>Training Strategy</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><b>Andaman & Nicobar</b></td><td class='good'>82.9%</td><td>0.884</td><td>N/A</td><td>N/A</td><td>0.674</td><td>National_Master_Fallback</td></tr><tr><td>2</td><td><b>Andhra Pradesh</b></td><td class='good'>89.7%</td><td>0.720</td><td>66.7%</td><td>50.0%</td><td>0.571</td><td>Regional_Neighbor_Fallback (Telangana, Tamil Nadu)</td></tr><tr><td>3</td><td><b>Arunachal Pradesh</b></td><td class='good'>100.0%</td><td>1.000</td><td>100.0%</td><td>100.0%</td><td>1.000</td><td>Regional_Neighbor_Fallback (Assam, Nagaland)</td></tr><tr><td>4</td><td><b>Assam</b></td><td class='warn'>71.4%</td><td>0.667</td><td>66.7%</td><td>100.0%</td><td>0.800</td><td>Native_State_Data</td></tr><tr><td>5</td><td><b>Bihar</b></td><td class='good'>100.0%</td><td>1.000</td><td>100.0%</td><td>100.0%</td><td>1.000</td><td>Native_State_Data</td></tr><tr><td>6</td><td><b>Chandigarh</b></td><td class='good'>77.8%</td><td>0.875</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Regional_Neighbor_Fallback (Punjab, Haryana)</td></tr><tr><td>7</td><td><b>Chhattisgarh</b></td><td class='warn'>60.0%</td><td>0.750</td><td>25.0%</td><td>50.0%</td><td>0.333</td><td>Native_State_Data</td></tr><tr><td>8</td><td><b>Dadra & Nagar Have</b></td><td class='good'>82.9%</td><td>0.884</td><td>N/A</td><td>N/A</td><td>0.674</td><td>National_Master_Fallback</td></tr><tr><td>9</td><td><b>Daman & Diu</b></td><td class='good'>94.1%</td><td>1.000</td><td>88.9%</td><td>100.0%</td><td>0.941</td><td>Regional_Neighbor_Fallback (Gujarat, Maharashtra)</td></tr><tr><td>10</td><td><b>Delhi</b></td><td class='good'>96.2%</td><td>0.982</td><td>100.0%</td><td>91.7%</td><td>0.957</td><td>Regional_Neighbor_Fallback (Haryana, Uttar Pradesh)</td></tr><tr><td>11</td><td><b>Goa</b></td><td class='good'>76.5%</td><td>0.875</td><td>75.0%</td><td>75.0%</td><td>0.750</td><td>Regional_Neighbor_Fallback (Maharashtra, Karnataka)</td></tr><tr><td>12</td><td><b>Gujarat</b></td><td class='good'>85.7%</td><td>0.800</td><td>100.0%</td><td>50.0%</td><td>0.667</td><td>Native_State_Data</td></tr><tr><td>13</td><td><b>Haryana</b></td><td class='good'>87.2%</td><td>0.943</td><td>79.0%</td><td>93.8%</td><td>0.857</td><td>Regional_Neighbor_Fallback (Punjab, Rajasthan)</td></tr><tr><td>14</td><td><b>Himachal Pradesh</b></td><td class='good'>83.3%</td><td>0.938</td><td>100.0%</td><td>50.0%</td><td>0.667</td><td>Native_State_Data</td></tr><tr><td>15</td><td><b>Jammu & Kashmir</b></td><td class='good'>100.0%</td><td>1.000</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Native_State_Data</td></tr><tr><td>16</td><td><b>Jharkhand</b></td><td class='good'>82.3%</td><td>0.916</td><td>81.8%</td><td>69.2%</td><td>0.750</td><td>Regional_Neighbor_Fallback (Bihar, West Bengal)</td></tr><tr><td>17</td><td><b>Karnataka</b></td><td class='good'>83.3%</td><td>1.000</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Native_State_Data</td></tr><tr><td>18</td><td><b>Kerala</b></td><td class='good'>82.3%</td><td>0.833</td><td>66.7%</td><td>80.0%</td><td>0.727</td><td>Regional_Neighbor_Fallback (Tamil Nadu, Karnataka)</td></tr><tr><td>19</td><td><b>Ladakh</b></td><td class='warn'>70.0%</td><td>0.312</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Regional_Neighbor_Fallback (Himachal Pradesh, Jammu & Kashmir)</td></tr><tr><td>20</td><td><b>Lakshadweep</b></td><td class='good'>88.9%</td><td>0.950</td><td>80.0%</td><td>100.0%</td><td>0.889</td><td>Regional_Neighbor_Fallback (Kerala, Karnataka)</td></tr><tr><td>21</td><td><b>Madhya Pradesh</b></td><td class='good'>100.0%</td><td>1.000</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Native_State_Data</td></tr><tr><td>22</td><td><b>Maharashtra</b></td><td class='good'>80.0%</td><td>0.952</td><td>77.8%</td><td>100.0%</td><td>0.875</td><td>Native_State_Data</td></tr><tr><td>23</td><td><b>Manipur</b></td><td class='good'>78.6%</td><td>0.875</td><td>66.7%</td><td>50.0%</td><td>0.571</td><td>Regional_Neighbor_Fallback (Nagaland, Mizoram)</td></tr><tr><td>24</td><td><b>Meghalaya</b></td><td class='good'>90.9%</td><td>1.000</td><td>100.0%</td><td>75.0%</td><td>0.857</td><td>Regional_Neighbor_Fallback (Assam, Tripura)</td></tr><tr><td>25</td><td><b>Mizoram</b></td><td class='good'>92.3%</td><td>0.972</td><td>100.0%</td><td>75.0%</td><td>0.857</td><td>Regional_Neighbor_Fallback (Manipur, Tripura)</td></tr><tr><td>26</td><td><b>Nagaland</b></td><td class='good'>88.2%</td><td>1.000</td><td>100.0%</td><td>50.0%</td><td>0.667</td><td>Regional_Neighbor_Fallback (Assam, Manipur)</td></tr><tr><td>27</td><td><b>Odisha</b></td><td class='good'>83.3%</td><td>1.000</td><td>50.0%</td><td>100.0%</td><td>0.667</td><td>Native_State_Data</td></tr><tr><td>28</td><td><b>Puducherry</b></td><td class='warn'>72.7%</td><td>0.750</td><td>50.0%</td><td>33.3%</td><td>0.400</td><td>Regional_Neighbor_Fallback (Tamil Nadu, Kerala)</td></tr><tr><td>29</td><td><b>Punjab</b></td><td class='good'>100.0%</td><td>1.000</td><td>100.0%</td><td>100.0%</td><td>1.000</td><td>Native_State_Data</td></tr><tr><td>30</td><td><b>Rajasthan</b></td><td class='good'>75.0%</td><td>0.417</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Native_State_Data</td></tr><tr><td>31</td><td><b>Sikkim</b></td><td class='good'>91.7%</td><td>1.000</td><td>87.5%</td><td>100.0%</td><td>0.933</td><td>Regional_Neighbor_Fallback (West Bengal, Assam)</td></tr><tr><td>32</td><td><b>Tamil Nadu</b></td><td class='good'>87.5%</td><td>0.143</td><td>0.0%</td><td>0.0%</td><td>0.000</td><td>Native_State_Data</td></tr><tr><td>33</td><td><b>Telangana</b></td><td class='good'>80.0%</td><td>0.841</td><td>69.2%</td><td>75.0%</td><td>0.720</td><td>Regional_Neighbor_Fallback (Andhra Pradesh, Maharashtra)</td></tr><tr><td>34</td><td><b>Tripura</b></td><td class='good'>83.3%</td><td>0.875</td><td>75.0%</td><td>75.0%</td><td>0.750</td><td>Regional_Neighbor_Fallback (Assam, Mizoram)</td></tr><tr><td>35</td><td><b>Uttar Pradesh</b></td><td class='good'>80.0%</td><td>0.890</td><td>84.6%</td><td>84.6%</td><td>0.846</td><td>Native_State_Data</td></tr><tr><td>36</td><td><b>Uttarakhand</b></td><td class='warn'>74.1%</td><td>0.819</td><td>72.2%</td><td>86.7%</td><td>0.788</td><td>Regional_Neighbor_Fallback (Himachal Pradesh, Uttar Pradesh)</td></tr><tr><td>37</td><td><b>West Bengal</b></td><td class='warn'>60.0%</td><td>0.000</td><td>60.0%</td><td>100.0%</td><td>0.750</td><td>Native_State_Data</td></tr>
+      <tr>
+        <td>--</td><td><b>AVERAGE (ALL 37)</b></td>
+        <td class="good">84.1%</td><td><b>0.834</b></td>
+        <td><b>63.5%</b></td><td><b>63.3%</b></td>
+        <td><b>0.620</b></td><td><b>Ensemble GBDT Protocol</b></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    Models with fewer native district samples use regional-neighbour augmentation or the national master fallback.
+    Accuracy is evaluated on held-out test districts, not on the live map heatmap.
+    Feature importance (national): Population 36.61%, Mean Flood Duration 14.69%, Corrected Flooded Area 13.80%.
+  </p>
+</body>
+</html>
