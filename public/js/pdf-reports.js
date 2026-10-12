@@ -471,6 +471,31 @@ function openPrintableReportModal(data, lang, shelter, refCode, dateNow, statusT
         </div>
       </div>
 
+      <!-- Flood Forecast Windows & Affected Corridors -->
+      <div style="background:#0f172a; border:1px solid #1e293b; border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#38bdf8; margin-bottom:8px;">⏱️ Expected Flood Forecast Windows & Affected Corridors</div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; font-size:10.5px; margin-bottom:10px;">
+          <div style="background:#111c34; border:1px solid #1e293b; border-radius:6px; padding:8px;">
+            <div style="color:#94a3b8; font-size:9.5px;">Immediate Window</div>
+            <b style="color:#f8fafc;">0 – 24 Hours</b>
+            <div style="color:#cbd5e1; font-size:9px; margin-top:3px;">Surface waterlogging & storm runoff</div>
+          </div>
+          <div style="background:#111c34; border:1px solid #1e293b; border-radius:6px; padding:8px;">
+            <div style="color:#94a3b8; font-size:9.5px;">Catchment Inflow</div>
+            <b style="color:#f8fafc;">24 – 72 Hours</b>
+            <div style="color:#cbd5e1; font-size:9px; margin-top:3px;">River basin crest & dam buffer surge</div>
+          </div>
+          <div style="background:#111c34; border:1px solid #1e293b; border-radius:6px; padding:8px;">
+            <div style="color:#94a3b8; font-size:9.5px;">Discharge Outlook</div>
+            <b style="color:#f8fafc;">7-Day GloFAS Trend</b>
+            <div style="color:#cbd5e1; font-size:9px; margin-top:3px;">Medium-range hydrological drainage</div>
+          </div>
+        </div>
+        <div style="font-size:10px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.06);">
+          🎯 <b>Vulnerable Locations in Focus:</b> River floodplains, low-lying alluvial depressions, unembanked channels, and downstream dam discharge corridors.
+        </div>
+      </div>
+
       <!-- Nearest Shelter -->
       <div style="background:#1e1b4b; border:1px solid #4338ca; border-radius:10px; padding:12px 14px; margin-bottom:14px;">
         <div style="font-size:12px; font-weight:800; color:#a5b4fc;">🏥 ${lang.nearest_shelter}: ${shelter.name}</div>

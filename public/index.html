@@ -1097,69 +1097,98 @@ function renderVulnerableZones() {
   if (!map || !riskZonesLayer) return;
   riskZonesLayer.clearLayers();
 
+  const curZoom = map.getZoom ? map.getZoom() : 5;
+  const getRadius = (r, z) => {
+    if (z <= 4) return Math.max(r, 50000);
+    if (z <= 5) return Math.max(r, 38000);
+    if (z <= 6) return Math.max(r, 28000);
+    return r;
+  };
+
   VULNERABLE_FLOOD_ZONES_INDEX.forEach(zone => {
     const pred = getPred(zone.state);
-    const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+    const prob = pred ? (Number(pred.probability) || 0) : 0.04;
     const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
 
-    const isHigh = prob >= 0.65 || rain >= 55.0;
-    const isMed = !isHigh && (prob >= 0.25 || rain >= 20.0);
+    let vulnerabilityWeight = 0.15;
+    if (zone.type === 'lowland') vulnerabilityWeight = 0.22;
+    if (zone.type === 'dam') vulnerabilityWeight = 0.18;
+    if (zone.type === 'river') vulnerabilityWeight = 0.16;
+
+    const effectiveScore = Math.min(0.99, prob + vulnerabilityWeight * (rain > 15 ? 1.6 : (rain > 0 ? 0.8 : 0.4)));
+    const isHigh = effectiveScore >= 0.60 || rain >= 60.0;
+    const isMed = !isHigh && (effectiveScore >= 0.25 || rain >= 15.0);
 
     const color = isHigh ? '#ef4444' : (isMed ? '#facc15' : '#10b981');
     const statusLabel = isHigh ? '🔴 HIGH FLOOD RISK' : (isMed ? '🟡 MODERATE WATCH' : '🟢 SAFE (NORMAL)');
-    const fillOpacity = isHigh ? 0.38 : (isMed ? 0.28 : 0.20);
+    const badgeText = isHigh ? 'HIGH RISK' : (isMed ? 'WATCH' : 'SAFE');
+    const fillOpacity = isHigh ? 0.45 : (isMed ? 0.35 : 0.22);
 
     const circle = L.circle([zone.lat, zone.lon], {
-      radius: zone.radiusMeters,
+      radius: getRadius(zone.radiusMeters, curZoom),
       color: color,
-      weight: isHigh ? 2.5 : 1.5,
-      opacity: 0.85,
+      weight: curZoom <= 5 ? (isHigh ? 3 : 2) : 2,
+      opacity: 0.90,
       fillColor: color,
       fillOpacity: fillOpacity
     });
 
+    const pinIcon = L.divIcon({
+      className: 'zone-pin',
+      html: `<div style="background:${color}; color:#fff; border:2px solid #fff; border-radius:50%; width:${curZoom <= 5 ? 14 : 18}px; height:${curZoom <= 5 ? 14 : 18}px; display:flex; align-items:center; justify-content:center; font-size:${curZoom <= 5 ? '8px' : '10px'}; box-shadow:0 0 10px ${color}; cursor:pointer;" title="${zone.name}">${zone.icon}</div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+    const pin = L.marker([zone.lat, zone.lon], { icon: pinIcon });
+
     const popupHtml = `
-      <div class="pop-wrap" style="min-width:240px;">
+      <div class="pop-wrap" style="min-width:240px; font-family:Inter, sans-serif;">
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
           <span style="font-size:12px; font-weight:800; color:#fff;">${zone.icon} ${zone.name}</span>
-          <span class="pop-badge" style="background:${color}22; color:${color}; border:1px solid ${color}; font-size:9px; padding:2px 6px;">${isHigh ? 'HIGH RISK' : (isMed ? 'WATCH' : 'SAFE')}</span>
+          <span class="pop-badge" style="background:${color}22; color:${color}; border:1px solid ${color}; font-size:9px; padding:2px 6px;">${badgeText}</span>
         </div>
         <div style="font-size:9.5px; color:#38bdf8; margin-bottom:4px;">${zone.typeLabel} • ${zone.state}</div>
         <div style="font-size:9px; color:#94a3b8; line-height:1.35; margin-bottom:6px;">${zone.desc}</div>
         <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; font-size:9.5px; margin-bottom:6px; border:1px solid rgba(255,255,255,0.06);">
           <div>🌧️ 24h Rain: <b style="color:#38bdf8;">${rain.toFixed(1)} mm</b></div>
-          <div>🎯 Live Inundation Risk: <b style="color:${color};">${(prob * 100).toFixed(1)}%</b> (${statusLabel})</div>
+          <div>🎯 Flood Risk: <b style="color:${color};">${(effectiveScore * 100).toFixed(1)}%</b> (${statusLabel})</div>
         </div>
         <button class="pop-action" onclick="openModal()">🔓 District Inundation Map →</button>
       </div>
     `;
 
     circle.bindPopup(popupHtml, { maxWidth: 280 });
-    circle.bindTooltip(`<b>${zone.name}</b> — ${statusLabel}`, { sticky: true, direction: 'top' });
+    circle.bindTooltip(`<b>${zone.name}</b> — ${badgeText}`, { sticky: true, direction: 'top' });
+    pin.bindPopup(popupHtml, { maxWidth: 280 });
+
     circle.addTo(riskZonesLayer);
+    pin.addTo(riskZonesLayer);
   });
 }
 
 // ═══════════════════════════════════════════════════════════
-// CLICKABLE STATE BOUNDARIES (Click state to show risk details)
+// CLICKABLE STATE BOUNDARIES: Clean subtle contours (satellite view remains visible)
 // ═══════════════════════════════════════════════════════════
 function renderGeoLayer(geoData) {
   if (geoLayer) map.removeLayer(geoLayer);
 
-  // NO yellow or red boundary lines! Completely seamless satellite view.
   geoLayer = L.geoJSON(geoData, {
     style: () => ({
-      fillColor: 'transparent',
-      fillOpacity: 0.0,
-      stroke: false,
-      weight: 0
+      fillColor: '#38bdf8',
+      fillOpacity: 0.02,
+      color: '#64748b',
+      weight: 1.0,
+      dashArray: '3, 3',
+      opacity: 0.45
     }),
     onEachFeature: (feature, layer) => {
       const name = feature.properties.ST_NM || 'Region';
       const pred = getPred(name);
-      const isHigh = pred && (pred.probability >= 0.65 || pred.risk_level === 'high');
-      const isMed = pred && !isHigh && (pred.probability >= 0.25 || pred.risk_level === 'medium');
-      const riskLabel = isHigh ? '🔴 High Risk' : (isMed ? '🟡 Medium Risk' : '🟢 Safe (Normal)');
+      const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+      const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
+      const isHigh = prob >= 0.65 || (pred && pred.risk_level === 'high') || rain >= 65.0;
+      const isMed = !isHigh && (prob >= 0.25 || (pred && pred.risk_level === 'medium') || rain >= 20.0);
+      const riskLabel = isHigh ? '🔴 High Risk Zone' : (isMed ? '🟡 Moderate Watch' : '🟢 Safe (Normal)');
 
       layer.bindTooltip(
         `<b>${name}</b> — ${riskLabel} (Click for details)`,
@@ -1167,6 +1196,12 @@ function renderGeoLayer(geoData) {
       );
 
       layer.on({
+        mouseover(e) {
+          e.target.setStyle({ fillOpacity: 0.12, fillColor: isHigh ? '#ef4444' : (isMed ? '#facc15' : '#38bdf8'), color: '#38bdf8', weight: 1.8 });
+        },
+        mouseout(e) {
+          e.target.setStyle({ fillOpacity: 0.02, fillColor: '#38bdf8', color: '#64748b', weight: 1.0 });
+        },
         click(e) { showPopup(name, pred, e.latlng); }
       });
     }

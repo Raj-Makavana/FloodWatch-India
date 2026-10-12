@@ -447,61 +447,9 @@ const VULNERABLE_FLOOD_ZONES = [
 function renderRiskMarkersOnMap() {
   if (!map || !riskMarkersLayerGroup) return;
   riskMarkersLayerGroup.clearLayers();
-
-  // Render specific vulnerable flood zones with accurate live calculations:
-  // 🔴 RED: High Flood Risk (overflows, heavy live rain >= 55mm, prob >= 65%)
-  // 🟡 YELLOW: Moderate Flood Watch (rain 20-55mm, prob 25-65%)
-  // 🟢 GREEN: Low Risk / Safe (rain < 20mm, normal hydrological flow)
-  VULNERABLE_FLOOD_ZONES.forEach(zone => {
-    const pred = getPred(zone.state);
-    const prob = pred ? (Number(pred.probability) || 0) : 0.02;
-    const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
-
-    const isHigh = prob >= 0.65 || rain >= 55.0;
-    const isMed = !isHigh && (prob >= 0.25 || rain >= 20.0);
-
-    const color = isHigh ? '#ef4444' : (isMed ? '#facc15' : '#10b981');
-    const statusLabel = isHigh ? '🔴 HIGH FLOOD RISK' : (isMed ? '🟡 MODERATE WATCH' : '🟢 SAFE (NORMAL)');
-    const fillOpacity = isHigh ? 0.38 : (isMed ? 0.28 : 0.20);
-
-    // Geographic circle in meters: persists perfectly at every zoom level without disappearing!
-    const circle = L.circle([zone.lat, zone.lon], {
-      radius: zone.radiusMeters,
-      color: color,
-      weight: isHigh ? 2.5 : 1.5,
-      opacity: 0.85,
-      fillColor: color,
-      fillOpacity: fillOpacity
-    });
-
-    const popupContent = `
-      <div class="pop-wrap" style="min-width:250px;">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
-          <span style="font-size:12px; font-weight:800; color:#fff;">${zone.icon} ${zone.name}</span>
-          <span class="pop-badge" style="background:${color}22; color:${color}; border:1px solid ${color}; font-size:9px; padding:2px 6px;">${isHigh ? 'HIGH RISK' : (isMed ? 'WATCH' : 'SAFE')}</span>
-        </div>
-        <div style="font-size:9.5px; color:#38bdf8; margin-bottom:6px;">${zone.typeLabel} • ${zone.state}</div>
-        <div style="font-size:9px; color:#94a3b8; line-height:1.35; margin-bottom:8px;">${zone.desc}</div>
-
-        <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; font-size:10px; margin-bottom:8px; border:1px solid rgba(255,255,255,0.06);">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:9.5px; color:#cbd5e1;">
-            <div>🌧️ Live Rain: <b style="color:#38bdf8;">${rain.toFixed(1)} mm</b></div>
-            <div>🎯 ML Risk: <b style="color:${color};">${(prob * 100).toFixed(1)}%</b></div>
-          </div>
-          <div style="margin-top:4px; font-size:9px; color:${color}; font-weight:700;">Status: ${statusLabel}</div>
-        </div>
-
-        <button class="btn-pop-action btn-pop-pdf" style="width:100%;" onclick="downloadDistrictRiskReportPDF('${zone.name}', '${zone.state}', ${zone.lat}, ${zone.lon})">
-          📄 Download ${zone.name} Safety Report (PDF)
-        </button>
-      </div>
-    `;
-
-    circle.bindPopup(popupContent, { maxWidth: 300 });
-    circle.bindTooltip(`<b>${zone.name}</b> — ${statusLabel}`, { sticky: true, direction: 'top' });
-    circle.addTo(riskMarkersLayerGroup);
-  });
+  // No circles or marker boundaries drawn — map fills regions seamlessly
 }
+
 
 /**
  * WATERWAY_HOTSPOTS: Precise lat/lon of river channels, dam zones, and low-lying
@@ -734,27 +682,38 @@ async function loadGeoJsonBoundaries() {
 function renderGeoLayer(geoData) {
   if (geoLayer) map.removeLayer(geoLayer);
 
-  // NO yellow or red boundary lines! Completely seamless satellite view.
+  // Administrative State Boundaries: Clean, subtle contours (allows satellite imagery to show clearly)
+  // Entire states are NOT colored red; specific vulnerable zones and river corridors are highlighted
   geoLayer = L.geoJSON(geoData, {
     style: () => ({
-      fillColor: 'transparent',
-      fillOpacity: 0.0,
-      stroke: false,
-      weight: 0
+      fillColor: '#38bdf8',
+      fillOpacity: 0.02,
+      color: '#64748b',
+      weight: 1.0,
+      dashArray: '3, 3',
+      opacity: 0.45
     }),
     onEachFeature: (feature, layer) => {
       const name = feature.properties.ST_NM || 'Region';
       const pred = getPred(name);
-      const isHigh = pred && (pred.probability >= 0.65 || pred.risk_level === 'high');
-      const isMed = pred && !isHigh && (pred.probability >= 0.25 || pred.risk_level === 'medium');
-      const riskLabel = isHigh ? '🔴 High Risk' : (isMed ? '🟡 Medium Risk' : '🟢 Safe (Normal)');
+      const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+      const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
+      const isHigh = prob >= 0.65 || (pred && pred.risk_level === 'high') || rain >= 65.0;
+      const isMed = !isHigh && (prob >= 0.25 || (pred && pred.risk_level === 'medium') || rain >= 20.0);
+      const riskLabel = isHigh ? '🔴 High Risk Zone' : (isMed ? '🟡 Moderate Watch' : '🟢 Safe (Normal)');
 
       layer.bindTooltip(
-        `<b>${name}</b> — ${riskLabel} <span style="color:#38bdf8; font-size:10px;">(Click for District ML Prediction & PDF)</span>`,
+        `<b>${name}</b> — ${riskLabel} <span style="color:#38bdf8; font-size:10px;">(Click for District ML & PDF)</span>`,
         { sticky: true, direction: 'top' }
       );
 
       layer.on({
+        mouseover(e) {
+          e.target.setStyle({ fillOpacity: 0.12, fillColor: isHigh ? '#ef4444' : (isMed ? '#facc15' : '#38bdf8'), color: '#38bdf8', weight: 1.8 });
+        },
+        mouseout(e) {
+          e.target.setStyle({ fillOpacity: 0.02, fillColor: '#38bdf8', color: '#64748b', weight: 1.0 });
+        },
         click(e) {
           L.DomEvent.stopPropagation(e);
           showAreaOrDistrictPopup(e.latlng, name, pred);
