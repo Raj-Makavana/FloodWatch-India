@@ -330,6 +330,48 @@ export class AuthService {
       message: 'Password reset successfully! Please sign in with your new password.',
     };
   }
+
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+    confirmPassword?: string
+  ): Promise<{ success: boolean; message: string }> {
+    const user = await userService.findById(userId);
+    if (!user) {
+      throw new Error('User not found.');
+    }
+    if (!user.password_hash) {
+      throw new Error('This account was created via Google Sign-In and does not have a local password.');
+    }
+
+    const isCurrentValid = await comparePassword(currentPassword, user.password_hash);
+    if (!isCurrentValid) {
+      throw new Error('Incorrect current password.');
+    }
+
+    const pwCheck = validatePassword(newPassword);
+    if (!pwCheck.isValid) {
+      throw new Error(pwCheck.message);
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+      throw new Error('New passwords do not match.');
+    }
+
+    const isSamePassword = await comparePassword(newPassword, user.password_hash);
+    if (isSamePassword) {
+      throw new Error('New password cannot be the same as your current password.');
+    }
+
+    const hashed = await hashPassword(newPassword);
+    await userService.updatePasswordByEmail(user.email, hashed);
+
+    return {
+      success: true,
+      message: 'Password updated successfully.',
+    };
+  }
 }
 
 export const authService = new AuthService();

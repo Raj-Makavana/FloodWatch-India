@@ -170,6 +170,24 @@ class FloodPredictionRequest(BaseModel):
         }
 
 
+class LocationPredictionRequest(BaseModel):
+    latitude: float = Field(..., example=28.6139, description="Latitude of user/detected location")
+    longitude: float = Field(..., example=77.2090, description="Longitude of user/detected location")
+    state_hint: Optional[str] = Field(None, example="Delhi", description="Optional state hint if detected by browser")
+    district_hint: Optional[str] = Field(None, example="New Delhi", description="Optional district hint if detected by browser")
+    rainfall_24h_mm: Optional[float] = Field(0.0, ge=0.0, description="Manual 24-hour rainfall override in mm (0 = auto-fetch)")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "latitude": 28.6139,
+                "longitude": 77.2090,
+                "rainfall_24h_mm": 0
+            }
+        }
+
+
+
 # --------------------------------------------------------------------------------------
 # 3. LIVE API HELPER FUNCTIONS
 # --------------------------------------------------------------------------------------
@@ -571,6 +589,118 @@ async def predict_flood(payload: FloodPredictionRequest):
         )
 
 
+def find_nearest_state(lat: float, lon: float) -> str:
+    best_state = "Delhi"
+    best_dist = float("inf")
+    for s_name, coords in STATE_COORDINATES.items():
+        d = (coords["lat"] - lat) ** 2 + (coords["lon"] - lon) ** 2
+        if d < best_dist:
+            best_dist = d
+            best_state = s_name
+    return best_state
+
+
+@app.post("/predict-location", tags=["Prediction Engine"])
+async def predict_location(payload: LocationPredictionRequest):
+    """
+    LOCATION-BASED PREDICTION ENGINE (My Location / GPS Detection):
+      1. Uses exact user GPS coordinates (latitude, longitude)
+      2. Determines state & district context (via hints or nearest centroid / reverse geocode)
+      3. Fetches live Open-Meteo weather & GloFAS river discharge for exact coords
+      4. Queries CWC dams and computes IMD alert
+      5. Runs state ML model inference
+      6. Returns comprehensive immediate local flood risk telemetry
+    """
+    try:
+        lat = payload.latitude
+        lon = payload.longitude
+
+        state = payload.state_hint.strip() if payload.state_hint else None
+        if not state or state not in STATE_COORDINATES:
+            matched_state = None
+            if state:
+                for k in STATE_COORDINATES:
+                    if k.lower() == state.lower():
+                        matched_state = k
+                        break
+            state = matched_state or find_nearest_state(lat, lon)
+
+        district = payload.district_hint.strip() if payload.district_hint else None
+
+        weather_task = fetch_live_weather(lat, lon)
+        discharge_task = fetch_live_river_discharge(lat, lon)
+        weather_data, river_telemetry = await asyncio.gather(weather_task, discharge_task)
+
+        if payload.rainfall_24h_mm and payload.rainfall_24h_mm > 0:
+            rainfall_to_use = payload.rainfall_24h_mm
+            rainfall_source = "Manual Override"
+        else:
+            rainfall_to_use = weather_data["rainfall_24h_mm"]
+            rainfall_source = "Open-Meteo Weather API (Real-Time at GPS Coords)"
+
+        dam_telemetry = get_dam_telemetry(state, district)
+        curr_discharge = river_telemetry.get("discharge_m3s")
+        imd_alert = compute_imd_alert(rainfall_to_use, curr_discharge)
+
+        result = predictor.predict(
+            state=state,
+            district=district,
+            rainfall_24h_mm=rainfall_to_use
+        )
+
+        if curr_discharge and curr_discharge > 1500:
+            result["prediction"]["key_risk_drivers"].append(
+                f"Surging Local River Discharge: {curr_discharge:.1f} m³/s"
+            )
+        if dam_telemetry.get("total_dams_in_zone", 0) > 0:
+            d_count = dam_telemetry["total_dams_in_zone"]
+            cap = dam_telemetry["total_storage_capacity_mcm"]
+            result["prediction"]["key_risk_drivers"].append(
+                f"Regional Dam Storage: {d_count} dams ({cap:.0f} MCM capacity)"
+            )
+
+        return {
+            "status": "success",
+            "query": {
+                "latitude": lat,
+                "longitude": lon,
+                "detected_state": state,
+                "detected_district": district or "Local Catchment",
+                "rainfall_used_for_prediction_mm": rainfall_to_use,
+                "rainfall_source": rainfall_source
+            },
+            "live_weather": {
+                "current_precipitation_mm": weather_data["rainfall_mm"],
+                "accumulated_24h_rainfall_mm": weather_data["rainfall_24h_mm"],
+                "temperature_c": weather_data["temperature_c"],
+                "soil_moisture": weather_data["soil_moisture"],
+                "humidity_percent": weather_data["humidity_percent"],
+                "weather_description": weather_data["weather_description"],
+                "source": weather_data["source"]
+            },
+            "river_telemetry": {
+                "discharge_m3s": curr_discharge,
+                "max_7d_forecast_m3s": river_telemetry.get("max_7d_forecast_m3s"),
+                "forecast_7d": river_telemetry.get("forecast_7d", []),
+                "source": river_telemetry["source"]
+            },
+            "imd_alert": imd_alert,
+            "dam_telemetry": dam_telemetry,
+            "prediction": result["prediction"],
+            "meta": {
+                "model_used": result["meta"]["model_used"],
+                "location_type": "GPS_COORDINATES",
+                "api_version": "2.1.0"
+            }
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Location inference error: {str(e)}"
+        )
+
+
+
 @app.get("/live-weather/{state_name}", tags=["Live Data"])
 async def get_live_weather(state_name: str, district: Optional[str] = Query(None)):
     """
@@ -653,23 +783,47 @@ async def get_map_predictions():
             result = predictor.predict(state=state, rainfall_24h_mm=rain)
             pred = result["prediction"]
             raw = float(pred["risk_probability_raw"])
-            if raw >= 0.75 or "Extreme" in pred["risk_category"]:
+            effective_rain = rain
+            if raw >= 0.65 or effective_rain >= 75.0:
                 level = "high"
+                category = "High Risk (Severe Inundation)"
+                alert = "🔴 RED HIGH ALERT"
+                color = "#ef4444"
+                guidance = "Flood defense activation required. River overflow warning for low-lying areas."
             elif raw >= 0.25:
                 level = "medium"
+                category = "Medium Risk (Flood Watch)"
+                alert = "🟡 YELLOW WATCH"
+                color = "#facc15"
+                guidance = "Continuous monitoring of river gauge levels and catchment precipitation."
             else:
                 level = "low"
+                category = "Safe (Normal Conditions)"
+                alert = "🟢 GREEN SAFE"
+                color = "#10b981"
+                guidance = "Normal conditions. Standard hydrological monitoring active."
+
+            drivers = []
+            if effective_rain >= 65.0:
+                drivers.append(f"Heavy 24h Rainfall Intensity ({effective_rain:.1f} mm/24h)")
+            elif effective_rain >= 25.0:
+                drivers.append(f"Moderate Rain Activity ({effective_rain:.1f} mm/24h)")
+            else:
+                drivers.append("Low / Dry Precipitation Conditions")
+            if raw >= 0.25:
+                drivers.append("High Historical Flood Inundation Index")
+
             return state, {
                 "state": state,
-                "risk_category": pred["risk_category"],
+                "risk_category": category,
                 "risk_level": level,
                 "probability": raw,
-                "probability_str": pred["flood_risk_probability"],
-                "alert_level": pred["alert_level"],
-                "color_code": pred["color_code"],
-                "action_guidance": pred["action_guidance"],
-                "key_risk_drivers": pred["key_risk_drivers"],
-                "rainfall_24h_mm": rain,
+                "probability_str": f"{raw * 100:.1f}%",
+                "alert_level": alert,
+                "color_code": color,
+                "action_guidance": guidance,
+                "key_risk_drivers": drivers,
+                "rainfall_24h_mm": round(effective_rain, 1),
                 "model_used": result["meta"]["model_used"],
             }
 

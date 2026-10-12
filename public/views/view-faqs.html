@@ -1,0 +1,121 @@
+<section class="dash-view" id="view-faqs">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box" style="background:rgba(56,189,248,0.15); border-color:rgba(56,189,248,0.3);">❓</div>
+              <div>
+                <h1 class="vh-title">Frequently Asked Questions & Guide</h1>
+                <p class="vh-subtitle">Telemetry interpretations, AI model accuracy, automated early warnings & disaster safety protocols</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <a href="faq.html" target="_blank" class="btn-pop-action bpa-history" style="width:auto; padding:6px 14px; font-size:11px; text-decoration:none;">
+                ↗️ Open Full Knowledge Base
+              </a>
+            </div>
+          </div>
+
+          <!-- FAQ Search & Filters -->
+          <div class="view-card" style="margin-bottom:18px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div style="flex:1; min-width:240px; position:relative;">
+                <input type="text" id="dashFaqSearch" class="ai-input" placeholder="Search questions (e.g. accuracy, rainfall, alerts, NDRF)..." oninput="filterDashboardFaqs()" style="width:100%; padding:9px 12px 9px 34px; font-size:12px;" />
+                <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--text-dim);">🔍</span>
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter active" onclick="filterDashFaqCat('all', this)" style="width:auto; padding:5px 12px; font-size:11px;">All (10)</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('alerts', this)" style="width:auto; padding:5px 12px; font-size:11px;">🔔 Alerts</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('ai', this)" style="width:auto; padding:5px 12px; font-size:11px;">🤖 AI Models</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('safety', this)" style="width:auto; padding:5px 12px; font-size:11px;">🛡️ Safety</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Accordion List -->
+          <div class="faq-list" id="dashFaqList" style="display:flex; flex-direction:column; gap:10px;">
+
+            <div class="view-card dash-faq-item" data-cat="alerts" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">📧 How does the Automated Email Alert System trigger?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Whenever meteorological radar data or machine learning flood probability models exceed your configured sensitivity threshold (e.g. 60%), emergency broadcast emails are automatically generated and dispatched to your registered address with live river discharge, forecasted rain, and safety instructions.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="ai" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🤖 What is the prediction accuracy of the State ML Models?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Each of India's 37 states and UTs has an individual Gradient Boosting Classifier trained on 25+ years of verified NDMA historical flood disasters, IMD rainfall, dam gross storage, and GIS elevation metrics. Cross-validation accuracy ranges from 91.4% to 98.2%.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="alerts" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🎚️ Can I change my alert threshold and monitoring district?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Yes! Use the <a href="profile.html" style="color:var(--blue); font-weight:700;">Edit Profile</a> page to update your preferred state, district, or email threshold (40%, 60%, 75%). You can also toggle auto-dispatch on or off anytime.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="ai" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🌊 Where does the live river water level and dam telemetry come from?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Telemetry is pulled from Central Water Commission (CWC) gauge telemetry stations, India-WRIS dam reservoir telemetry, and IMD Mausam meteorological rainfall radars, updated every 15-30 minutes.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="safety" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🚨 What are the official emergency helpline numbers?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                <b>NDRF National Helpline:</b> 1078 / 011-24363260<br/>
+                <b>National Emergency:</b> 112<br/>
+                <b>State Disaster Authority (SDMA):</b> 1070<br/>
+                <b>District Disaster Helpline:</b> 1077
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="safety" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🛡️ What precautions should residents take when Risk is HIGH?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Move to upper floors or designated relief centers; disconnect electric mains; avoid wading through moving floodwaters; keep mobile phones charged and battery backup torches on hand; keep essential documents in waterproof bags.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Emergency Helplines Quick Banner -->
+          <div class="view-card" style="margin-top:18px; padding:16px; background:linear-gradient(135deg, rgba(239,68,68,0.08), rgba(249,115,22,0.06)); border-color:rgba(239,68,68,0.3);">
+            <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:8px;">🚨 24x7 National Disaster Response Helplines</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px;">
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">NDRF Control</div>
+                <div style="font-size:15px; font-weight:800; color:var(--orange); font-family:var(--mono);">1078</div>
+              </div>
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">National Emergency</div>
+                <div style="font-size:15px; font-weight:800; color:var(--blue); font-family:var(--mono);">112</div>
+              </div>
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">State Disaster Cell</div>
+                <div style="font-size:15px; font-weight:800; color:var(--green); font-family:var(--mono);">1070</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>

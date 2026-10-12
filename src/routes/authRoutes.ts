@@ -102,6 +102,12 @@ router.get(
             email: user.email,
             provider: user.provider,
             email_verified: user.email_verified,
+            phone: user.phone || null,
+            state: user.state || null,
+            district: user.district || null,
+            organization: user.organization || null,
+            bio: user.bio || null,
+            avatar_url: user.avatar_url || null,
             created_at: user.created_at,
           },
         },
@@ -110,6 +116,127 @@ router.get(
       res.status(500).json({
         success: false,
         message: 'Something went wrong. Please try again.',
+      });
+    }
+  }
+);
+
+// GET /api/auth/profile (Alias for /me)
+router.get(
+  '/profile',
+  requireAuth,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const user = await userService.findById(req.user!.userId);
+      if (!user) {
+        res.status(404).json({ success: false, message: 'User not found' });
+        return;
+      }
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            provider: user.provider,
+            email_verified: user.email_verified,
+            phone: user.phone || null,
+            state: user.state || null,
+            district: user.district || null,
+            organization: user.organization || null,
+            bio: user.bio || null,
+            avatar_url: user.avatar_url || null,
+            created_at: user.created_at,
+          },
+        },
+      });
+    } catch (err: any) {
+      res.status(500).json({ success: false, message: err.message || 'Failed to load profile' });
+    }
+  }
+);
+
+// PUT /api/auth/profile (Update authenticated user's profile details)
+router.put(
+  '/profile',
+  requireAuth,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const { name, phone, state, district, organization, bio, avatar_url } = req.body;
+      if (name !== undefined && typeof name === 'string' && name.trim().length < 2) {
+        res.status(400).json({ success: false, message: 'Name must be at least 2 characters long.' });
+        return;
+      }
+
+      const updatedUser = await userService.updateProfile(req.user!.userId, {
+        name,
+        phone,
+        state,
+        district,
+        organization,
+        bio,
+        avatar_url,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Profile updated successfully!',
+        data: {
+          user: {
+            id: updatedUser.id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            provider: updatedUser.provider,
+            email_verified: updatedUser.email_verified,
+            phone: updatedUser.phone || null,
+            state: updatedUser.state || null,
+            district: updatedUser.district || null,
+            organization: updatedUser.organization || null,
+            bio: updatedUser.bio || null,
+            avatar_url: updatedUser.avatar_url || null,
+            created_at: updatedUser.created_at,
+          },
+        },
+      });
+    } catch (err: any) {
+      res.status(500).json({
+        success: false,
+        message: err.message || 'Failed to update profile.',
+      });
+    }
+  }
+);
+
+// PUT /api/auth/change-password (Change password for logged-in user)
+router.put(
+  '/change-password',
+  requireAuth,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+    try {
+      const { currentPassword, newPassword, confirmPassword } = req.body;
+      if (!currentPassword || !newPassword) {
+        res.status(400).json({
+          success: false,
+          message: 'Both current password and new password are required.',
+        });
+        return;
+      }
+
+      const result = await authService.changePassword(
+        req.user!.userId,
+        currentPassword,
+        newPassword,
+        confirmPassword
+      );
+
+      res.status(200).json(result);
+    } catch (err: any) {
+      const message = err.message || 'Failed to update password.';
+      const status = message.includes('Incorrect') || message.includes('same') || message.includes('match') || message.includes('Password') ? 400 : 500;
+      res.status(status).json({
+        success: false,
+        message,
       });
     }
   }

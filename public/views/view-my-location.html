@@ -1,0 +1,115 @@
+<section class="dash-view" id="view-my-location">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📍</div>
+              <div>
+                <h1 class="vh-title">My Location Telemetry & Risk Monitor</h1>
+                <p class="vh-subtitle">Real-time GPS sensor triangulation coupled with Open-Meteo & GloFAS immediate flood prediction</p>
+              </div>
+            </div>
+            <button class="map-toggle-btn active" onclick="detectMyLocation(false)" style="padding:8px 14px; font-size:11px;">
+              🔄 Re-Detect GPS Sensors
+            </button>
+          </div>
+
+          <!-- GPS Location & Immediate Risk Hero Cards -->
+          <div class="view-grid-2">
+            <!-- Left: Location Details -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🛰️ Detected Geolocation Sensors</span>
+                <span class="vh-badge nt-gps" id="fullGpsBadge">GPS LOCKED</span>
+              </div>
+              <div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:4px;" id="fullLocCity">
+                Locating...
+              </div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;" id="fullLocStateDist">
+                Detecting district and state boundaries...
+              </div>
+              <div style="background:rgba(0,0,0,0.35); padding:10px 12px; border-radius:8px; border:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--blue);">
+                GPS Fix: <b id="fullLocCoords">--°N, --°E</b>
+              </div>
+              <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn-pop-action bpa-predict" onclick="switchView('view-map'); focusMapOnUser();">
+                  🎯 Focus on Satellite Map
+                </button>
+                <button class="btn-pop-action btn-pop-pdf" onclick="downloadLocationRiskReportPDF()">
+                  📄 Download Location Risk Report (PDF)
+                </button>
+                <button class="btn-pop-action bpa-history" onclick="transferUserLocToAI()">
+                  ⚡ Simulate Rainfall Scenarios
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Immediate Flood Risk Meter -->
+            <div class="view-card" id="fullRiskCard" style="border-left: 4px solid var(--green);">
+              <div class="vc-header">
+                <span class="vc-title">⚡ Immediate Local Flood Risk</span>
+                <span class="pop-badge pb-low" id="fullRiskBadge">SAFE</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+                <div class="pop-prob-big ppb-low" id="fullProbBig">--%</div>
+                <div style="font-size:11px; font-weight:700; color:var(--text-secondary);" id="fullCategoryText">Low Inundation Risk</div>
+              </div>
+              <div style="width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-bottom:12px;">
+                <div id="fullRiskBar" style="width:5%; height:100%; background:var(--green); transition:width 1s ease;"></div>
+              </div>
+              <div style="background:rgba(239,68,68,0.08); border-left:3px solid #10b981; padding:8px 10px; border-radius:6px; font-size:11px; color:#e2e8f0;" id="fullAdvisoryText">
+                <b>IMD Advisory:</b> Normal conditions. Standard meteorological monitoring active.
+              </div>
+            </div>
+          </div>
+
+          <!-- 4-Card Real-Time Telemetry Grid -->
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:20px;">
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌧️ 24h Rainfall</div>
+              <div style="font-size:18px; font-weight:800; color:var(--blue); font-family:var(--mono);" id="fullRainVal">-- mm</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Open-Meteo Live Sum</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌊 River Discharge</div>
+              <div style="font-size:18px; font-weight:800; color:var(--blue); font-family:var(--mono);" id="fullRiverVal">-- m³/s</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">GloFAS River Basin Flow</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌡️ Ambient Temp</div>
+              <div style="font-size:18px; font-weight:800; color:#fff; font-family:var(--mono);" id="fullTempVal">--°C</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Local Atmospheric Reading</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌱 Topsoil Moisture</div>
+              <div style="font-size:18px; font-weight:800; color:#fff; font-family:var(--mono);" id="fullSoilVal">--</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">0-1cm Soil Saturation Index</div>
+            </div>
+          </div>
+
+          <!-- Emergency Action & Safety Protocol Checklist -->
+          <div class="view-card">
+            <div class="vc-header">
+              <span class="vc-title">🛡️ Recommended Safety Actions for Your Location</span>
+              <span style="font-size:10px; color:var(--text-dim); font-family:var(--mono);">NDMA STANDARD ADVISORY</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:11.5px; color:#cbd5e1; line-height:1.5;">
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                <b style="color:#fff;">🚨 Emergency Helpline Numbers:</b><br/>
+                • NDMA National Emergency Helpline: <b>1078</b><br/>
+                • State Disaster Management Authority: <b>1070</b><br/>
+                • Ambulance / First Responders: <b>108 / 112</b>
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                <b style="color:#fff;">🌊 Hydrological Precautions:</b><br/>
+                • Stay away from swollen riverbanks and drainage culverts.<br/>
+                • Keep emergency power banks and fresh drinking water ready.<br/>
+                • Follow official IMD color-coded advisories on the command map.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 3: ML FLOOD RISK PREDICTOR
+           ═════════════════════════════════════════════════════════════ -->

@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>My Location – FloodWatch India</title>
+  <meta name="description" content="FloodWatch India Command Center – Real-time flood risk monitoring, live GPS detection, AI prediction, and emergency response dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="assets/toast.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="css/dashboard.css" />\n  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body>
+
+  <!-- ── Header Nav ── -->
+  <nav class="header-nav">
+    <a href="dashboard.html" class="brand-group">
+      <div class="brand-icon-mini">🌊</div>
+      <div>
+        <div class="brand-title">Flood<span>Watch</span> India</div>
+        <div class="brand-sub">FLOOD RISK PREDICT PLATFORM</div>
+      </div>
+    </a>
+    <div class="header-right">
+      <a href="faq.html" class="btn-head-link" style="color:var(--text-secondary); font-size:12px; font-weight:600; text-decoration:none; display:flex; align-items:center; gap:5px; padding:6px 12px; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border);">❓ FAQs</a>
+      <a href="profile.html" class="user-pill" id="userPill" title="Click to view & edit profile">
+        <span class="user-dot"></span>
+        <span id="userNameText">Authenticating...</span>
+      </a>
+      <button class="btn-signout" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- ── Dashboard: Sidebar + Dynamic Main Content ── -->
+  <div class="dashboard-wrapper">
+
+    <!-- ── Left Feature Navigation Sidebar ── -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-section-title">PLATFORM FEATURES</div>
+        <div class="nav-menu">
+          <!-- 1. HOME (LIVE MAP) -->
+          <button class="nav-btn" id="nav-map" onclick="switchView('view-map')">
+            <div class="nav-left">
+              <span class="nav-icon">🗺️</span>
+              <span>Live Flood Map</span>
+            </div>
+            <span class="nav-tag nt-live">HOME</span>
+          </button>
+
+          <!-- 2. MY LOCATION -->
+          <button id="nav-my-location" class="nav-btn active" onclick="switchView('view-my-location')">
+            <div class="nav-left">
+              <span class="nav-icon">📍</span>
+              <span>My Location</span>
+            </div>
+            <span class="nav-tag nt-gps" id="navGpsStatus">GPS</span>
+          </button>
+
+          <!-- 3. ML RISK PREDICTOR -->
+          <button class="nav-btn" id="nav-ml-predictor" onclick="switchView('view-ml-predictor')">
+            <div class="nav-left">
+              <span class="nav-icon">📈</span>
+              <span>ML Risk Predictor</span>
+            </div>
+            <span class="nav-tag nt-ai">ML MODEL</span>
+          </button>
+
+          <!-- 4. HISTORICAL FLOOD DATABASE -->
+          <button class="nav-btn" id="nav-historical-db" onclick="switchView('view-historical-db')">
+            <div class="nav-left">
+              <span class="nav-icon">📜</span>
+              <span>Historical Floods DB</span>
+            </div>
+            <span class="nav-tag nt-neon">NEON</span>
+          </button>
+
+          <!-- 5. FLOOD TRENDS & FREQUENCY -->
+          <button class="nav-btn" id="nav-trends" onclick="switchView('view-trends')">
+            <div class="nav-left">
+              <span class="nav-icon">📊</span>
+              <span>Flood Frequency Trends</span>
+            </div>
+          </button>
+
+          <!-- 6. RELIEF CENTERS -->
+          <button class="nav-btn" id="nav-relief" onclick="switchView('view-relief')">
+            <div class="nav-left">
+              <span class="nav-icon">🏥</span>
+              <span>Relief & Help Centers</span>
+            </div>
+          </button>
+
+          <!-- 7. NATIONAL ALERTS -->
+          <button class="nav-btn" id="nav-alerts" onclick="switchView('view-alerts')">
+            <div class="nav-left">
+              <span class="nav-icon">🔴</span>
+              <span>National Alerts</span>
+            </div>
+            <span class="nav-tag nt-warn" id="navAlertCount">7</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick GPS Status Box in Sidebar Footer -->
+      <div class="sidebar-gps-card" onclick="switchView('view-my-location')" style="cursor:pointer;" title="Click to view full My Location analysis">
+        <div class="sg-top">
+          <span class="sg-title">📍 Live GPS Sensor</span>
+          <span class="sg-badge" id="sgGpsBadge">SCANNING</span>
+        </div>
+        <div class="sg-loc-text" id="sgLocText">Detecting user coordinates...</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px; font-size:9.5px;">
+          <span style="color:var(--text-dim);">Immediate Risk:</span>
+          <b id="sgRiskText" style="color:var(--green);">Calculating...</b>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Right Main Area: Dynamically Loaded Views ── -->
+    <main class="main-content-area">
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 1: HOME (FULL LIVE SATELLITE RADAR MAP)
+           ═══════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-map">
+        <div id="floodMap"></div>
+
+        <!-- Top Map Bar with Radar Title -->
+        <div class="map-top-bar">
+          <div class="map-title-pill">
+            <span class="mtp-icon">🛰️</span>
+            <div class="mtp-text">India Satellite Flood Radar</div>
+          </div>
+        </div>
+
+        <!-- NOAA Flood Risk Inundation Alert Spectrum Legend -->
+        <div class="noaa-legend">
+          <div class="nl-title">
+            <span>Flood Inundation Risk Alert</span>
+            <span style="color:#ef4444;font-weight:900;">LIVE ML</span>
+            <span id="predUpdatedAt" style="color:#94a3b8;font-weight:600;margin-left:4px;"></span>
+          </div>
+          <div class="nl-bar"></div>
+          <div class="nl-labels">
+            <span style="color:#64748b;">Normal (Safe)</span>
+            <span style="color:#facc15;font-weight:800;">🟡 Medium Risk</span>
+            <span style="color:#ef4444;font-weight:900;">🔴 High Risk</span>
+          </div>
+        </div>
+
+        <!-- Floating "My Location" Button on Map -->
+        <button class="map-locate-btn" onclick="focusMapOnUser()">
+          <span>📍</span> My Location
+        </button>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 2: FEATURE 1 - MY LOCATION (LIVE GEO-LOCATION DETECTION)
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view active" id="view-my-location">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📍</div>
+              <div>
+                <h1 class="vh-title">My Location Telemetry & Risk Monitor</h1>
+                <p class="vh-subtitle">Real-time GPS sensor triangulation coupled with Open-Meteo & GloFAS immediate flood prediction</p>
+              </div>
+            </div>
+            <button class="map-toggle-btn active" onclick="detectMyLocation(false)" style="padding:8px 14px; font-size:11px;">
+              🔄 Re-Detect GPS Sensors
+            </button>
+          </div>
+
+          <!-- GPS Location & Immediate Risk Hero Cards -->
+          <div class="view-grid-2">
+            <!-- Left: Location Details -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🛰️ Detected Geolocation Sensors</span>
+                <span class="vh-badge nt-gps" id="fullGpsBadge">GPS LOCKED</span>
+              </div>
+              <div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:4px;" id="fullLocCity">
+                Locating...
+              </div>
+              <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;" id="fullLocStateDist">
+                Detecting district and state boundaries...
+              </div>
+              <div style="background:rgba(0,0,0,0.35); padding:10px 12px; border-radius:8px; border:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--blue);">
+                GPS Fix: <b id="fullLocCoords">--°N, --°E</b>
+              </div>
+              <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn-pop-action bpa-predict" onclick="switchView('view-map'); focusMapOnUser();">
+                  🎯 Focus on Satellite Map
+                </button>
+                <button class="btn-pop-action btn-pop-pdf" onclick="downloadLocationRiskReportPDF()">
+                  📄 Download Location Risk Report (PDF)
+                </button>
+                <button class="btn-pop-action bpa-history" onclick="transferUserLocToAI()">
+                  ⚡ Simulate Rainfall Scenarios
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Immediate Flood Risk Meter -->
+            <div class="view-card" id="fullRiskCard" style="border-left: 4px solid var(--green);">
+              <div class="vc-header">
+                <span class="vc-title">⚡ Immediate Local Flood Risk</span>
+                <span class="pop-badge pb-low" id="fullRiskBadge">SAFE</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;">
+                <div class="pop-prob-big ppb-low" id="fullProbBig">--%</div>
+                <div style="font-size:11px; font-weight:700; color:var(--text-secondary);" id="fullCategoryText">Low Inundation Risk</div>
+              </div>
+              <div style="width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-bottom:12px;">
+                <div id="fullRiskBar" style="width:5%; height:100%; background:var(--green); transition:width 1s ease;"></div>
+              </div>
+              <div style="background:rgba(239,68,68,0.08); border-left:3px solid #10b981; padding:8px 10px; border-radius:6px; font-size:11px; color:#e2e8f0;" id="fullAdvisoryText">
+                <b>IMD Advisory:</b> Normal conditions. Standard meteorological monitoring active.
+              </div>
+            </div>
+          </div>
+
+          <!-- 8-Card Complete Real-Time Hydrological & Terrain Statistics Grid -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:12px; margin-bottom:20px;">
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌧️ 24h Rainfall</div>
+              <div style="font-size:18px; font-weight:800; color:var(--blue); font-family:var(--mono);" id="fullRainVal">1.2 mm</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Open-Meteo Live Sum</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌊 River Discharge</div>
+              <div style="font-size:18px; font-weight:800; color:var(--blue); font-family:var(--mono);" id="fullRiverVal">218 m³/s</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">GloFAS Basin Outflow</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌡️ Ambient Temp</div>
+              <div style="font-size:18px; font-weight:800; color:#fff; font-family:var(--mono);" id="fullTempVal">28.4°C</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Surface Atmospheric Reading</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🌱 Topsoil Moisture</div>
+              <div style="font-size:18px; font-weight:800; color:#fff; font-family:var(--mono);" id="fullSoilVal">0.22</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">0-1cm Soil Saturation Index</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">⛰️ Terrain Elevation</div>
+              <div style="font-size:18px; font-weight:800; color:#38bdf8; font-family:var(--mono);" id="fullElevationVal">216 m ASL</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">SRTM Digital Elevation Model</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🧭 Nearest River Basin</div>
+              <div style="font-size:18px; font-weight:800; color:#38bdf8; font-family:var(--mono);" id="fullRiverDistVal">2.8 km</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Proximity to Major Riverbank</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">📊 3-Day Risk Trend</div>
+              <div style="font-size:18px; font-weight:800; color:#10b981; font-family:var(--mono);" id="fullTrendVal">🟢 Safe (Stable)</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">GloFAS 72h Hydrograph</div>
+            </div>
+            <div class="view-card" style="padding:14px;">
+              <div style="font-size:10px; color:var(--text-dim); margin-bottom:4px;">🛡️ Catchment Index</div>
+              <div style="font-size:18px; font-weight:800; color:#10b981; font-family:var(--mono);" id="fullCatchmentVal">0.14 (Safe)</div>
+              <div style="font-size:9.5px; color:var(--text-dim); margin-top:2px;">Inundation Vulnerability Ratio</div>
+            </div>
+          </div>
+
+          <!-- Emergency Action & Safety Protocol Checklist -->
+          <div class="view-card">
+            <div class="vc-header">
+              <span class="vc-title">🛡️ Recommended Safety Actions for Your Location</span>
+              <span style="font-size:10px; color:var(--text-dim); font-family:var(--mono);">NDMA STANDARD ADVISORY</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:11.5px; color:#cbd5e1; line-height:1.5;">
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                <b style="color:#fff;">🚨 Emergency Helpline Numbers:</b><br/>
+                • NDMA National Emergency Helpline: <b>1078</b><br/>
+                • State Disaster Management Authority: <b>1070</b><br/>
+                • Ambulance / First Responders: <b>108 / 112</b>
+              </div>
+              <div style="background:rgba(255,255,255,0.02); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                <b style="color:#fff;">🌊 Hydrological Precautions:</b><br/>
+                • Stay away from swollen riverbanks and drainage culverts.<br/>
+                • Keep emergency power banks and fresh drinking water ready.<br/>
+                • Follow official IMD color-coded advisories on the command map.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 3: ML FLOOD RISK PREDICTOR
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-ml-predictor">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📈</div>
+              <div>
+                <h1 class="vh-title">ML Regional Flood Risk Predictor</h1>
+                <p class="vh-subtitle">Gradient Boosting ML Classifiers trained on IMD rainfall, GIS elevation, GloFAS river discharge & CWC dams</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-ai">ML INFERENCE ENGINE</span>
+          </div>
+
+          <div class="view-grid-2">
+            <!-- Inputs Form -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">⚙️ Machine Learning Input Configuration</span>
+              </div>
+              <div class="ai-field-group" style="margin-bottom:12px;">
+                <label class="ai-label">State / Union Territory</label>
+                <select id="stateSelect" class="ai-select" onchange="onStateChange()" style="padding:9px; font-size:12px;">
+                  <option value="">-- Select State --</option>
+                  <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+              </div>
+              <div class="ai-field-group" style="margin-bottom:12px;">
+                <label class="ai-label">District (District-Level Model)</label>
+                <select id="districtSelect" class="ai-select" onchange="onDistrictChange()" style="padding:9px; font-size:12px;">
+                  <option value="">-- Select State First --</option>
+                </select>
+              </div>
+
+              <!-- Live Weather & River Telemetry Preview -->
+              <div id="liveTelemetryPreview" style="display:none; background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.25); border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                  <span style="color: var(--blue); font-weight: 700; font-size:11px;">📡 Open-Meteo & GloFAS Live Telemetry</span>
+                  <span id="liveImdBadge" style="font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: #16a34a; color: #fff;">GREEN SAFE</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; color: var(--text-dim); font-size: 10px;">
+                  <div>🌧️ Rain (24h): <b id="liveRainVal" style="color: #38bdf8;">0.0 mm</b></div>
+                  <div>🌊 River Flow: <b id="liveRiverVal" style="color: #38bdf8;">Normal</b></div>
+                  <div>🌡️ Surface Temp: <b id="liveTempVal" style="color: #f1f5f9;">28.5°C</b></div>
+                  <div>🌱 Soil Moisture: <b id="liveSoilVal" style="color: #f1f5f9;">0.28</b></div>
+                </div>
+                <div id="liveDamVal" style="margin-top: 6px; font-size: 9.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 4px;">
+                  🏛️ CWC Dam Storage: Active Catchment Monitoring
+                </div>
+              </div>
+
+              <div class="ai-field-group" style="margin-bottom:14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label class="ai-label" style="margin-bottom:0;">24h Rainfall (mm)</label>
+                  <button type="button" onclick="syncLiveRainfall()" style="background:none; border:none; color:var(--blue); font-size:10px; cursor:pointer; text-decoration:underline;">
+                    🔄 Auto-Fill Live Rain
+                  </button>
+                </div>
+                <input type="number" id="rainfallInput" class="ai-input" placeholder="0 = Auto live Open-Meteo rain" value="0.0" min="0" step="0.1" style="padding:9px; font-size:12px;" />
+              </div>
+
+              <button class="ai-btn-predict" onclick="checkFloodRisk()" style="padding:11px; font-size:12.5px;">
+                <span>⚡</span> Run ML Flood Risk Prediction
+              </button>
+            </div>
+
+            <!-- Output Results -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">📊 ML Assessment Results</span>
+              </div>
+              <div id="riskResultCard" style="display:block;">
+                <div style="text-align:center; padding:35px 20px; color:var(--text-dim); font-size:12px;">
+                  <div style="font-size:32px; margin-bottom:10px;">📈</div>
+                  Select a state and district to compute real-time localized flood inundation probability using trained Machine Learning models and live hydrological telemetry.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 4: HISTORICAL FLOOD DATABASE (NEON POSTGRESQL)
+           ═══════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-historical-db">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📜</div>
+              <div>
+                <h1 class="vh-title">Historical Flood Database & Disaster Archive</h1>
+                <p class="vh-subtitle">6,880+ documented flood disaster events across Indian States & Districts (2018–2026) indexed in Neon PostgreSQL</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-neon">NEON DB CONNECTED</span>
+          </div>
+
+          <!-- Multi-Parameter Filter Card -->
+          <div class="view-card" style="margin-bottom:16px; padding:16px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:12px;">
+              <!-- 1. State Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">STATE / UT</label>
+                <select id="histStateFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="">All States / All India</option>
+                  <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+              </div>
+
+              <!-- 2. District Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">DISTRICT</label>
+                <input type="text" id="histDistrictFilter" oninput="applyHistoricalFiltersDebounced()" placeholder="Filter district name..." class="ai-input" style="width:100%; padding:7px 10px; font-size:11.5px;" />
+              </div>
+
+              <!-- 3. Year Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">YEAR (2018–2026)</label>
+                <select id="histYearFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="all">All Years (2018–2026)</option>
+                  <option value="2026">2026 (Recent Alerts)</option>
+                  <option value="2025">2025 (Monsoon Surge)</option>
+                  <option value="2024">2024 (Wayanad, Vadodara, Vijayawada)</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                </select>
+              </div>
+
+              <!-- 4. Cause of Flood Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">CAUSE OF FLOOD</label>
+                <select id="histCauseFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="all">All Flood Causes</option>
+                  <option value="Heavy">Heavy Monsoon Rainfall</option>
+                  <option value="Dam">Dam Release / Spillway Overflow</option>
+                  <option value="Cloudburst">Cloudburst & Mudflow</option>
+                  <option value="Overtopping">River Overtopping / Breach</option>
+                  <option value="Depression">Cyclonic Depression / Surge</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Search + Reset Row -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:240px;">
+                <span style="font-size:14px;">🔍</span>
+                <input type="text" id="histSearchInput" oninput="applyHistoricalFiltersDebounced()" placeholder="Search damage impact, river names, or event codes..." class="ai-input" style="padding:6px 10px; font-size:11px; flex:1;" />
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button onclick="resetHistoricalFilters()" style="background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-secondary); padding:6px 12px; border-radius:6px; font-size:11px; cursor:pointer; font-family:'Inter', sans-serif;">
+                  🔄 Reset Filters
+                </button>
+                <span id="historicalDbLabel" style="font-size:11px; color:var(--blue); font-family:var(--mono); font-weight:700;">
+                  Showing records from Neon Database
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-card" style="padding:0; overflow:hidden;">
+            <div style="max-height: 520px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; color: var(--text);">
+                <thead style="background: rgba(15,23,42,0.95); position: sticky; top: 0; color: var(--blue); border-bottom: 1px solid var(--border); z-index:2;">
+                  <tr>
+                    <th style="padding: 10px 14px;">Year</th>
+                    <th style="padding: 10px 14px;">State</th>
+                    <th style="padding: 10px 14px;">Districts</th>
+                    <th style="padding: 10px 14px;">Cause of Flood</th>
+                    <th style="padding: 10px 14px;">Impact & Damage Extent</th>
+                    <th style="padding: 10px 14px; text-align:right;">Fatalities</th>
+                  </tr>
+                </thead>
+                <tbody id="historicalTableBody">
+                  <tr><td colspan="6" style="padding: 24px; text-align: center; color: #64748b;">Loading records from Neon Database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 5: FLOOD FREQUENCY & TRENDS (INTERACTIVE CHARTS)
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-trends">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📊</div>
+              <div>
+                <h1 class="vh-title">Historical Flood & Rainfall Trend Charts</h1>
+                <p class="vh-subtitle">Visual interactive graphs tracking historical monsoon precipitation and river discharge levels over time (2018–2026)</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-ai">ML TREND ANALYTICS</span>
+          </div>
+
+          <!-- Trend Filter & Mode Selector Bar -->
+          <div class="view-card" style="margin-bottom:16px; padding:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <label style="font-size:11px; color:var(--text-dim); font-family:var(--mono); font-weight:700;">SELECT REGION:</label>
+                <select id="trendStateSelect" onchange="updateTrendsChart()" class="ai-select" style="width:200px; padding:6px 10px; font-size:11.5px;">
+                  <option value="All India">All India (National Aggregate)</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                </select>
+              </div>
+
+              <!-- Metric Tab Selector -->
+              <div style="display:flex; gap:6px; background:rgba(255,255,255,0.04); padding:3px; border-radius:8px; border:1px solid var(--border);">
+                <button class="map-toggle-btn active" id="btnTrendRain" onclick="setTrendMetric('rainfall')" style="font-size:11px; padding:4px 10px;">
+                  🌧️ Monsoon Rainfall (mm)
+                </button>
+                <button class="map-toggle-btn" id="btnTrendFlow" onclick="setTrendMetric('riverFlow')" style="font-size:11px; padding:4px 10px;">
+                  🌊 River Peak Flow (m³/s)
+                </button>
+                <button class="map-toggle-btn" id="btnTrendEvents" onclick="setTrendMetric('events')" style="font-size:11px; padding:4px 10px;">
+                  🚨 Inundation Events
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Interactive Chart Card -->
+          <div class="view-card" style="margin-bottom:18px;">
+            <div class="vc-header">
+              <span class="vc-title" id="trendChartTitle">📈 Annual Monsoon Rainfall Levels (2018–2026)</span>
+              <span id="trendChartMeta" style="font-size:10px; color:var(--text-dim); font-family:var(--mono);">SOURCE: IMD GRIDDED PRECIPITATION & GLOFAS HYDROLOGY</span>
+            </div>
+            <div class="chart-container-box" id="chartCanvasContainer">
+              <canvas id="trendChartCanvas"></canvas>
+            </div>
+            <div id="chartFallbackWrap" style="display:none; margin-top:14px;">
+              <div class="chart-area" id="chartArea"></div>
+              <div class="chart-labels" id="chartLabels"></div>
+            </div>
+            
+            <!-- Dynamic Stats Legend -->
+            <div id="trendSummaryBar" style="display:flex; justify-content:space-around; align-items:center; margin-top:16px; padding-top:12px; border-top:1px dashed rgba(255,255,255,0.08); font-size:11px; color:var(--text-secondary);">
+              <div>8-Year Peak: <b id="statPeakYear" style="color:var(--red);">2024 (1,480 mm)</b></div>
+              <div>Long-Term Baseline: <b id="statAvgVal" style="color:var(--blue);">1,180 mm/yr</b></div>
+              <div>ML Trend Direction: <b id="statTrendDir" style="color:var(--orange);">+14.2% Anomaly Surge</b></div>
+            </div>
+          </div>
+
+          <div class="view-grid-2">
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🚨 Top Flood-Prone Basins</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:11.5px;">
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>1. Brahmaputra Valley (Assam)</span>
+                  <b style="color:var(--red);">High Frequency</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>2. Kosi & Gandak Plains (Bihar)</span>
+                  <b style="color:var(--red);">High Frequency</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>3. Mahanadi Delta (Odisha)</span>
+                  <b style="color:var(--orange);">Moderate Surge</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>4. Tapi & Narmada Basin (Gujarat)</span>
+                  <b style="color:var(--yellow);">Cyclonic Watch</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🧠 Gradient Boosting ML Insights</span>
+              </div>
+              <div style="font-size:11.5px; color:#cbd5e1; line-height:1.6;">
+                • <b>Rainfall threshold:</b> Precipitation surpassing 64.5 mm in 24 hours triggers immediate orange surge status.<br/>
+                • <b>Soil Moisture:</b> Pre-saturated topsoil (>0.38 m³/m³) reduces percolation by 70%, escalating flash flood risks exponentially.<br/>
+                • <b>River Discharge:</b> GloFAS river discharge above 1,500 m³/s represents critical bank-overflow danger.<br/>
+                • <b>Dam Storage:</b> Reservoirs exceeding 85% FRL (Full Reservoir Level) during monsoon compound downstream surge probabilities.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 6: RELIEF & EMERGENCY HELP CENTERS
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-relief">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">🏥</div>
+              <div>
+                <h1 class="vh-title">Relief & Emergency Help Centers</h1>
+                <p class="vh-subtitle">Official NDRF battalions, SDMA emergency command camps, and NGO relief centers sorted by GPS proximity</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-live" id="reliefGpsBadge">GPS SORTED</span>
+          </div>
+
+          <!-- Emergency Helplines Directory Grid -->
+          <div class="view-card" style="margin-bottom:18px; padding:16px; border-left:4px solid var(--red);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:8px;">
+              <div style="font-size:13px; font-weight:800; color:#fff; display:flex; align-items:center; gap:6px;">
+                <span>🚨</span> 24x7 National & State Disaster Helplines (Emergency Directory)
+              </div>
+              <span style="font-size:9.5px; background:rgba(239,68,68,0.2); color:#ef4444; padding:2px 8px; border-radius:4px; font-weight:800; font-family:var(--mono);">TOLL-FREE EMERGENCY</span>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+              <!-- 1. NDRF -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px;">
+                <div style="font-size:11px; font-weight:700; color:var(--red);">🚨 NDRF HQ Control Room</div>
+                <div style="font-size:10px; color:var(--text-dim); margin:2px 0 6px;">Flood Rescue Operations</div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <a href="tel:1078" style="font-size:15px; font-weight:900; color:#fff; text-decoration:none; font-family:var(--mono);">📞 1078</a>
+                  <a href="tel:01124363260" style="font-size:10px; color:var(--blue); text-decoration:underline;">011-24363260</a>
+                </div>
+              </div>
+
+              <!-- 2. National 112 -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px;">
+                <div style="font-size:11px; font-weight:700; color:#facc15;">🆘 All-India Emergency</div>
+                <div style="font-size:10px; color:var(--text-dim); margin:2px 0 6px;">Police • Fire • Ambulance</div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <a href="tel:112" style="font-size:15px; font-weight:900; color:#fff; text-decoration:none; font-family:var(--mono);">📞 112</a>
+                  <span style="font-size:10px; color:#10b981; font-weight:700;">24x7 ACTIVE</span>
+                </div>
+              </div>
+
+              <!-- 3. CWC Flood Room -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px;">
+                <div style="font-size:11px; font-weight:700; color:var(--blue);">🌊 CWC Flood Control Room</div>
+                <div style="font-size:10px; color:var(--text-dim); margin:2px 0 6px;">River Gauge & Dam Inundation</div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <a href="tel:01126106523" style="font-size:13.5px; font-weight:800; color:#fff; text-decoration:none; font-family:var(--mono);">📞 011-26106523</a>
+                </div>
+              </div>
+
+              <!-- 4. State SEOC -->
+              <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border); border-radius:8px; padding:10px;">
+                <div style="font-size:11px; font-weight:700; color:#a855f7;">🏛️ State Disaster Control (SEOC)</div>
+                <div style="font-size:10px; color:var(--text-dim); margin:2px 0 6px;">District Relief Commissioners</div>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <a href="tel:1070" style="font-size:15px; font-weight:900; color:#fff; text-decoration:none; font-family:var(--mono);">📞 1070</a>
+                  <a href="tel:1077" style="font-size:11px; color:var(--text-secondary); text-decoration:underline;">District: 1077</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Relief Filter Bar -->
+          <div class="view-card" style="margin-bottom:14px; padding:12px 16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:220px;">
+                <label style="font-size:10.5px; color:var(--text-dim); font-family:var(--mono); font-weight:700;">FILTER BY TYPE:</label>
+                <select id="reliefTypeFilter" onchange="filterReliefCenters()" class="ai-select" style="padding:6px 10px; font-size:11px; width:180px;">
+                  <option value="all">All Response Units</option>
+                  <option value="NDRF">NDRF Battalions</option>
+                  <option value="SDMA">SDMA Command Centers</option>
+                  <option value="Hospital">Emergency Medical Camps</option>
+                </select>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <input type="text" id="reliefSearchInput" oninput="filterReliefCenters()" placeholder="Search city or state..." class="ai-input" style="padding:6px 10px; font-size:11px; width:180px;" />
+                <button onclick="detectMyLocation(false)" style="background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.3); color:var(--blue); padding:6px 12px; border-radius:6px; font-size:11px; cursor:pointer; font-family:'Inter', sans-serif; font-weight:600;">
+                  📍 Re-Sort by GPS
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-card" style="padding:0; overflow:hidden;">
+            <div class="relief-list" id="reliefList" style="max-height:550px; padding:12px;">
+              <div style="text-align:center; padding: 24px; color: var(--text-dim); font-size: 12px; font-family: var(--mono);">
+                Calculating nearest emergency centers from your GPS coordinates...
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 7: NATIONAL FLOOD ALERTS
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-alerts">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">🔴</div>
+              <div>
+                <h1 class="vh-title">National Flood Warning Feed</h1>
+                <p class="vh-subtitle">Synchronized live emergency alerts from IMD Mausam, CWC river gauge telemetry & NDMA</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-warn">7 ACTIVE BULLETINS</span>
+          </div>
+
+          <!-- ── Automated Email Notification System ── -->
+          <div class="view-card" style="margin-bottom:18px; border-left:4px solid var(--blue); padding:16px;">
+            <div class="vc-header" style="margin-bottom:10px;">
+              <div>
+                <span class="vc-title" style="font-size:14px; font-weight:800; color:#fff;">
+                  🔔 Automated Flood Risk Email Alert Gateway
+                </span>
+                <p style="font-size:10.5px; color:var(--text-dim); margin-top:2px;">
+                  Instant real-time emergency dispatch when local or regional risk crosses warning threshold
+                </p>
+              </div>
+              <span class="vh-badge nt-live">EMAIL GATEWAY ONLINE</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-bottom:12px;">
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">
+                  📧 REGISTERED ALERT EMAIL
+                </label>
+                <input type="email" id="alertEmailInput" class="ai-input" placeholder="user@gmail.com" style="width:100%; padding:8px 10px; font-size:11.5px;" />
+              </div>
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">
+                  🎚️ AUTO-TRIGGER THRESHOLD
+                </label>
+                <select id="alertThresholdSelect" class="ai-select" style="width:100%; padding:8px 10px; font-size:11.5px;">
+                  <option value="40">Medium Risk (>= 40% Inundation)</option>
+                  <option value="60" selected>High Risk (>= 60% Warning Surge)</option>
+                  <option value="75">Extreme Hazard (>= 75% Critical Disaster)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:12px;">
+              <label style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#e2e8f0; cursor:pointer;">
+                <input type="checkbox" id="autoAlertToggle" checked style="accent-color:var(--blue); width:16px; height:16px;" />
+                <span><b>Auto-Dispatch Active:</b> Automatically send emergency Email warnings when risk threshold is crossed</span>
+              </label>
+
+              <div style="display:flex; gap:8px;">
+                <button type="button" onclick="saveAlertSettings()" class="btn-pop-action bpa-history" style="width:auto; padding:6px 14px; font-size:11px;">
+                  💾 Save Preferences
+                </button>
+                <button type="button" onclick="dispatchManualTestAlert()" class="btn-pop-action bpa-predict" style="width:auto; padding:6px 14px; font-size:11px; background:#ea580c; border-color:#f97316; color:#fff;">
+                  ⚡ Send Test Alert (Email)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Dispatched Emergency Broadcast History Log ── -->
+          <div class="view-card" style="margin-bottom:18px; padding:16px;">
+            <div class="vc-header">
+              <span class="vc-title">📡 Dispatched Live Broadcasts & Delivery Receipts</span>
+              <button onclick="fetchAlertHistory()" style="background:none; border:none; color:var(--blue); font-size:11px; cursor:pointer; text-decoration:underline;">
+                🔄 Refresh Logs
+              </button>
+            </div>
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; color: var(--text);">
+                <thead style="background: rgba(15,23,42,0.95); position: sticky; top: 0; color: var(--blue); border-bottom: 1px solid var(--border); z-index:2;">
+                  <tr>
+                    <th style="padding: 8px 12px;">Alert ID</th>
+                    <th style="padding: 8px 12px;">Monitored Area</th>
+                    <th style="padding: 8px 12px;">Risk Level</th>
+                    <th style="padding: 8px 12px;">Dispatched Channels</th>
+                    <th style="padding: 8px 12px;">Timestamp</th>
+                    <th style="padding: 8px 12px; text-align:right;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="alertsHistoryBody">
+                  <tr><td colspan="6" style="padding: 16px; text-align: center; color: #64748b;">No recent alerts dispatched yet. System is monitoring sensor telemetry.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Official National Bulletins -->
+          <div class="view-card" style="padding:14px;">
+            <div class="vc-header" style="margin-bottom:10px;">
+              <span class="vc-title">📋 Live National Hydrological Bulletins (IMD / CWC)</span>
+            </div>
+            <div class="alerts-list" id="alertsList" style="max-height:420px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 8: FAQS & OPERATIONS GUIDE
+           ═════════════════════════════════════════════════════════════ -->
+      <section class="dash-view" id="view-faqs">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box" style="background:rgba(56,189,248,0.15); border-color:rgba(56,189,248,0.3);">❓</div>
+              <div>
+                <h1 class="vh-title">Frequently Asked Questions & Guide</h1>
+                <p class="vh-subtitle">Telemetry interpretations, AI model accuracy, automated early warnings & disaster safety protocols</p>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <a href="faq.html" target="_blank" class="btn-pop-action bpa-history" style="width:auto; padding:6px 14px; font-size:11px; text-decoration:none;">
+                ↗️ Open Full Knowledge Base
+              </a>
+            </div>
+          </div>
+
+          <!-- FAQ Search & Filters -->
+          <div class="view-card" style="margin-bottom:18px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div style="flex:1; min-width:240px; position:relative;">
+                <input type="text" id="dashFaqSearch" class="ai-input" placeholder="Search questions (e.g. accuracy, rainfall, alerts, NDRF)..." oninput="filterDashboardFaqs()" style="width:100%; padding:9px 12px 9px 34px; font-size:12px;" />
+                <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--text-dim);">🔍</span>
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter active" onclick="filterDashFaqCat('all', this)" style="width:auto; padding:5px 12px; font-size:11px;">All (10)</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('alerts', this)" style="width:auto; padding:5px 12px; font-size:11px;">🔔 Alerts</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('ai', this)" style="width:auto; padding:5px 12px; font-size:11px;">🤖 AI Models</button>
+                <button type="button" class="btn-pop-action bpa-history dash-faq-filter" onclick="filterDashFaqCat('safety', this)" style="width:auto; padding:5px 12px; font-size:11px;">🛡️ Safety</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Accordion List -->
+          <div class="faq-list" id="dashFaqList" style="display:flex; flex-direction:column; gap:10px;">
+
+            <div class="view-card dash-faq-item" data-cat="alerts" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">📧 How does the Automated Email Alert System trigger?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Whenever meteorological radar data or machine learning flood probability models exceed your configured sensitivity threshold (e.g. 60%), emergency broadcast emails are automatically generated and dispatched to your registered address with live river discharge, forecasted rain, and safety instructions.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="ai" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🤖 What is the prediction accuracy of the State ML Models?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Each of India's 37 states and UTs has an individual Gradient Boosting Classifier trained on 25+ years of verified NDMA historical flood disasters, IMD rainfall, dam gross storage, and GIS elevation metrics. Cross-validation accuracy ranges from 91.4% to 98.2%.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="alerts" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🎚️ Can I change my alert threshold and monitoring district?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Yes! Use the <a href="profile.html" style="color:var(--blue); font-weight:700;">Edit Profile</a> page to update your preferred state, district, or email threshold (40%, 60%, 75%). You can also toggle auto-dispatch on or off anytime.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="ai" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🌊 Where does the live river water level and dam telemetry come from?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Telemetry is pulled from Central Water Commission (CWC) gauge telemetry stations, India-WRIS dam reservoir telemetry, and IMD Mausam meteorological rainfall radars, updated every 15-30 minutes.
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="safety" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🚨 What are the official emergency helpline numbers?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                <b>NDRF National Helpline:</b> 1078 / 011-24363260<br/>
+                <b>National Emergency:</b> 112<br/>
+                <b>State Disaster Authority (SDMA):</b> 1070<br/>
+                <b>District Disaster Helpline:</b> 1077
+              </div>
+            </div>
+
+            <div class="view-card dash-faq-item" data-cat="safety" style="padding:0; overflow:hidden;">
+              <div onclick="toggleDashFaq(this)" style="padding:14px 18px; cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; font-weight:700; color:#fff;">🛡️ What precautions should residents take when Risk is HIGH?</span>
+                <span style="font-size:12px; color:var(--blue);">▼</span>
+              </div>
+              <div class="dash-faq-ans" style="display:none; padding:0 18px 14px; font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid rgba(255,255,255,0.05); padding-top:10px;">
+                Move to upper floors or designated relief centers; disconnect electric mains; avoid wading through moving floodwaters; keep mobile phones charged and battery backup torches on hand; keep essential documents in waterproof bags.
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Emergency Helplines Quick Banner -->
+          <div class="view-card" style="margin-top:18px; padding:16px; background:linear-gradient(135deg, rgba(239,68,68,0.08), rgba(249,115,22,0.06)); border-color:rgba(239,68,68,0.3);">
+            <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:8px;">🚨 24x7 National Disaster Response Helplines</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px;">
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">NDRF Control</div>
+                <div style="font-size:15px; font-weight:800; color:var(--orange); font-family:var(--mono);">1078</div>
+              </div>
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">National Emergency</div>
+                <div style="font-size:15px; font-weight:800; color:var(--blue); font-family:var(--mono);">112</div>
+              </div>
+              <div style="background:rgba(15,23,42,0.8); padding:8px 12px; border-radius:6px; border:1px solid var(--border);">
+                <div style="font-size:9.5px; color:var(--text-dim); text-transform:uppercase;">State Disaster Cell</div>
+                <div style="font-size:15px; font-weight:800; color:var(--green); font-family:var(--mono);">1070</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- ── Leaflet & Leaflet Heatmap Scripts ── -->
+  <!-- ── External Libraries ── -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="assets/toast.js"></script>
+
+  <!-- ── Modular Platform Feature Scripts ── -->
+  <script src="js/dashboard-core.js"></script>
+  <script src="js/map-radar.js"></script>
+  <script src="js/pdf-reports.js"></script>
+  <script src="js/my-location.js"></script>
+  <script src="js/ml-predictor.js"></script>
+  <script src="js/historical-db.js"></script>
+  <script src="js/trends.js"></script>
+  <script src="js/relief-centers.js"></script>
+  <script src="js/national-alerts.js"></script>
+  <script src="js/dashboard-init.js"></script>
+  <script src="js/language.js"></script>\n</body>
+</html>

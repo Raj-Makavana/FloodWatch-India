@@ -1,0 +1,112 @@
+<section class="dash-view" id="view-trends">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📊</div>
+              <div>
+                <h1 class="vh-title">Historical Flood & Rainfall Trend Charts</h1>
+                <p class="vh-subtitle">Visual interactive graphs tracking historical monsoon precipitation and river discharge levels over time (2018–2026)</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-ai">ML TREND ANALYTICS</span>
+          </div>
+
+          <!-- Trend Filter & Mode Selector Bar -->
+          <div class="view-card" style="margin-bottom:16px; padding:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <label style="font-size:11px; color:var(--text-dim); font-family:var(--mono); font-weight:700;">SELECT REGION:</label>
+                <select id="trendStateSelect" onchange="updateTrendsChart()" class="ai-select" style="width:200px; padding:6px 10px; font-size:11.5px;">
+                  <option value="All India">All India (National Aggregate)</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                </select>
+              </div>
+
+              <!-- Metric Tab Selector -->
+              <div style="display:flex; gap:6px; background:rgba(255,255,255,0.04); padding:3px; border-radius:8px; border:1px solid var(--border);">
+                <button class="map-toggle-btn active" id="btnTrendRain" onclick="setTrendMetric('rainfall')" style="font-size:11px; padding:4px 10px;">
+                  🌧️ Monsoon Rainfall (mm)
+                </button>
+                <button class="map-toggle-btn" id="btnTrendFlow" onclick="setTrendMetric('riverFlow')" style="font-size:11px; padding:4px 10px;">
+                  🌊 River Peak Flow (m³/s)
+                </button>
+                <button class="map-toggle-btn" id="btnTrendEvents" onclick="setTrendMetric('events')" style="font-size:11px; padding:4px 10px;">
+                  🚨 Inundation Events
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Interactive Chart Card -->
+          <div class="view-card" style="margin-bottom:18px;">
+            <div class="vc-header">
+              <span class="vc-title" id="trendChartTitle">📈 Annual Monsoon Rainfall Levels (2018–2026)</span>
+              <span id="trendChartMeta" style="font-size:10px; color:var(--text-dim); font-family:var(--mono);">SOURCE: IMD GRIDDED PRECIPITATION & GLOFAS HYDROLOGY</span>
+            </div>
+            <div class="chart-container-box" id="chartCanvasContainer">
+              <canvas id="trendChartCanvas"></canvas>
+            </div>
+            <div id="chartFallbackWrap" style="display:none; margin-top:14px;">
+              <div class="chart-area" id="chartArea"></div>
+              <div class="chart-labels" id="chartLabels"></div>
+            </div>
+            
+            <!-- Dynamic Stats Legend -->
+            <div id="trendSummaryBar" style="display:flex; justify-content:space-around; align-items:center; margin-top:16px; padding-top:12px; border-top:1px dashed rgba(255,255,255,0.08); font-size:11px; color:var(--text-secondary);">
+              <div>8-Year Peak: <b id="statPeakYear" style="color:var(--red);">2024 (1,480 mm)</b></div>
+              <div>Long-Term Baseline: <b id="statAvgVal" style="color:var(--blue);">1,180 mm/yr</b></div>
+              <div>ML Trend Direction: <b id="statTrendDir" style="color:var(--orange);">+14.2% Anomaly Surge</b></div>
+            </div>
+          </div>
+
+          <div class="view-grid-2">
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🚨 Top Flood-Prone Basins</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px; font-size:11.5px;">
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>1. Brahmaputra Valley (Assam)</span>
+                  <b style="color:var(--red);">High Frequency</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>2. Kosi & Gandak Plains (Bihar)</span>
+                  <b style="color:var(--red);">High Frequency</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>3. Mahanadi Delta (Odisha)</span>
+                  <b style="color:var(--orange);">Moderate Surge</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; padding:8px; background:rgba(255,255,255,0.02); border-radius:6px;">
+                  <span>4. Tapi & Narmada Basin (Gujarat)</span>
+                  <b style="color:var(--yellow);">Cyclonic Watch</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">🧠 Gradient Boosting ML Insights</span>
+              </div>
+              <div style="font-size:11.5px; color:#cbd5e1; line-height:1.6;">
+                • <b>Rainfall threshold:</b> Precipitation surpassing 64.5 mm in 24 hours triggers immediate orange surge status.<br/>
+                • <b>Soil Moisture:</b> Pre-saturated topsoil (>0.38 m³/m³) reduces percolation by 70%, escalating flash flood risks exponentially.<br/>
+                • <b>River Discharge:</b> GloFAS river discharge above 1,500 m³/s represents critical bank-overflow danger.<br/>
+                • <b>Dam Storage:</b> Reservoirs exceeding 85% FRL (Full Reservoir Level) during monsoon compound downstream surge probabilities.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 6: RELIEF & EMERGENCY HELP CENTERS
+           ═════════════════════════════════════════════════════════════ -->

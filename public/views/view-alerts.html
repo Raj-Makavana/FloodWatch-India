@@ -1,0 +1,103 @@
+<section class="dash-view" id="view-alerts">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">🔴</div>
+              <div>
+                <h1 class="vh-title">National Flood Warning Feed</h1>
+                <p class="vh-subtitle">Synchronized live emergency alerts from IMD Mausam, CWC river gauge telemetry & NDMA</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-warn">7 ACTIVE BULLETINS</span>
+          </div>
+
+          <!-- ── Automated Email Notification System ── -->
+          <div class="view-card" style="margin-bottom:18px; border-left:4px solid var(--blue); padding:16px;">
+            <div class="vc-header" style="margin-bottom:10px;">
+              <div>
+                <span class="vc-title" style="font-size:14px; font-weight:800; color:#fff;">
+                  🔔 Automated Flood Risk Email Alert Gateway
+                </span>
+                <p style="font-size:10.5px; color:var(--text-dim); margin-top:2px;">
+                  Instant real-time emergency dispatch when local or regional risk crosses warning threshold
+                </p>
+              </div>
+              <span class="vh-badge nt-live">EMAIL GATEWAY ONLINE</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; margin-bottom:12px;">
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">
+                  📧 REGISTERED ALERT EMAIL
+                </label>
+                <input type="email" id="alertEmailInput" class="ai-input" placeholder="user@gmail.com" style="width:100%; padding:8px 10px; font-size:11.5px;" />
+              </div>
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">
+                  🎚️ AUTO-TRIGGER THRESHOLD
+                </label>
+                <select id="alertThresholdSelect" class="ai-select" style="width:100%; padding:8px 10px; font-size:11.5px;">
+                  <option value="40">Medium Risk (>= 40% Inundation)</option>
+                  <option value="60" selected>High Risk (>= 60% Warning Surge)</option>
+                  <option value="75">Extreme Hazard (>= 75% Critical Disaster)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:12px;">
+              <label style="display:flex; align-items:center; gap:8px; font-size:11.5px; color:#e2e8f0; cursor:pointer;">
+                <input type="checkbox" id="autoAlertToggle" checked style="accent-color:var(--blue); width:16px; height:16px;" />
+                <span><b>Auto-Dispatch Active:</b> Automatically send emergency Email warnings when risk threshold is crossed</span>
+              </label>
+
+              <div style="display:flex; gap:8px;">
+                <button type="button" onclick="saveAlertSettings()" class="btn-pop-action bpa-history" style="width:auto; padding:6px 14px; font-size:11px;">
+                  💾 Save Preferences
+                </button>
+                <button type="button" onclick="dispatchManualTestAlert()" class="btn-pop-action bpa-predict" style="width:auto; padding:6px 14px; font-size:11px; background:#ea580c; border-color:#f97316; color:#fff;">
+                  ⚡ Send Test Alert (Email)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Dispatched Emergency Broadcast History Log ── -->
+          <div class="view-card" style="margin-bottom:18px; padding:16px;">
+            <div class="vc-header">
+              <span class="vc-title">📡 Dispatched Live Broadcasts & Delivery Receipts</span>
+              <button onclick="fetchAlertHistory()" style="background:none; border:none; color:var(--blue); font-size:11px; cursor:pointer; text-decoration:underline;">
+                🔄 Refresh Logs
+              </button>
+            </div>
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; color: var(--text);">
+                <thead style="background: rgba(15,23,42,0.95); position: sticky; top: 0; color: var(--blue); border-bottom: 1px solid var(--border); z-index:2;">
+                  <tr>
+                    <th style="padding: 8px 12px;">Alert ID</th>
+                    <th style="padding: 8px 12px;">Monitored Area</th>
+                    <th style="padding: 8px 12px;">Risk Level</th>
+                    <th style="padding: 8px 12px;">Dispatched Channels</th>
+                    <th style="padding: 8px 12px;">Timestamp</th>
+                    <th style="padding: 8px 12px; text-align:right;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="alertsHistoryBody">
+                  <tr><td colspan="6" style="padding: 16px; text-align: center; color: #64748b;">No recent alerts dispatched yet. System is monitoring sensor telemetry.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Official National Bulletins -->
+          <div class="view-card" style="padding:14px;">
+            <div class="vc-header" style="margin-bottom:10px;">
+              <span class="vc-title">📋 Live National Hydrological Bulletins (IMD / CWC)</span>
+            </div>
+            <div class="alerts-list" id="alertsList" style="max-height:420px;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 8: FAQS & OPERATIONS GUIDE
+           ═════════════════════════════════════════════════════════════ -->

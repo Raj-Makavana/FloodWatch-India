@@ -1,0 +1,117 @@
+<section class="dash-view" id="view-ml-predictor">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📈</div>
+              <div>
+                <h1 class="vh-title">ML Regional Flood Risk Predictor</h1>
+                <p class="vh-subtitle">Gradient Boosting ML Classifiers trained on IMD rainfall, GIS elevation, GloFAS river discharge & CWC dams</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-ai">ML INFERENCE ENGINE</span>
+          </div>
+
+          <div class="view-grid-2">
+            <!-- Inputs Form -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">⚙️ Machine Learning Input Configuration</span>
+              </div>
+              <div class="ai-field-group" style="margin-bottom:12px;">
+                <label class="ai-label">State / Union Territory</label>
+                <select id="stateSelect" class="ai-select" onchange="onStateChange()" style="padding:9px; font-size:12px;">
+                  <option value="">-- Select State --</option>
+                  <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+              </div>
+              <div class="ai-field-group" style="margin-bottom:12px;">
+                <label class="ai-label">District (District-Level Model)</label>
+                <select id="districtSelect" class="ai-select" onchange="onDistrictChange()" style="padding:9px; font-size:12px;">
+                  <option value="">-- Select State First --</option>
+                </select>
+              </div>
+
+              <!-- Live Weather & River Telemetry Preview -->
+              <div id="liveTelemetryPreview" style="display:none; background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.25); border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                  <span style="color: var(--blue); font-weight: 700; font-size:11px;">📡 Open-Meteo & GloFAS Live Telemetry</span>
+                  <span id="liveImdBadge" style="font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: #16a34a; color: #fff;">GREEN SAFE</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; color: var(--text-dim); font-size: 10px;">
+                  <div>🌧️ Rain (24h): <b id="liveRainVal" style="color: #38bdf8;">0.0 mm</b></div>
+                  <div>🌊 River Flow: <b id="liveRiverVal" style="color: #38bdf8;">Normal</b></div>
+                  <div>🌡️ Surface Temp: <b id="liveTempVal" style="color: #f1f5f9;">28.5°C</b></div>
+                  <div>🌱 Soil Moisture: <b id="liveSoilVal" style="color: #f1f5f9;">0.28</b></div>
+                </div>
+                <div id="liveDamVal" style="margin-top: 6px; font-size: 9.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 4px;">
+                  🏛️ CWC Dam Storage: Active Catchment Monitoring
+                </div>
+              </div>
+
+              <div class="ai-field-group" style="margin-bottom:14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label class="ai-label" style="margin-bottom:0;">24h Rainfall (mm)</label>
+                  <button type="button" onclick="syncLiveRainfall()" style="background:none; border:none; color:var(--blue); font-size:10px; cursor:pointer; text-decoration:underline;">
+                    🔄 Auto-Fill Live Rain
+                  </button>
+                </div>
+                <input type="number" id="rainfallInput" class="ai-input" placeholder="0 = Auto live Open-Meteo rain" value="0.0" min="0" step="0.1" style="padding:9px; font-size:12px;" />
+              </div>
+
+              <button class="ai-btn-predict" onclick="checkFloodRisk()" style="padding:11px; font-size:12.5px;">
+                <span>⚡</span> Run ML Flood Risk Prediction
+              </button>
+            </div>
+
+            <!-- Output Results -->
+            <div class="view-card">
+              <div class="vc-header">
+                <span class="vc-title">📊 ML Assessment Results</span>
+              </div>
+              <div id="riskResultCard" style="display:block;">
+                <div style="text-align:center; padding:35px 20px; color:var(--text-dim); font-size:12px;">
+                  <div style="font-size:32px; margin-bottom:10px;">📈</div>
+                  Select a state and district to compute real-time localized flood inundation probability using trained Machine Learning models and live hydrological telemetry.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 4: HISTORICAL FLOOD DATABASE (NEON POSTGRESQL)
+           ═══════════════════════════════════════════════════════════ -->

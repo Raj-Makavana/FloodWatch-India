@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Frequently Asked Questions (FAQs) — FloodWatch India</title>
+  <meta name="description" content="Frequently asked questions about FloodWatch India: AI flood forecasting models, automated email alerts, CWC telemetry, emergency helplines, and profile configuration." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06080e;
+      --bg-card: #0d1322;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-blue: rgba(56, 189, 248, 0.3);
+      --border-orange: rgba(249, 115, 22, 0.35);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --blue: #38bdf8;
+      --blue-glow: rgba(56, 189, 248, 0.18);
+      --orange: #f97316;
+      --red: #ef4444;
+      --green: #10b981;
+      --mono: 'JetBrains Mono', monospace;
+      --header-h: 58px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    header {
+      height: var(--header-h);
+      background: rgba(8, 12, 22, 0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 14px rgba(234,88,12,0.4);
+    }
+    .brand-title {
+      font-size: 15px; font-weight: 800; color: #fff;
+    }
+    .brand-title span { color: var(--orange); }
+    .brand-sub {
+      font-size: 9px; font-family: var(--mono); color: var(--text-dim); letter-spacing: 0.8px;
+    }
+
+    .hdr-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-nav {
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+    }
+    .btn-ghost {
+      color: var(--text-muted);
+      border-color: var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+    .btn-ghost:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: #fff;
+      box-shadow: 0 2px 14px rgba(234,88,12,0.4);
+    }
+
+    /* HERO */
+    .faq-hero {
+      text-align: center;
+      padding: 48px 20px 32px;
+      background: linear-gradient(180deg, rgba(234,88,12,0.08) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(56,189,248,0.12);
+      border: 1px solid var(--border-blue);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue);
+      font-family: var(--mono);
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.6px;
+      margin-bottom: 10px;
+    }
+    .hero-title span {
+      color: transparent;
+      background: linear-gradient(135deg, #f97316, #ef4444);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .hero-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 24px;
+      line-height: 1.5;
+    }
+
+    /* SEARCH BAR */
+    .search-wrap {
+      max-width: 580px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      background: rgba(13, 19, 34, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 12px 20px 12px 46px;
+      font-size: 14px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .search-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 16px var(--blue-glow);
+    }
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--text-dim);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* CATEGORY TABS */
+    .cat-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .cat-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .cat-btn:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .cat-btn.active {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 2px 12px var(--blue-glow);
+    }
+
+    /* ACCORDION */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+    .faq-item:hover {
+      border-color: rgba(255,255,255,0.18);
+    }
+    .faq-item.active {
+      border-color: var(--border-blue);
+      background: rgba(14, 21, 38, 0.98);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .faq-question {
+      padding: 16px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      user-select: none;
+    }
+    .fq-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .fq-badge {
+      font-size: 9px;
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .fb-general { background: rgba(56,189,248,0.15); color: #38bdf8; }
+    .fb-alert { background: rgba(239,68,68,0.15); color: #fca5a5; }
+    .fb-ai { background: rgba(168,85,247,0.15); color: #c084fc; }
+    .fb-safety { background: rgba(16,185,129,0.15); color: #34d399; }
+    .fb-account { background: rgba(249,115,22,0.15); color: #fb923c; }
+
+    .fq-icon {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+    .faq-item.active .fq-icon {
+      transform: rotate(180deg);
+      background: var(--blue);
+      color: #06080e;
+    }
+    .faq-answer {
+      display: none;
+      padding: 0 20px 18px 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding-top: 14px;
+    }
+    .faq-item.active .faq-answer {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    /* EMERGENCY CARDS */
+    .emergency-box {
+      margin-top: 48px;
+      background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(249,115,22,0.06));
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 14px;
+      padding: 24px;
+    }
+    .eb-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .eb-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+    .helpline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .hl-card {
+      background: rgba(13,19,34,0.8);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .hl-name { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; }
+    .hl-num { font-size: 16px; font-weight: 800; color: var(--orange); font-family: var(--mono); margin-top: 2px; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <link rel="stylesheet" href="css/mobile.css" />\n</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="index.html" class="brand">
+      <div class="brand-icon">🌊</div>
+      <div>
+        <div class="brand-title">Flood<span>Watch</span> India</div>
+        <div class="brand-sub">KNOWLEDGE BASE & SUPPORT</div>
+      </div>
+    </a>
+
+    <div class="hdr-links">
+      <a href="index.html" class="btn-nav btn-ghost">← Homepage</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="faq-hero">
+    <div class="hero-badge">HELP & INTELLIGENCE CENTER</div>
+    <h1 class="hero-title">Frequently Asked <span>Questions</span></h1>
+    <p class="hero-desc">Everything you need to know about our machine learning flood risk prediction algorithms, automated early warnings, meteorological radar, and citizen safety protocols.</p>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="faqSearchInput" class="search-input" placeholder="Search questions (e.g., rainfall, alerts, accuracy, model, CWC)..." oninput="filterFaqs()" />
+    </div>
+  </section>
+
+  <!-- MAIN ACCORDION -->
+  <main class="container">
+    <div class="cat-bar">
+      <button class="cat-btn active" onclick="setCategory('all')">All Questions (12)</button>
+      <button class="cat-btn" onclick="setCategory('general')">🌊 General Platform</button>
+      <button class="cat-btn" onclick="setCategory('alerts')">🔔 Email Alerts</button>
+      <button class="cat-btn" onclick="setCategory('ai')">🤖 AI Prediction & Accuracy</button>
+      <button class="cat-btn" onclick="setCategory('safety')">🛡️ Safety & Helplines</button>
+      <button class="cat-btn" onclick="setCategory('account')">👤 Profile & Settings</button>
+    </div>
+
+    <div class="faq-list" id="faqList">
+
+      <!-- ITEM 1 -->
+      <div class="faq-item" data-cat="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>What is FloodWatch India and what is its primary objective?</span>
+            <span class="fq-badge fb-general">GENERAL</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          FloodWatch India is an advanced AI-powered meteorological intelligence platform dedicated to real-time inundation risk forecasting and automated early disaster warnings across India. It ingests telemetry from the Central Water Commission (CWC), India Meteorological Department (IMD) Mausam forecasts, GIS elevation grids, and over 25 years of documented historical flood disasters to empower disaster responders and citizens with proactive warnings before riverbanks breach.
+        </div>
+      </div>
+
+      <!-- ITEM 2 -->
+      <div class="faq-item" data-cat="ai">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How does the AI flood risk prediction model work?</span>
+            <span class="fq-badge fb-ai">AI MODEL</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Rather than relying on generic nationwide approximations, FloodWatch India deploys <b>37 specialized Gradient Boosting Classifiers</b> (one dedicated ML model per state and Union Territory). Each state model is trained on multi-factor variables:
+          <ul style="margin: 8px 0 8px 20px; line-height: 1.5;">
+            <li>24-hour and 72-hour cumulative precipitation (mm)</li>
+            <li>Catchment soil moisture saturation index</li>
+            <li>Upstream dam gross storage capacity and live spillway discharge (m³/s)</li>
+            <li>Catchment elevation gradients & historical DFSI (District Flood Severity Index)</li>
+            <li>Population vulnerability in low-lying river plains</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ITEM 3 -->
+      <div class="faq-item" data-cat="ai">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How accurate are the state-wise flood risk predictions?</span>
+            <span class="fq-badge fb-ai">ACCURACY</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Based on independent cross-validation against official National Disaster Management Authority (NDMA) incident reports from 2000 to 2026, our state models demonstrate an overall cross-validation accuracy ranging from <b>91.4% to 98.2%</b>. You can review the complete state-wise accuracy metrics directly in the Command Center under the "ML Risk Predictor" module.
+        </div>
+      </div>
+
+      <!-- ITEM 4 -->
+      <div class="faq-item" data-cat="alerts">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How does the Automated Email Alert System work?</span>
+            <span class="fq-badge fb-alert">EMAIL ALERTS</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Whenever our continuous sensor polling engine detects that calculated flood probability for your monitored jurisdiction crosses your chosen sensitivity threshold (e.g. 60%), our SMTP alert engine immediately generates an emergency broadcast email. The email includes catchment location, severity badge, forecasted rainfall, river flow volume, IMD meteorological bulletins, and emergency contact helplines.
+        </div>
+      </div>
+
+      <!-- ITEM 5 -->
+      <div class="faq-item" data-cat="alerts">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>Can I customize the risk sensitivity threshold for receiving email alerts?</span>
+            <span class="fq-badge fb-alert">PREFERENCES</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Yes! You can configure your alert threshold to <b>40% (Medium Risk Advisory)</b>, <b>60% (High Inundation Warning)</b>, or <b>75% (Critical Disaster Alert)</b>. Simply visit your <a href="profile.html" style="color:var(--blue); font-weight:700;">Edit Profile</a> page or the National Alerts tab in the Command Center to save your preference.
+        </div>
+      </div>
+
+      <!-- ITEM 6 -->
+      <div class="faq-item" data-cat="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>What do the Risk Levels (Normal, Medium, High, Extreme) signify?</span>
+            <span class="fq-badge fb-general">RISK MATRIX</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          <ul style="margin: 6px 0 6px 20px; line-height: 1.6;">
+            <li><b style="color:var(--green);">🟢 Normal (0 - 39%):</b> Catchments and river gauges within safe non-flood levels. Routine telemetry monitoring active.</li>
+            <li><b style="color:#facc15;">🟡 Medium Risk (40 - 59%):</b> Elevated runoff and localized waterlogging possible. Residents in low-lying riparian tracts should stay watchful.</li>
+            <li><b style="color:var(--orange);">🟠 High Risk (60 - 74%):</b> River discharge approaching or exceeding danger marks. Bank breaches possible; preparatory relief measures recommended.</li>
+            <li><b style="color:var(--red);">🔴 Extreme Hazard (75% - 100%):</b> Severe inundation emergency. Catchment overflowing; immediate evacuation to identified relief shelters mandated.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ITEM 7 -->
+      <div class="faq-item" data-cat="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How does the "My Location" GPS risk detection work?</span>
+            <span class="fq-badge fb-general">GPS SENSORS</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          When you click "📍 My Location", your browser coordinates (latitude & longitude) are reverse-geocoded against our GIS district boundary repository. The system instantly queries the latest meteorological conditions, nearest CWC river gauge discharge, and live model probability for your exact coordinates.
+        </div>
+      </div>
+
+      <!-- ITEM 8 -->
+      <div class="faq-item" data-cat="safety">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>What essential actions should I take during a flood warning?</span>
+            <span class="fq-badge fb-safety">SAFETY TIPS</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          <ol style="margin: 6px 0 6px 20px; line-height: 1.6;">
+            <li>Immediately move to higher ground or upper storeys of pucca concrete structures.</li>
+            <li>Disconnect all main electrical circuit breakers and gas cylinders.</li>
+            <li>Do not attempt to walk, swim, or drive through moving floodwaters (even 6 inches of rapid water can knock a person over).</li>
+            <li>Keep essential emergency kit ready: potable water, non-perishable food, torch with spare batteries, first-aid, waterproof pouch for Aadhaar/deeds.</li>
+            <li>Monitor official FloodWatch India advisories and listen to district administration loudspeaker alerts.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- ITEM 9 -->
+      <div class="faq-item" data-cat="safety">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>What are the key national disaster helpline numbers in India?</span>
+            <span class="fq-badge fb-safety">HELPLINES</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Save these toll-free round-the-clock emergency numbers:
+          <ul style="margin: 6px 0 6px 20px; line-height: 1.6;">
+            <li><b>National Disaster Response Force (NDRF):</b> 1078 / 011-24363260</li>
+            <li><b>All-India Emergency Number:</b> 112</li>
+            <li><b>State Disaster Management Authority (SDMA):</b> 1070</li>
+            <li><b>District Disaster Emergency Control Room:</b> 1077</li>
+            <li><b>Ambulance / Medical Emergency:</b> 108</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ITEM 10 -->
+      <div class="faq-item" data-cat="account">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How do I update my profile, preferred state, or change my password?</span>
+            <span class="fq-badge fb-account">ACCOUNT</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Head over to the <a href="profile.html" style="color:var(--blue); font-weight:700;">Edit Profile</a> page from the top navigation bar. You can choose a custom avatar emoji, update your contact details, set your organization role, select your primary state and district, or update your security password.
+        </div>
+      </div>
+
+      <!-- ITEM 11 -->
+      <div class="faq-item" data-cat="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>Is FloodWatch India free for citizen use?</span>
+            <span class="fq-badge fb-general">FREE ACCESS</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Yes! FloodWatch India is fully open and free for all Indian residents, students, researchers, and government relief personnel. All live interactive maps, district predictions, and automated email warning subscriptions are provided without any subscription charges.
+        </div>
+      </div>
+
+      <!-- ITEM 12 -->
+      <div class="faq-item" data-cat="general">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <div class="fq-text">
+            <span>How frequently is rainfall radar and river gauge telemetry updated?</span>
+            <span class="fq-badge fb-general">TELEMETRY REFRESH</span>
+          </div>
+          <div class="fq-icon">▼</div>
+        </div>
+        <div class="faq-answer">
+          Sensor data from our Neon database and external IMD/CWC telemetry feeds are refreshed automatically every 15 to 30 minutes during active monsoon depressions and cyclone warnings.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EMERGENCY HOTLINES SECTION -->
+    <div class="emergency-box">
+      <div class="eb-title">🚨 National Emergency & Disaster Response Helplines</div>
+      <div class="eb-desc">In the event of sudden dam discharge, riverbank breach, or cloudburst, reach out immediately to disaster response command cells:</div>
+      <div class="helpline-grid">
+        <div class="hl-card">
+          <div class="hl-name">NDRF Central Control Room</div>
+          <div class="hl-num">1078</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-name">All-India Emergency</div>
+          <div class="hl-num">112</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-name">State Disaster Authority</div>
+          <div class="hl-num">1070</div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-name">District Disaster Helpline</div>
+          <div class="hl-num">1077</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let currentCategory = 'all';
+
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const wasActive = item.classList.contains('active');
+      
+      // Close other active in same view
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+      filterFaqs();
+    }
+
+    function filterFaqs() {
+      const search = document.getElementById('faqSearchInput').value.toLowerCase().trim();
+      const items = document.querySelectorAll('.faq-item');
+
+      items.forEach(item => {
+        const itemCat = item.getAttribute('data-cat');
+        const text = item.textContent.toLowerCase();
+
+        const matchCat = (currentCategory === 'all' || itemCat === currentCategory);
+        const matchSearch = (!search || text.includes(search));
+
+        if (matchCat && matchSearch) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+  <script src="js/language.js"></script>\n</body>
+</html>

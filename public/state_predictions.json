@@ -1,92 +1,72 @@
 {
-  "Andaman & Nicobar": {
-    "state": "Andaman & Nicobar",
-    "risk_category": "Moderate Risk",
-    "risk_level": "low",
-    "probability": 0.11617622735390191,
-    "probability_str": "11.62%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Moderate Rain Activity (18.2 mm/24h)",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 18.2,
-    "model_used": "andaman_and_nicobar_flood_model.joblib"
-  },
   "Andhra Pradesh": {
     "state": "Andhra Pradesh",
-    "risk_category": "Moderate Risk",
-    "risk_level": "medium",
-    "probability": 0.3058036474565773,
-    "probability_str": "30.58%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 10.1,
-    "model_used": "andhra_pradesh_flood_model.joblib"
-  },
-  "Arunachal Pradesh": {
-    "state": "Arunachal Pradesh",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.03487138483529021,
+    "probability_str": "3.5%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 1.3,
-    "model_used": "arunachal_pradesh_flood_model.joblib"
+    "rainfall_24h_mm": 0.0,
+    "model_used": "andhra_pradesh_flood_model.joblib"
   },
-  "Assam": {
-    "state": "Assam",
-    "risk_category": "Moderate Risk",
-    "risk_level": "medium",
-    "probability": 0.3326961837677367,
-    "probability_str": "33.27%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
+  "Chhattisgarh": {
+    "state": "Chhattisgarh",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 8.3,
-    "model_used": "assam_flood_model.joblib"
+    "rainfall_24h_mm": 0.0,
+    "model_used": "chhattisgarh_flood_model.joblib"
   },
-  "Bihar": {
-    "state": "Bihar",
-    "risk_category": "Moderate Risk",
-    "risk_level": "medium",
-    "probability": 0.3252689375738949,
-    "probability_str": "32.53%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
+  "Andaman & Nicobar": {
+    "state": "Andaman & Nicobar",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.08904703191996897,
+    "probability_str": "8.9%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 5.5,
-    "model_used": "bihar_flood_model.joblib"
+    "rainfall_24h_mm": 9.9,
+    "model_used": "andaman_and_nicobar_flood_model.joblib"
+  },
+  "Dadra & Nagar Have": {
+    "state": "Dadra & Nagar Have",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0010701543516008186,
+    "probability_str": "0.1%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "dadra_and_nagar_have_flood_model.joblib"
   },
   "Chandigarh": {
     "state": "Chandigarh",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
       "Low / Dry Precipitation Conditions"
@@ -94,379 +74,344 @@
     "rainfall_24h_mm": 0.0,
     "model_used": "chandigarh_flood_model.joblib"
   },
-  "Chhattisgarh": {
-    "state": "Chhattisgarh",
-    "risk_category": "Moderate Risk",
+  "Delhi": {
+    "state": "Delhi",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.12230413634610274,
-    "probability_str": "12.23%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Moderate Rain Activity (20.3 mm/24h)",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 20.3,
-    "model_used": "chhattisgarh_flood_model.joblib"
-  },
-  "Dadra & Nagar Have": {
-    "state": "Dadra & Nagar Have",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.003809749491698914,
-    "probability_str": "0.38%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 3.2,
-    "model_used": "dadra_and_nagar_have_flood_model.joblib"
+    "rainfall_24h_mm": 1.3,
+    "model_used": "delhi_flood_model.joblib"
   },
   "Daman & Diu": {
     "state": "Daman & Diu",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.002009168007682007,
-    "probability_str": "0.2%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.0006051710866512069,
+    "probability_str": "0.1%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 2.9,
+    "rainfall_24h_mm": 0.0,
     "model_used": "daman_and_diu_flood_model.joblib"
   },
-  "Delhi": {
-    "state": "Delhi",
-    "risk_category": "Low Risk",
+  "Assam": {
+    "state": "Assam",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.039993611238632765,
+    "probability_str": "4.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
       "Low / Dry Precipitation Conditions"
     ],
     "rainfall_24h_mm": 0.0,
-    "model_used": "delhi_flood_model.joblib"
+    "model_used": "assam_flood_model.joblib"
   },
-  "Goa": {
-    "state": "Goa",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.00041655802972100054,
-    "probability_str": "0.04%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 1.0,
-    "model_used": "goa_flood_model.joblib"
-  },
-  "Gujarat": {
-    "state": "Gujarat",
-    "risk_category": "Low Risk",
+  "Arunachal Pradesh": {
+    "state": "Arunachal Pradesh",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 2.2,
-    "model_used": "gujarat_flood_model.joblib"
-  },
-  "Haryana": {
-    "state": "Haryana",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0003576014238695167,
-    "probability_str": "0.04%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 0.0,
-    "model_used": "haryana_flood_model.joblib"
-  },
-  "Himachal Pradesh": {
-    "state": "Himachal Pradesh",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 0.0,
-    "model_used": "himachal_pradesh_flood_model.joblib"
-  },
-  "Jammu & Kashmir": {
-    "state": "Jammu & Kashmir",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
       "Low / Dry Precipitation Conditions"
     ],
     "rainfall_24h_mm": 0.0,
-    "model_used": "jammu_and_kashmir_flood_model.joblib"
+    "model_used": "arunachal_pradesh_flood_model.joblib"
   },
-  "Jharkhand": {
-    "state": "Jharkhand",
-    "risk_category": "Low Risk",
+  "Bihar": {
+    "state": "Bihar",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.07632911053182803,
-    "probability_str": "7.63%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions"
-    ],
-    "rainfall_24h_mm": 5.7,
-    "model_used": "jharkhand_flood_model.joblib"
-  },
-  "Karnataka": {
-    "state": "Karnataka",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 1.6,
-    "model_used": "karnataka_flood_model.joblib"
-  },
-  "Kerala": {
-    "state": "Kerala",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.09448862612254418,
-    "probability_str": "9.45%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 2.1,
-    "model_used": "kerala_flood_model.joblib"
-  },
-  "Ladakh": {
-    "state": "Ladakh",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.04639616034909057,
+    "probability_str": "4.6%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
       "Low / Dry Precipitation Conditions"
     ],
     "rainfall_24h_mm": 0.2,
+    "model_used": "bihar_flood_model.joblib"
+  },
+  "Goa": {
+    "state": "Goa",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.00023142112762277806,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "goa_flood_model.joblib"
+  },
+  "Himachal Pradesh": {
+    "state": "Himachal Pradesh",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 1.1,
+    "model_used": "himachal_pradesh_flood_model.joblib"
+  },
+  "Ladakh": {
+    "state": "Ladakh",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
     "model_used": "ladakh_flood_model.joblib"
+  },
+  "Jammu & Kashmir": {
+    "state": "Jammu & Kashmir",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.6,
+    "model_used": "jammu_and_kashmir_flood_model.joblib"
+  },
+  "Karnataka": {
+    "state": "Karnataka",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "karnataka_flood_model.joblib"
+  },
+  "Kerala": {
+    "state": "Kerala",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.03525695004572543,
+    "probability_str": "3.5%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "kerala_flood_model.joblib"
+  },
+  "Gujarat": {
+    "state": "Gujarat",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "gujarat_flood_model.joblib"
+  },
+  "Jharkhand": {
+    "state": "Jharkhand",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "jharkhand_flood_model.joblib"
+  },
+  "Haryana": {
+    "state": "Haryana",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0003576014238695167,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "haryana_flood_model.joblib"
   },
   "Lakshadweep": {
     "state": "Lakshadweep",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.00031477344635482465,
-    "probability_str": "0.03%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.00011404835012855965,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 2.2,
+    "rainfall_24h_mm": 0.0,
     "model_used": "lakshadweep_flood_model.joblib"
-  },
-  "Madhya Pradesh": {
-    "state": "Madhya Pradesh",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 1.5,
-    "model_used": "madhya_pradesh_flood_model.joblib"
   },
   "Maharashtra": {
     "state": "Maharashtra",
-    "risk_category": "Moderate Risk",
-    "risk_level": "medium",
-    "probability": 0.3231062587376122,
-    "probability_str": "32.31%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index",
-      "High Dam Catchment Water Inflow"
-    ],
-    "rainfall_24h_mm": 5.2,
-    "model_used": "maharashtra_flood_model.joblib"
-  },
-  "Manipur": {
-    "state": "Manipur",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.03977250509598915,
+    "probability_str": "4.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 0.8,
-    "model_used": "manipur_flood_model.joblib"
+    "rainfall_24h_mm": 0.0,
+    "model_used": "maharashtra_flood_model.joblib"
+  },
+  "Madhya Pradesh": {
+    "state": "Madhya Pradesh",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "madhya_pradesh_flood_model.joblib"
   },
   "Meghalaya": {
     "state": "Meghalaya",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 4.4,
+    "rainfall_24h_mm": 0.3,
     "model_used": "meghalaya_flood_model.joblib"
-  },
-  "Mizoram": {
-    "state": "Mizoram",
-    "risk_category": "Moderate Risk",
-    "risk_level": "low",
-    "probability": 0.10593886339932136,
-    "probability_str": "10.59%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Moderate Rain Activity (15.8 mm/24h)",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 15.8,
-    "model_used": "mizoram_flood_model.joblib"
   },
   "Nagaland": {
     "state": "Nagaland",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.08137857974114365,
-    "probability_str": "8.14%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 7.8,
-    "model_used": "nagaland_flood_model.joblib"
-  },
-  "Odisha": {
-    "state": "Odisha",
-    "risk_category": "Moderate Risk",
-    "risk_level": "low",
-    "probability": 0.15817940963683,
-    "probability_str": "15.82%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
-    "key_risk_drivers": [
-      "Moderate Rain Activity (28.7 mm/24h)",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 28.7,
-    "model_used": "odisha_flood_model.joblib"
-  },
-  "Puducherry": {
-    "state": "Puducherry",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "nagaland_flood_model.joblib"
+  },
+  "Manipur": {
+    "state": "Manipur",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "manipur_flood_model.joblib"
+  },
+  "Mizoram": {
+    "state": "Mizoram",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
     ],
     "rainfall_24h_mm": 0.1,
-    "model_used": "puducherry_flood_model.joblib"
+    "model_used": "mizoram_flood_model.joblib"
   },
   "Punjab": {
     "state": "Punjab",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 0.1,
+    "rainfall_24h_mm": 0.0,
     "model_used": "punjab_flood_model.joblib"
   },
   "Rajasthan": {
     "state": "Rajasthan",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
       "Low / Dry Precipitation Conditions"
@@ -474,115 +419,139 @@
     "rainfall_24h_mm": 0.0,
     "model_used": "rajasthan_flood_model.joblib"
   },
-  "Sikkim": {
-    "state": "Sikkim",
-    "risk_category": "Moderate Risk",
+  "Odisha": {
+    "state": "Odisha",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.12502927445304254,
-    "probability_str": "12.5%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Moderate Rain Activity (20.9 mm/24h)"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 20.9,
-    "model_used": "sikkim_flood_model.joblib"
+    "rainfall_24h_mm": 0.3,
+    "model_used": "odisha_flood_model.joblib"
+  },
+  "Puducherry": {
+    "state": "Puducherry",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.3,
+    "model_used": "puducherry_flood_model.joblib"
   },
   "Tamil Nadu": {
     "state": "Tamil Nadu",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
     "probability": 0.0001,
-    "probability_str": "0.01%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 0.7,
+    "rainfall_24h_mm": 0.2,
     "model_used": "tamil_nadu_flood_model.joblib"
   },
-  "Telangana": {
-    "state": "Telangana",
-    "risk_category": "Low Risk",
+  "Sikkim": {
+    "state": "Sikkim",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.07994277122434186,
-    "probability_str": "7.99%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 6.9,
-    "model_used": "telangana_flood_model.joblib"
+    "rainfall_24h_mm": 0.1,
+    "model_used": "sikkim_flood_model.joblib"
   },
   "Tripura": {
     "state": "Tripura",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.08002945047301163,
-    "probability_str": "8.0%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.0001,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 7.3,
+    "rainfall_24h_mm": 0.0,
     "model_used": "tripura_flood_model.joblib"
-  },
-  "Uttar Pradesh": {
-    "state": "Uttar Pradesh",
-    "risk_category": "Low Risk",
-    "risk_level": "low",
-    "probability": 0.005617578215464052,
-    "probability_str": "0.56%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
-    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
-    "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
-    ],
-    "rainfall_24h_mm": 1.6,
-    "model_used": "uttar_pradesh_flood_model.joblib"
   },
   "Uttarakhand": {
     "state": "Uttarakhand",
-    "risk_category": "Low Risk",
+    "risk_category": "Safe (Normal Conditions)",
     "risk_level": "low",
-    "probability": 0.087028073324225,
-    "probability_str": "8.7%",
-    "alert_level": "GREEN SAFE",
-    "color_code": "#16a34a",
+    "probability": 0.06364739690876156,
+    "probability_str": "6.4%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
     "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 2.1,
+    "rainfall_24h_mm": 1.2,
     "model_used": "uttarakhand_flood_model.joblib"
+  },
+  "Telangana": {
+    "state": "Telangana",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.00016117582488991254,
+    "probability_str": "0.0%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.0,
+    "model_used": "telangana_flood_model.joblib"
+  },
+  "Uttar Pradesh": {
+    "state": "Uttar Pradesh",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.0034493901323024876,
+    "probability_str": "0.3%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
+    "key_risk_drivers": [
+      "Low / Dry Precipitation Conditions"
+    ],
+    "rainfall_24h_mm": 0.5,
+    "model_used": "uttar_pradesh_flood_model.joblib"
   },
   "West Bengal": {
     "state": "West Bengal",
-    "risk_category": "Moderate Risk",
-    "risk_level": "medium",
-    "probability": 0.3505731776822305,
-    "probability_str": "35.06%",
-    "alert_level": "YELLOW WATCH ALERT",
-    "color_code": "#ca8a04",
-    "action_guidance": "Continuous monitoring of river gauge levels and catchment precipitation.",
+    "risk_category": "Safe (Normal Conditions)",
+    "risk_level": "low",
+    "probability": 0.04308951577892576,
+    "probability_str": "4.3%",
+    "alert_level": "\ud83d\udfe2 GREEN SAFE",
+    "color_code": "#10b981",
+    "action_guidance": "Normal conditions. Standard hydrological monitoring active.",
     "key_risk_drivers": [
-      "Low / Dry Precipitation Conditions",
-      "High Historical Flood Inundation Index"
+      "Low / Dry Precipitation Conditions"
     ],
-    "rainfall_24h_mm": 14.4,
+    "rainfall_24h_mm": 0.1,
     "model_used": "west_bengal_flood_model.joblib"
   }
 }

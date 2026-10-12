@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Edit Profile — FloodWatch India</title>
+  <meta name="description" content="Manage your personal credentials, operational monitoring preferences, and flood warning settings on FloodWatch India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/toast.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06080e;
+      --bg-card: #0d1322;
+      --bg-card-hover: #12192c;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-blue: rgba(56, 189, 248, 0.3);
+      --border-orange: rgba(249, 115, 22, 0.4);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --blue: #38bdf8;
+      --blue-glow: rgba(56, 189, 248, 0.2);
+      --orange: #f97316;
+      --red: #ef4444;
+      --green: #10b981;
+      --mono: 'JetBrains Mono', monospace;
+      --header-h: 58px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      height: var(--header-h);
+      background: rgba(8, 12, 22, 0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 14px rgba(234,88,12,0.4);
+    }
+    .brand-title {
+      font-size: 15px; font-weight: 800; color: #fff;
+    }
+    .brand-title span { color: var(--orange); }
+    .brand-sub {
+      font-size: 9px; font-family: var(--mono); color: var(--text-dim); letter-spacing: 0.8px;
+    }
+
+    .hdr-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-nav {
+      padding: 6px 14px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid transparent;
+    }
+    .btn-ghost {
+      color: var(--text-muted);
+      border-color: var(--border);
+      background: rgba(255,255,255,0.03);
+    }
+    .btn-ghost:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border-color: rgba(56,189,248,0.4);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(2,132,199,0.3);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #0284c7);
+      transform: translateY(-1px);
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .page-head {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .page-title {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .page-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* GRID LAYOUT */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 880px) {
+      .profile-grid { grid-template-columns: 1fr; }
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    /* LEFT USER IDENTITY CARD */
+    .user-card {
+      text-align: center;
+      position: sticky;
+      top: 80px;
+    }
+    .avatar-wrapper {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 3px solid var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      box-shadow: 0 0 24px var(--blue-glow);
+    }
+    .avatar-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 22px;
+      height: 22px;
+      background: var(--green);
+      border: 3px solid var(--bg-card);
+      border-radius: 50%;
+    }
+    .avatar-picker-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .avatar-selector {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .avatar-opt {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.2s;
+    }
+    .avatar-opt:hover, .avatar-opt.selected {
+      border-color: var(--blue);
+      background: var(--blue-glow);
+      transform: scale(1.1);
+    }
+
+    .user-name-display {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .user-email-display {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      margin-bottom: 12px;
+      word-break: break-all;
+    }
+    .user-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .meta-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: var(--mono);
+    }
+    .tag-blue { background: rgba(56,189,248,0.15); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); }
+    .tag-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+    .tag-orange { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.3); }
+
+    .identity-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    .user-stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      margin-bottom: 8px;
+    }
+    .user-stat-label { color: var(--text-dim); }
+    .user-stat-val { color: var(--text); font-weight: 600; }
+
+    /* RIGHT TABS */
+    .tabs-bar {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.04);
+    }
+    .tab-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    /* FORM STYLING */
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+    .input-field, .select-field, .textarea-field {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #fff;
+      font-family: inherit;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .input-field:focus, .select-field:focus, .textarea-field:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 12px var(--blue-glow);
+      background: rgba(15, 23, 42, 0.95);
+    }
+    .input-field:disabled {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-dim);
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+    .field-hint {
+      font-size: 10.5px;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      color: #fff;
+      border: 1px solid rgba(249,115,22,0.4);
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(234,88,12,0.3);
+    }
+    .btn-save:hover {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(234,88,12,0.45);
+    }
+
+    /* PASSWORD SECURITY INDICATOR */
+    .strength-meter {
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+    .strength-fill {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s;
+    }
+
+    /* NOTIFICATION TOGGLE CARD */
+    .pref-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .pref-info h4 { font-size: 13px; color: #fff; margin-bottom: 2px; }
+    .pref-info p { font-size: 11px; color: var(--text-dim); }
+
+    /* SWITCH */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--blue); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* TAB CONTENTS */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  <link rel="stylesheet" href="css/mobile.css" />\n</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="dashboard.html" class="brand">
+      <div class="brand-icon">🌊</div>
+      <div>
+        <div class="brand-title">Flood<span>Watch</span> India</div>
+        <div class="brand-sub">PROFILE MANAGEMENT</div>
+      </div>
+    </a>
+
+    <div class="hdr-links">
+      <a href="dashboard.html" class="btn-nav btn-ghost">← Command Center</a>
+      <a href="faq.html" class="btn-nav btn-ghost">❓ FAQs & Help</a>
+      <button onclick="handleLogout()" class="btn-nav btn-ghost" style="color:var(--red);">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">
+          <span>👤 Officer Profile & Settings</span>
+        </h1>
+        <p class="page-subtitle">Configure your personal information, monitoring jurisdiction, and emergency email notification threshold.</p>
+      </div>
+      <div>
+        <a href="dashboard.html" class="btn-nav btn-primary">🛰️ Launch Live Flood Map →</a>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <!-- LEFT: USER IDENTITY SUMMARY -->
+      <aside class="card user-card">
+        <div class="avatar-wrapper" id="userAvatarDisplay">
+          👤
+          <span class="avatar-badge" title="Active Account"></span>
+        </div>
+
+        <div class="avatar-picker-label">Choose Avatar Icon</div>
+        <div class="avatar-selector">
+          <div class="avatar-opt selected" onclick="selectAvatar('👤')">👤</div>
+          <div class="avatar-opt" onclick="selectAvatar('🌊')">🌊</div>
+          <div class="avatar-opt" onclick="selectAvatar('🛡️')">🛡️</div>
+          <div class="avatar-opt" onclick="selectAvatar('🛰️')">🛰️</div>
+          <div class="avatar-opt" onclick="selectAvatar('🚨')">🚨</div>
+          <div class="avatar-opt" onclick="selectAvatar('👨‍💼')">👨‍💼</div>
+        </div>
+
+        <div class="user-name-display" id="dispUserName">Loading...</div>
+        <div class="user-email-display" id="dispUserEmail">user@floodwatch.org</div>
+
+        <div class="user-meta-tags">
+          <span class="meta-tag tag-blue" id="dispUserRole">OPERATIONAL OFFICER</span>
+          <span class="meta-tag tag-green">EMAIL VERIFIED</span>
+          <span class="meta-tag tag-orange" id="dispUserStateBadge">ALL INDIA</span>
+        </div>
+
+        <div class="identity-divider"></div>
+
+        <div class="user-stat-row">
+          <span class="user-stat-label">Jurisdiction</span>
+          <span class="user-stat-val" id="dispJurisdiction">National Network</span>
+        </div>
+        <div class="user-stat-row">
+          <span class="user-stat-label">Default District</span>
+          <span class="user-stat-val" id="dispDistrict">All Monitored</span>
+        </div>
+        <div class="user-stat-row">
+          <span class="user-stat-label">Email Alerts</span>
+          <span class="user-stat-val" style="color:var(--green);" id="dispAlertState">ACTIVE (>= 60%)</span>
+        </div>
+        <div class="user-stat-row">
+          <span class="user-stat-label">Member Since</span>
+          <span class="user-stat-val" id="dispCreated">2026</span>
+        </div>
+      </aside>
+
+      <!-- RIGHT: TABBED EDIT SECTIONS -->
+      <section class="card">
+        <div class="tabs-bar">
+          <button class="tab-btn active" onclick="switchProfileTab('general')">
+            <span>⚙️ General Profile</span>
+          </button>
+          <button class="tab-btn" onclick="switchProfileTab('security')">
+            <span>🔒 Security & Password</span>
+          </button>
+          <button class="tab-btn" onclick="switchProfileTab('notifications')">
+            <span>🔔 Email Alert Settings</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: GENERAL PROFILE -->
+        <div class="tab-content active" id="tab-general">
+          <form id="profileForm" onsubmit="handleProfileSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>FULL NAME *</label>
+                <input type="text" id="inputName" class="input-field" placeholder="Officer / Resident Name" required />
+              </div>
+              <div class="form-group">
+                <label>EMAIL ADDRESS (PRIMARY IDENTIFIER)</label>
+                <input type="email" id="inputEmail" class="input-field" disabled />
+                <div class="field-hint">Email is linked to authentication credentials and cannot be modified directly.</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>CONTACT PHONE NUMBER (OPTIONAL)</label>
+                <input type="tel" id="inputPhone" class="input-field" placeholder="+91 9876543210" />
+                <div class="field-hint">Used for official disaster response coordinator records.</div>
+              </div>
+              <div class="form-group">
+                <label>ORGANIZATION / AGENCY</label>
+                <select id="inputOrg" class="select-field">
+                  <option value="NDMA / SDRF Disaster Responder">NDMA / SDRF Disaster Responder</option>
+                  <option value="Central Water Commission (CWC) Observer">Central Water Commission (CWC) Observer</option>
+                  <option value="State Irrigation & Flood Control Dept">State Irrigation & Flood Control Dept</option>
+                  <option value="Municipal Corporation Disaster Cell">Municipal Corporation Disaster Cell</option>
+                  <option value="Hydrologist & Academic Researcher">Hydrologist & Academic Researcher</option>
+                  <option value="Citizen & Regional Resident" selected>Citizen & Regional Resident</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>PRIMARY MONITORING STATE / UT</label>
+                <select id="inputState" class="select-field" onchange="handleStateSelectionChange()">
+                  <option value="All India">All India (National Overview)</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>PREFERRED DISTRICT / CATCHMENT BASIN</label>
+                <input type="text" id="inputDistrict" class="input-field" placeholder="e.g. Vadodara, Kamrup, Patna, Wayanad" />
+                <div class="field-hint">Your Command Center and live charts will prioritize this district.</div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>OPERATIONAL NOTES & BIO</label>
+              <textarea id="inputBio" rows="3" class="textarea-field" placeholder="Add custom station notes, catchment monitoring focus, or emergency details..."></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+              <button type="submit" class="btn-save" id="btnSaveProfile">
+                <span>💾 Save Profile Changes</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TAB 2: SECURITY & PASSWORD -->
+        <div class="tab-content" id="tab-security">
+          <form id="passwordForm" onsubmit="handlePasswordSubmit(event)">
+            <div class="form-group">
+              <label>CURRENT PASSWORD *</label>
+              <input type="password" id="inputCurrentPass" class="input-field" placeholder="Enter your current password" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>NEW PASSWORD *</label>
+                <input type="password" id="inputNewPass" class="input-field" placeholder="Minimum 8 characters" oninput="checkPassStrength(this.value)" required />
+                <div class="strength-meter">
+                  <div class="strength-fill" id="passStrengthFill"></div>
+                </div>
+                <div class="field-hint" id="passStrengthLabel">Must have 8+ chars with uppercase, lowercase & number.</div>
+              </div>
+              <div class="form-group">
+                <label>CONFIRM NEW PASSWORD *</label>
+                <input type="password" id="inputConfirmPass" class="input-field" placeholder="Re-type new password" required />
+              </div>
+            </div>
+
+            <div style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:12px; margin-bottom:20px;">
+              <div style="font-size:11.5px; font-weight:700; color:#fca5a5; margin-bottom:3px;">🛡️ Account Security Policy</div>
+              <div style="font-size:11px; color:#cbd5e1; line-height:1.4;">
+                New passwords cannot match your old password. If your account was authenticated with Google OAuth, you do not need to set a local password.
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+              <button type="submit" class="btn-save" id="btnSavePassword">
+                <span>🔒 Update Password</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TAB 3: NOTIFICATIONS & ALERTS -->
+        <div class="tab-content" id="tab-notifications">
+          <div class="pref-item">
+            <div class="pref-info">
+              <h4>📧 Automated Email Warning Notifications</h4>
+              <p>Receive real-time meteorological flood warnings and river discharge surge advisories to your inbox.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="prefAutoEmail" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="pref-item">
+            <div class="pref-info">
+              <h4>🎚️ Flood Risk Trigger Sensitivity</h4>
+              <p>Configure the minimum ML inundation probability that fires automated warnings.</p>
+            </div>
+            <select id="prefThreshold" class="select-field" style="width:200px;">
+              <option value="40">Medium Risk (>= 40%)</option>
+              <option value="60" selected>High Risk (>= 60%)</option>
+              <option value="75">Critical Emergency (>= 75%)</option>
+            </select>
+          </div>
+
+          <div class="pref-item">
+            <div class="pref-info">
+              <h4>🌊 Catchment Telemetry Inclusions</h4>
+              <p>Include CWC gauge telemetry, 24h rainfall statistics, and nearest relief center contacts in alerts.</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="prefTelemetry" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; margin-top:20px;">
+            <button type="button" onclick="saveNotificationPreferences()" class="btn-save">
+              <span>💾 Save Alert Preferences</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="assets/toast.js"></script>
+  <script>
+    const NODE_API_BASE = window.location.origin;
+    let currentUser = null;
+    let selectedAvatar = '👤';
+
+    // Simple Toast fallback if toast.js hasn't loaded
+    function notify(message, type = 'info') {
+      if (typeof showToast === 'function') {
+        showToast(message, type);
+      } else {
+        alert(message);
+      }
+    }
+
+    function switchProfileTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (event && event.currentTarget) event.currentTarget.classList.add('active');
+      const target = document.getElementById(`tab-${tabName}`);
+      if (target) target.classList.add('active');
+    }
+
+    function selectAvatar(emoji) {
+      selectedAvatar = emoji;
+      document.getElementById('userAvatarDisplay').firstChild.textContent = emoji;
+      document.querySelectorAll('.avatar-opt').forEach(opt => {
+        opt.classList.toggle('selected', opt.textContent.trim() === emoji);
+      });
+    }
+
+    function checkPassStrength(val) {
+      const fill = document.getElementById('passStrengthFill');
+      const label = document.getElementById('passStrengthLabel');
+      if (!val) {
+        fill.style.width = '0%';
+        label.textContent = 'Must have 8+ chars with uppercase, lowercase & number.';
+        return;
+      }
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[a-z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const pct = Math.min(100, score * 20);
+      fill.style.width = pct + '%';
+      if (pct <= 40) {
+        fill.style.background = '#ef4444';
+        label.textContent = 'Weak password';
+        label.style.color = '#fca5a5';
+      } else if (pct <= 80) {
+        fill.style.background = '#facc15';
+        label.textContent = 'Moderate password strength';
+        label.style.color = '#fde047';
+      } else {
+        fill.style.background = '#10b981';
+        label.textContent = 'Strong password ✅';
+        label.style.color = '#86efac';
+      }
+    }
+
+    function handleStateSelectionChange() {
+      const state = document.getElementById('inputState').value;
+      document.getElementById('dispUserStateBadge').textContent = state.toUpperCase();
+      document.getElementById('dispJurisdiction').textContent = state;
+    }
+
+    async function loadUserProfile() {
+      try {
+        const res = await fetch(`${NODE_API_BASE}/api/auth/me`, {
+          credentials: 'include'
+        });
+
+        if (res.status === 401) {
+          // Fallback to local session storage if available
+          const cached = localStorage.getItem('floodwatch_user');
+          if (cached) {
+            currentUser = JSON.parse(cached);
+            populateFields(currentUser);
+            return;
+          }
+          window.location.href = 'login.html?redirect=profile.html';
+          return;
+        }
+
+        const data = await res.json();
+        if (data.success && data.data?.user) {
+          currentUser = data.data.user;
+          localStorage.setItem('floodwatch_user', JSON.stringify(currentUser));
+          populateFields(currentUser);
+        } else {
+          window.location.href = 'login.html';
+        }
+      } catch (err) {
+        console.warn('Network error loading profile, trying cached credentials:', err);
+        const cached = localStorage.getItem('floodwatch_user');
+        if (cached) {
+          currentUser = JSON.parse(cached);
+          populateFields(currentUser);
+        }
+      }
+    }
+
+    function populateFields(user) {
+      if (!user) return;
+
+      document.getElementById('dispUserName').textContent = user.name || 'Resident Officer';
+      document.getElementById('dispUserEmail').textContent = user.email || '';
+      document.getElementById('inputName').value = user.name || '';
+      document.getElementById('inputEmail').value = user.email || '';
+      if (user.phone) document.getElementById('inputPhone').value = user.phone;
+      if (user.state) {
+        document.getElementById('inputState').value = user.state;
+        document.getElementById('dispUserStateBadge').textContent = user.state.toUpperCase();
+        document.getElementById('dispJurisdiction').textContent = user.state;
+      }
+      if (user.district) {
+        document.getElementById('inputDistrict').value = user.district;
+        document.getElementById('dispDistrict').textContent = user.district;
+      }
+      if (user.organization) {
+        document.getElementById('inputOrg').value = user.organization;
+        document.getElementById('dispUserRole').textContent = user.organization.toUpperCase().slice(0, 24);
+      }
+      if (user.bio) document.getElementById('inputBio').value = user.bio;
+      if (user.avatar_url && ['👤','🌊','🛡️','🛰️','🚨','👨‍💼'].includes(user.avatar_url)) {
+        selectAvatar(user.avatar_url);
+      }
+      if (user.created_at) {
+        const d = new Date(user.created_at);
+        document.getElementById('dispCreated').textContent = d.getFullYear() || '2026';
+      }
+
+      // Load alert preferences
+      try {
+        const alertSettings = JSON.parse(localStorage.getItem('floodwatch_alert_settings') || '{}');
+        if (alertSettings.threshold) {
+          document.getElementById('prefThreshold').value = alertSettings.threshold;
+          document.getElementById('dispAlertState').textContent = `ACTIVE (>= ${alertSettings.threshold}%)`;
+        }
+        if (alertSettings.autoActive !== undefined) {
+          document.getElementById('prefAutoEmail').checked = alertSettings.autoActive;
+          if (!alertSettings.autoActive) document.getElementById('dispAlertState').textContent = 'DISABLED';
+        }
+      } catch (e) {}
+    }
+
+    async function handleProfileSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSaveProfile');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Saving Changes...</span>';
+
+      const payload = {
+        name: document.getElementById('inputName').value.trim(),
+        phone: document.getElementById('inputPhone').value.trim(),
+        state: document.getElementById('inputState').value,
+        district: document.getElementById('inputDistrict').value.trim(),
+        organization: document.getElementById('inputOrg').value,
+        bio: document.getElementById('inputBio').value.trim(),
+        avatar_url: selectedAvatar
+      };
+
+      try {
+        const res = await fetch(`${NODE_API_BASE}/api/auth/profile`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.success && data.data?.user) {
+          currentUser = { ...currentUser, ...data.data.user };
+          localStorage.setItem('floodwatch_user', JSON.stringify(currentUser));
+          populateFields(currentUser);
+          notify('✅ Profile updated successfully!', 'success');
+        } else {
+          notify(data.message || 'Failed to update profile.', 'error');
+        }
+      } catch (err) {
+        // Fallback save in localStorage
+        currentUser = { ...currentUser, ...payload };
+        localStorage.setItem('floodwatch_user', JSON.stringify(currentUser));
+        populateFields(currentUser);
+        notify('Profile updated locally in browser storage.', 'success');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>💾 Save Profile Changes</span>';
+      }
+    }
+
+    async function handlePasswordSubmit(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('inputCurrentPass').value;
+      const newPassword = document.getElementById('inputNewPass').value;
+      const confirmPassword = document.getElementById('inputConfirmPass').value;
+
+      if (newPassword !== confirmPassword) {
+        notify('New password and confirm password do not match.', 'warning');
+        return;
+      }
+
+      const btn = document.getElementById('btnSavePassword');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Updating Password...</span>';
+
+      try {
+        const res = await fetch(`${NODE_API_BASE}/api/auth/change-password`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          notify('🔒 Password changed successfully!', 'success');
+          document.getElementById('passwordForm').reset();
+          checkPassStrength('');
+        } else {
+          notify(data.message || 'Failed to update password.', 'error');
+        }
+      } catch (err) {
+        notify('Network error updating password. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔒 Update Password</span>';
+      }
+    }
+
+    async function saveNotificationPreferences() {
+      const email = currentUser?.email || document.getElementById('inputEmail').value.trim();
+      const threshold = document.getElementById('prefThreshold').value;
+      const autoActive = document.getElementById('prefAutoEmail').checked;
+
+      const settings = {
+        email,
+        threshold,
+        autoActive,
+        state: document.getElementById('inputState').value,
+        district: document.getElementById('inputDistrict').value.trim()
+      };
+
+      localStorage.setItem('floodwatch_alert_settings', JSON.stringify(settings));
+
+      try {
+        await fetch(`${NODE_API_BASE}/api/alerts/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            threshold,
+            name: currentUser?.name || 'Resident Officer',
+            state: settings.state,
+            district: settings.district
+          })
+        });
+      } catch (e) {}
+
+      document.getElementById('dispAlertState').textContent = autoActive ? `ACTIVE (>= ${threshold}%)` : 'DISABLED';
+      notify(`Saved! Automated Email alerts active for risk threshold >= ${threshold}%`, 'success');
+    }
+
+    async function handleLogout() {
+      try {
+        await fetch(`${NODE_API_BASE}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+      } catch (e) {}
+      localStorage.removeItem('floodwatch_user');
+      window.location.href = 'login.html';
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', loadUserProfile);
+  </script>
+  <script src="js/language.js"></script>\n</body>
+</html>

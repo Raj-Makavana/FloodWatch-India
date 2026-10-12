@@ -31,17 +31,6 @@
       color: var(--text);
     }
 
-    .top-bar { height: 2px; background: var(--green); width: 100%; }
-
-    .tab-label {
-      font-size: 11px;
-      color: var(--text-dim);
-      padding: 8px 20px;
-      letter-spacing: 0.5px;
-      background: #0b1120;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
     .page-body {
       min-height: calc(100vh - 50px);
       display: flex;
@@ -138,10 +127,8 @@
 
     .bottom-bar { height: 2px; background: var(--green); width: 100%; position: fixed; bottom: 0; left: 0; }
   </style>
-</head>
+  <link rel="stylesheet" href="css/mobile.css" />\n</head>
 <body>
-
-  <div class="top-bar"></div>
 
   <div class="page-body">
     <div class="card">
@@ -152,8 +139,8 @@
 
       <form id="loginForm" onsubmit="handleLogin(event)">
         <div class="field">
-          <label class="field-label" for="email">Institutional Email</label>
-          <input class="field-input" id="email" type="email" placeholder="name@gov.in or name@academic.edu" autocomplete="email" required />
+          <label class="field-label" for="email">Email Address</label>
+          <input class="field-input" id="email" type="email" placeholder="name@example.com" autocomplete="email" required />
         </div>
 
         <div class="field">
@@ -164,7 +151,7 @@
         <div class="row-between">
           <label class="check-wrap">
             <input type="checkbox" id="remember" checked />
-            <span class="check-label">Remember this terminal</span>
+            <span class="check-label">Remember me</span>
           </label>
           <a href="forgot-password.html" class="forgot-link">Forgot password?</a>
         </div>
@@ -271,5 +258,5 @@
       }, 500);
     }
   </script>
-</body>
+  <script src="js/language.js"></script>\n</body>
 </html>

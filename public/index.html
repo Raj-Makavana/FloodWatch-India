@@ -12,11 +12,11 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #07080d;
-      --bg2: #0b0f1a;
-      --glass: rgba(12, 17, 30, 0.94);
+      --bg: #060810;
+      --bg2: #0a0e1c;
+      --glass: rgba(13, 18, 35, 0.98);
       --border: rgba(255,255,255,0.08);
-      --border2: rgba(56,189,248,0.25);
+      --border2: rgba(56,189,248,0.3);
       --t1: #f1f5f9;
       --t2: #94a3b8;
       --t3: #475569;
@@ -43,14 +43,27 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: var(--hh);
-      background: rgba(7, 8, 13, 0.98);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(6, 8, 16, 0.99);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(249,115,22,0.18);
+      box-shadow: 0 1px 0 rgba(249,115,22,0.08), 0 4px 32px rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
       z-index: 1000;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(249,115,22,0.5) 30%, rgba(56,189,248,0.4) 70%, transparent 100%);
+      animation: headerGlow 4s ease-in-out infinite alternate;
+    }
+    @keyframes headerGlow {
+      0%   { opacity: 0.4; }
+      100% { opacity: 1; }
     }
 
     .logo {
@@ -61,13 +74,18 @@
     }
     .logo-icon {
       width: 36px; height: 36px;
-      background: linear-gradient(135deg, #ea580c, #c2410c);
+      background: linear-gradient(135deg, #ea580c, #9a3412);
       border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
       font-size: 19px;
-      box-shadow: 0 0 16px rgba(234,88,12,0.45);
-      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 22px rgba(234,88,12,0.65), 0 0 6px rgba(234,88,12,0.3);
+      border: 1px solid rgba(249,115,22,0.4);
       flex-shrink: 0;
+      animation: logoPulse 3s ease-in-out infinite;
+    }
+    @keyframes logoPulse {
+      0%, 100% { box-shadow: 0 0 22px rgba(234,88,12,0.65), 0 0 6px rgba(234,88,12,0.3); }
+      50%       { box-shadow: 0 0 32px rgba(234,88,12,0.9), 0 0 12px rgba(234,88,12,0.5); }
     }
     .logo-text { line-height: 1.15; }
     .logo-name {
@@ -108,12 +126,13 @@
     .btn-primary {
       background: linear-gradient(135deg, #ea580c, #c2410c);
       color: #fff;
-      border-color: rgba(234,88,12,0.5);
-      box-shadow: 0 2px 14px rgba(234,88,12,0.4);
+      border-color: rgba(234,88,12,0.6);
+      box-shadow: 0 2px 18px rgba(234,88,12,0.55), 0 0 8px rgba(234,88,12,0.2);
     }
     .btn-primary:hover {
       background: linear-gradient(135deg, #f97316, #dc4a0c);
       transform: translateY(-1px);
+      box-shadow: 0 4px 28px rgba(234,88,12,0.75), 0 0 14px rgba(234,88,12,0.3);
     }
 
     /* MOBILE NAV SWITCHER (VISIBLE ONLY ON MOBILE) */
@@ -174,68 +193,106 @@
     .left-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
 
     .hero {
-      padding: 22px 24px 16px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(234,88,12,0.06) 0%, transparent 100%);
+      padding: 18px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(160deg, rgba(234,88,12,0.1) 0%, transparent 75%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 160px; height: 160px;
+      background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, transparent 70%);
+      pointer-events: none;
     }
     .hero-title {
-      font-size: 22px; font-weight: 900;
-      color: #fff; letter-spacing: -0.5px;
+      font-size: 22px; font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+      line-height: 1.25;
+      font-family: 'Inter', sans-serif;
     }
     .hero-title span {
       color: transparent;
-      background: linear-gradient(135deg, #f97316, #ef4444);
+      background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
       -webkit-background-clip: text;
       background-clip: text;
     }
 
-    .features-section { padding: 16px 20px 24px; }
+    .features-section { padding: 14px 18px 24px; }
 
     .feature-card {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 12px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      margin-bottom: 10px;
-      transition: all 0.2s;
+      display: flex; align-items: center; gap: 13px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 8px;
+      transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+    .feature-card:hover::before { opacity: 1; }
     .feature-card:hover {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.18);
-      transform: translateX(3px);
+      background: rgba(255,255,255,0.08);
+      transform: translateX(4px);
     }
+    /* per-card colored hover border */
+    .feature-card.fc-green:hover  { border-color: rgba(16,185,129,0.5);  box-shadow: 0 4px 24px rgba(16,185,129,0.1); }
+    .feature-card.fc-blue:hover   { border-color: rgba(56,189,248,0.5);  box-shadow: 0 4px 24px rgba(56,189,248,0.1); }
+    .feature-card.fc-orange:hover { border-color: rgba(249,115,22,0.5);  box-shadow: 0 4px 24px rgba(249,115,22,0.1); }
+    .feature-card.fc-red:hover    { border-color: rgba(239,68,68,0.5);   box-shadow: 0 4px 24px rgba(239,68,68,0.1); }
+    .feature-card.fc-purple:hover { border-color: rgba(168,85,247,0.5);  box-shadow: 0 4px 24px rgba(168,85,247,0.1); }
     .feature-icon {
-      width: 36px; height: 36px;
-      border-radius: 8px;
+      width: 40px; height: 40px;
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       flex-shrink: 0;
+      transition: transform 0.2s;
     }
-    .fi-red { background: rgba(239,68,68,0.15); }
-    .fi-blue { background: rgba(56,189,248,0.15); }
-    .fi-green { background: rgba(16,185,129,0.15); }
-    .fi-orange { background: rgba(245,158,11,0.15); }
-    .fi-purple { background: rgba(168,85,247,0.15); }
+    .feature-card:hover .feature-icon { transform: scale(1.1); }
+    .fi-red    { background: rgba(239,68,68,0.2);   border: 1px solid rgba(239,68,68,0.2); }
+    .fi-blue   { background: rgba(56,189,248,0.18); border: 1px solid rgba(56,189,248,0.2); }
+    .fi-green  { background: rgba(16,185,129,0.2);  border: 1px solid rgba(16,185,129,0.2); }
+    .fi-orange { background: rgba(249,115,22,0.2);  border: 1px solid rgba(249,115,22,0.2); }
+    .fi-purple { background: rgba(168,85,247,0.2);  border: 1px solid rgba(168,85,247,0.2); }
     .feature-text { flex: 1; min-width: 0; }
     .feature-title {
-      font-size: 13px; font-weight: 700;
-      color: var(--t1); margin-bottom: 2px;
+      font-size: 13px; font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 3px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.1px;
+      line-height: 1.3;
     }
     .feature-desc {
-      font-size: 11px; color: var(--t3);
-      line-height: 1.4;
+      font-size: 11px; color: #7e93ab;
+      line-height: 1.45;
+      font-weight: 400;
     }
     .feature-badge {
       font-size: 9px; font-weight: 800;
-      padding: 2px 6px; border-radius: 8px;
+      padding: 3px 7px; border-radius: 6px;
       font-family: 'JetBrains Mono', monospace;
       white-space: nowrap; align-self: center;
+      flex-shrink: 0;
+      letter-spacing: 0.4px;
     }
-    .fb-live { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
-    .fb-new { background: rgba(56,189,248,0.2); color: #7dd3fc; border: 1px solid rgba(56,189,248,0.3); }
-    .fb-ai { background: rgba(168,85,247,0.2); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+    .fb-live { background: rgba(16,185,129,0.18); color: #4ade80;  border: 1px solid rgba(16,185,129,0.4); }
+    .fb-new  { background: rgba(56,189,248,0.18);  color: #7dd3fc; border: 1px solid rgba(56,189,248,0.4); }
+    .fb-ai   { background: rgba(168,85,247,0.18);  color: #c084fc; border: 1px solid rgba(168,85,247,0.4); }
 
     /* RIGHT MAP PANEL */
     .right-panel {
@@ -517,7 +574,7 @@
       }
     }
   </style>
-</head>
+  <link rel="stylesheet" href="css/mobile.css" />\n</head>
 <body>
 
 <!-- HEADER -->
@@ -554,60 +611,71 @@
     </div>
 
     <div class="features-section">
-      <div class="feature-card" onclick="openModal()">
-        <div class="feature-icon fi-red">🗺️</div>
-        <div class="feature-text">
-          <div class="feature-title">Live Flood Risk Map</div>
-          <div class="feature-desc">Meteorological radar heatmaps and state-wise risk zones updated from trained ML inference.</div>
-        </div>
-        <span class="feature-badge fb-live">LIVE</span>
-      </div>
-
-      <div class="feature-card" onclick="openModal()">
-        <div class="feature-icon fi-blue">🤖</div>
-        <div class="feature-text">
-          <div class="feature-title">37-State AI Prediction</div>
-          <div class="feature-desc">Individual Gradient Boosting Classifier per state — trained on IMD, GIS, dam & population telemetry.</div>
-        </div>
-        <span class="feature-badge fb-ai">AI</span>
-      </div>
-
-      <div class="feature-card" onclick="openModal()">
-        <div class="feature-icon fi-orange">🌧️</div>
-        <div class="feature-text">
-          <div class="feature-title">Rainfall Impact Simulator</div>
-          <div class="feature-desc">Enter forecasted rainfall → get instant flood probability for any district in real-time.</div>
-        </div>
-        <span class="feature-badge fb-new">NEW</span>
-      </div>
-
-      <div class="feature-card" onclick="openModal()">
+      <div class="feature-card fc-green" onclick="openModal()">
         <div class="feature-icon fi-green">📍</div>
         <div class="feature-text">
-          <div class="feature-title">My Location Risk Alert</div>
-          <div class="feature-desc">One-click to detect your GPS location and show real-time flood risk for your exact region.</div>
+          <div class="feature-title">My Location (Live Geo-Location Detection)</div>
+          <div class="feature-desc">Automatically detects user GPS coordinates to display immediate local risk levels.</div>
         </div>
         <span class="feature-badge fb-live">GPS</span>
       </div>
 
-      <div class="feature-card" onclick="openModal()">
-        <div class="feature-icon fi-purple">📊</div>
+      <div class="feature-card fc-blue" onclick="openModal()">
+        <div class="feature-icon fi-blue">📈</div>
         <div class="feature-text">
-          <div class="feature-title">District-Level Forecasts</div>
-          <div class="feature-desc">Block-level inundation probability, dam spillway data and 72-hour advanced warnings.</div>
+          <div class="feature-title">Historical Trend Charts</div>
+          <div class="feature-desc">Visual interactive graphs tracking rainfall and river water levels over time.</div>
         </div>
-        <span class="feature-badge fb-ai">PRO</span>
+        <span class="feature-badge fb-ai">CHARTS</span>
       </div>
 
-      <div class="feature-card" onclick="openModal()">
-        <div class="feature-icon fi-blue">📱</div>
+      <div class="feature-card fc-orange" onclick="openModal()">
+        <div class="feature-icon fi-orange">📧</div>
         <div class="feature-text">
-          <div class="feature-title">Emergency SMS Alerts</div>
-          <div class="feature-desc">Custom push notifications when flood risk crosses threshold in your selected districts.</div>
+          <div class="feature-title">Email Alert System</div>
+          <div class="feature-desc">Automated notifications sent when local risk crosses warning thresholds.</div>
         </div>
         <span class="feature-badge fb-new">ALERT</span>
       </div>
+
+      <div class="feature-card fc-red" onclick="openModal()">
+        <div class="feature-icon fi-red">🏥</div>
+        <div class="feature-text">
+          <div class="feature-title">Nearby Relief Center Finder</div>
+          <div class="feature-desc">Maps showing emergency shelters, medical centers, and evacuation routes.</div>
+        </div>
+        <span class="feature-badge fb-live">LIVE</span>
+      </div>
+
+      <div class="feature-card fc-purple" onclick="openModal()">
+        <div class="feature-icon fi-purple">📄</div>
+        <div class="feature-text">
+          <div class="feature-title">Downloadable PDF Reports</div>
+          <div class="feature-desc">One-click summary reports containing current risk maps and district statistics.</div>
+        </div>
+        <span class="feature-badge fb-ai">PDF</span>
+      </div>
+
+      <div class="feature-card fc-blue" onclick="openModal()">
+        <div class="feature-icon fi-blue">🛰️</div>
+        <div class="feature-text">
+          <div class="feature-title">Live GPS Auto-Detection & Distance Sorting</div>
+          <div class="feature-desc">Automatically sorts flood-risk zones and relief centers by distance from your live GPS position.</div>
+        </div>
+        <span class="feature-badge fb-live">GPS</span>
+      </div>
+
+      <div class="feature-card fc-orange" onclick="openModal()">
+        <div class="feature-icon fi-orange">🗂️</div>
+        <div class="feature-text">
+          <div class="feature-title">Historical Data of Floods State-wise</div>
+          <div class="feature-desc">State-by-state historical flood records with year-wise rainfall, damage, and inundation statistics.</div>
+        </div>
+        <span class="feature-badge fb-ai">DATA</span>
+      </div>
     </div>
+
+
   </div>
 
   <!-- RIGHT MAP PANEL -->
@@ -650,12 +718,12 @@
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-head">🔒 PREMIUM INTELLIGENCE ACCESS</div>
     <div class="modal-title">Unlock Full District-Level Forecasts</div>
-    <div class="modal-desc">Sign up to access real-time block-level inundation maps, 72-hour early warnings, SMS alerts, dam telemetry and historical flood GIS layers.</div>
+    <div class="modal-desc">Sign up to access real-time block-level inundation maps, 72-hour early warnings, automated email alerts, dam telemetry and historical flood GIS layers.</div>
     <div class="modal-feat">
       <div class="modal-feat-item">🗺️ Block-level water inundation probability maps</div>
       <div class="modal-feat-item">📊 72-hour ahead predictive warning system</div>
-      <div class="modal-feat-item">📱 Custom SMS & WhatsApp emergency alerts</div>
-      <div class="modal-feat-item">📁 Historical flood GIS layers (2000–2025)</div>
+      <div class="modal-feat-item">📧 Automated Email early warning dispatches</div>
+      <div class="modal-feat-item">📁 Historical flood GIS layers (2000–2026)</div>
       <div class="modal-feat-item">🏞️ River gauge & dam discharge live telemetry</div>
     </div>
     <div class="modal-btns">
@@ -768,7 +836,7 @@ function getPred(name) {
 // ═══════════════════════════════════════════════════════════
 // MAP INITIALIZATION (PERMANENT SATELLITE RADAR VIEW)
 // ═══════════════════════════════════════════════════════════
-let map, satLayer, geoLayer, heatLayer, userMarker;
+let map, satLayer, geoLayer, heatLayer, userMarker, riskZonesLayer;
 
 function initMap() {
   const isMobile = window.innerWidth <= 900;
@@ -776,11 +844,12 @@ function initMap() {
   map = L.map('floodMap', {
     center: isMobile ? [22.5, 79.5] : [22.8, 81.5],
     zoom: isMobile ? 4.3 : 5,
-    minZoom: 3.8, maxZoom: 12,
+    minZoom: 3.8, maxZoom: 14,
     zoomControl: true,
     attributionControl: false
   });
   map.zoomControl.setPosition('bottomright');
+  riskZonesLayer = L.layerGroup().addTo(map);
 
   // Realistic ArcGIS High-Resolution Satellite Earth Imagery
   satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -792,6 +861,21 @@ function initMap() {
     maxZoom: 19, pane: 'shadowPane'
   }).addTo(map);
 
+  // Dynamic heatmap radius adapter — scales radius proportionally so colors never disappear when zooming
+  const updateHeatRadius = () => {
+    if (!heatLayer) return;
+    const z = map.getZoom();
+    let r = 10, b = 6;
+    if (z >= 13)      { r = 46; b = 26; }
+    else if (z >= 11) { r = 36; b = 20; }
+    else if (z >= 9)  { r = 26; b = 15; }
+    else if (z >= 7)  { r = 18; b = 10; }
+    else if (z >= 5)  { r = 12; b = 7; }
+    else              { r = 8;  b = 5; }
+    heatLayer.setOptions({ radius: r, blur: b, max: 0.85, minOpacity: 0.35 });
+    if (typeof heatLayer._redraw === 'function') heatLayer._redraw();
+  };
+  map.on('zoomend', updateHeatRadius);
 }
 
 const ML_API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -811,7 +895,7 @@ function markPredictionsUpdated(label) {
 
 async function loadPredictions() {
   try {
-    const fileRes = await fetch('state_predictions.json?t=' + Date.now());
+    const fileRes = await fetch('state_predictions.json?t=' + Date.now(), { cache: 'no-store' });
     if (fileRes.ok) {
       PREDS = normalizePredictions(await fileRes.json());
       markPredictionsUpdated('ML models');
@@ -822,7 +906,7 @@ async function loadPredictions() {
 
   if (ML_API_BASE) {
     try {
-      const liveRes = await fetch(ML_API_BASE + '/map-predictions');
+      const liveRes = await fetch(ML_API_BASE + '/map-predictions?t=' + Date.now(), { cache: 'no-store' });
       if (liveRes.ok) {
         const live = await liveRes.json();
         PREDS = normalizePredictions(live);
@@ -836,78 +920,245 @@ async function loadPredictions() {
   if (map) {
     buildRadarLayers();
     renderGeoLayer(INDIA_GEO);
+    renderVulnerableZones();
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// ML-DRIVEN RADAR HEATMAP (updates from trained models / live API)
+// WATERWAY-LOCALISED HEATMAP — only river/dam corridors glow,
+// and ONLY when the LIVE prediction probability warrants it.
 // ═══════════════════════════════════════════════════════════
+const WATERWAY_HOTSPOTS_INDEX = [
+  { state:'Assam', thresh:0.50, pts:[
+    [26.018,89.984,0.92],[26.144,91.736,1.0],[26.180,91.600,0.96],
+    [26.220,91.850,0.96],[26.350,92.680,0.98],[26.634,92.793,1.0],
+    [26.580,93.170,0.97],[26.750,94.216,0.95],[27.472,94.912,0.93],
+    [24.833,92.778,0.90],
+    [26.144,91.650,0.38],[26.144,91.820,0.36],[26.350,92.580,0.37],
+    [26.634,92.900,0.38],[26.750,94.100,0.35]
+  ]},
+  { state:'Bihar', thresh:0.50, pts:[
+    [25.930,86.600,0.97],[26.120,86.600,0.95],[26.154,85.891,0.92],
+    [25.777,87.475,0.95],[25.540,87.570,0.93],
+    [25.594,85.137,0.88],[25.242,86.984,0.86],
+    [25.930,86.500,0.36],[25.930,86.700,0.35],
+    [26.120,86.500,0.34],[25.777,87.375,0.36]
+  ]},
+  { state:'West Bengal', thresh:0.55, pts:[
+    [22.572,88.363,0.90],[22.595,88.263,0.88],[22.400,88.240,0.85],
+    [26.727,88.395,0.88],[26.541,88.719,0.86],
+    [22.572,88.250,0.35],[22.572,88.470,0.34]
+  ]},
+  { state:'Maharashtra', thresh:0.55, pts:[
+    [19.076,72.877,0.93],[19.100,72.895,0.90],[19.050,72.860,0.88],
+    [16.705,74.243,0.90],[16.680,74.220,0.86],
+    [19.997,73.789,0.82],[18.520,73.856,0.78],
+    [19.076,72.820,0.36],[19.076,72.930,0.35],[16.705,74.170,0.34]
+  ]},
+  { state:'Gujarat', thresh:0.55, pts:[
+    [21.170,72.831,0.92],[21.150,72.810,0.88],
+    [23.022,72.571,0.82],[23.050,72.590,0.78],
+    [21.705,72.995,0.80],
+    [21.170,72.780,0.35],[21.170,72.880,0.34]
+  ]},
+  { state:'Kerala', thresh:0.55, pts:[
+    [9.850,76.971,0.92],[9.931,76.267,0.88],
+    [9.498,76.338,0.95],[9.480,76.300,0.90],
+    [11.258,75.780,0.82],
+    [9.498,76.270,0.36],[9.498,76.400,0.35]
+  ]},
+  { state:'Odisha', thresh:0.55, pts:[
+    [20.462,85.882,0.93],[20.296,85.824,0.88],
+    [21.466,83.981,0.82],[21.493,86.933,0.80],
+    [20.462,85.800,0.34],[20.462,85.960,0.34]
+  ]},
+  { state:'Uttar Pradesh', thresh:0.55, pts:[
+    [25.435,81.846,0.92],[25.317,82.973,0.88],
+    [26.760,83.373,0.82],
+    [25.435,81.780,0.34],[25.317,82.900,0.33]
+  ]},
+  { state:'Andhra Pradesh', thresh:0.55, pts:[
+    [16.506,80.648,0.90],[16.480,80.620,0.85],
+    [16.506,80.580,0.34],[16.506,80.710,0.33]
+  ]},
+  { state:'Telangana', thresh:0.55, pts:[
+    [17.385,78.486,0.82],[17.380,78.500,0.76],
+    [17.385,78.430,0.33]
+  ]},
+  { state:'Uttarakhand', thresh:0.60, pts:[
+    [29.945,78.164,0.92],[30.316,78.032,0.82],
+    [29.945,78.100,0.35],[29.945,78.220,0.34]
+  ]},
+  { state:'Himachal Pradesh', thresh:0.60, pts:[
+    [31.957,77.109,0.85],[31.104,77.173,0.78],
+    [31.957,77.050,0.34]
+  ]},
+  { state:'Punjab', thresh:0.55, pts:[
+    [30.900,75.850,0.85],[30.730,76.330,0.80],
+    [30.900,75.780,0.33]
+  ]},
+  { state:'Jharkhand', thresh:0.55, pts:[
+    [22.804,86.202,0.85],[23.669,86.151,0.80],
+    [22.804,86.140,0.33]
+  ]},
+  { state:'Delhi', thresh:0.60, pts:[
+    [28.660,77.280,0.90],[28.613,77.245,0.85],
+    [28.660,77.230,0.35],[28.660,77.330,0.34]
+  ]},
+  { state:'Arunachal Pradesh', thresh:0.55, pts:[
+    [27.100,93.620,0.88],[27.200,94.000,0.84],
+    [27.100,93.550,0.34]
+  ]}
+];
+
 function buildRadarLayers() {
   if (!map || typeof L.heatLayer !== 'function') return;
-  if (heatLayer) {
-    map.removeLayer(heatLayer);
-    heatLayer = null;
-  }
+  if (heatLayer) { map.removeLayer(heatLayer); heatLayer = null; }
 
-  const offsets = [
-    [0, 0], [0.35, 0.25], [-0.28, 0.32], [0.30, -0.28],
-    [-0.32, -0.22], [0.18, 0.42], [-0.40, 0.10]
-  ];
   const heatPoints = [];
 
-  Object.keys(LAT_LNG).forEach((name) => {
-    const pred = getPred(name);
-    const ll = LAT_LNG[name];
-    if (!pred || !ll) return;
-    const intensity = Math.max(0.04, Math.min(1, Number(pred.probability) || 0));
-    if (intensity < 0.08) return;
-    const spread = intensity >= 0.75 ? offsets : offsets.slice(0, 4);
-    spread.forEach(([dLat, dLng], i) => {
-      const weight = i === 0 ? intensity : intensity * 0.78;
-      heatPoints.push([ll[0] + dLat, ll[1] + dLng, weight]);
+  // Dynamic Multi-Tier Hydrological Risk Rendering:
+  // RED 🔴: High flood chance (dam overflow, surging river, low-lying inundation)
+  // YELLOW 🟡: Moderate flood watch / elevated catchment rain
+  // GREEN 🟢: Normal flow / safe hydrological baseline
+  WATERWAY_HOTSPOTS_INDEX.forEach(({ state, thresh, pts }) => {
+    const pred = getPred(state);
+    const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+    const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
+
+    let tierIntensity = 0.28; // Default GREEN (safe)
+    if (prob >= 0.65 || rain >= 55.0) {
+      tierIntensity = 0.88; // RED (high risk / overflow)
+    } else if (prob >= 0.25 || rain >= 20.0) {
+      tierIntensity = 0.55; // YELLOW (moderate watch)
+    }
+
+    pts.forEach(([lat, lon, baseIntensity]) => {
+      // Scale point intensity with actual live conditions
+      heatPoints.push([lat, lon, Math.min(0.95, baseIntensity * tierIntensity)]);
     });
   });
 
   if (!heatPoints.length) return;
 
+  const curZoom = map.getZoom ? map.getZoom() : 5;
+  let initR = 12, initB = 7;
+  if (curZoom >= 13)      { initR = 46; initB = 26; }
+  else if (curZoom >= 11) { initR = 36; initB = 20; }
+  else if (curZoom >= 9)  { initR = 26; initB = 15; }
+  else if (curZoom >= 7)  { initR = 18; initB = 10; }
+  else if (curZoom >= 5)  { initR = 12; initB = 7; }
+
   heatLayer = L.heatLayer(heatPoints, {
-    radius: 46,
-    blur: 26,
-    maxZoom: 10,
-    max: 1.0,
-    minOpacity: 0.28,
+    radius: initR, blur: initB, maxZoom: 16, max: 0.85, minOpacity: 0.35,
     gradient: {
-      0.30: '#facc15',
-      0.55: '#f97316',
-      0.75: '#ef4444',
-      0.95: '#dc2626'
+      0.00: 'transparent',
+      0.25: '#10b981',  // Safe / Normal baseline (Green)
+      0.55: '#facc15',  // Moderate flood watch (Yellow)
+      0.80: '#dc2626'   // River & Dam overflow hazard (Red)
     }
   }).addTo(map);
 }
 
 // ═══════════════════════════════════════════════════════════
-// CLICKABLE STATE BOUNDARIES (Click state to show risk details)
+// SPECIFIC VULNERABLE FLOOD ZONES (Rivers, Dams, Low-Lying Land)
+// Stays visible across all zoom levels without disappearing
 // ═══════════════════════════════════════════════════════════
-function getStateStyle() {
-  return {
-    fillColor: '#000000',
-    fillOpacity: 0.0,
-    stroke: false,
-    weight: 0
-  };
+const VULNERABLE_FLOOD_ZONES_INDEX = [
+  { name: 'Brahmaputra Valley Corridor', state: 'Assam', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 26.144, lon: 91.736, radiusMeters: 28000, desc: 'Brahmaputra river channel & seasonal alluvial floodplain' },
+  { name: 'Barak Valley Basin', state: 'Assam', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 24.833, lon: 92.778, radiusMeters: 22000, desc: 'Barak River catchment & low-lying Cachar depression' },
+  { name: 'Kosi River Floodplain', state: 'Bihar', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 25.930, lon: 86.600, radiusMeters: 28000, desc: 'Kosi River avulsion belt & Supaul/Saharsa alluvial lowlands' },
+  { name: 'Ganga-Gandak Confluence', state: 'Bihar', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 25.680, lon: 85.220, radiusMeters: 24000, desc: 'Ganga & Gandak confluence zone at Hajipur/Patna' },
+  { name: 'Yamuna River Corridor', state: 'Delhi', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 28.660, lon: 77.250, radiusMeters: 18000, desc: 'Yamuna River floodplain & Old Railway Bridge lowlands' },
+  { name: 'Godavari River Delta', state: 'Andhra Pradesh', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 16.989, lon: 81.784, radiusMeters: 26000, desc: 'Godavari River estuary & Dowleswaram barrage flood plain' },
+  { name: 'Krishna River Basin', state: 'Andhra Pradesh', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 16.506, lon: 80.648, radiusMeters: 24000, desc: 'Krishna River flood corridor & Prakasam Barrage zone' },
+  { name: 'Mahanadi River Channel', state: 'Odisha', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 20.462, lon: 85.882, radiusMeters: 25000, desc: 'Mahanadi River delta & Cuttack flood embankments' },
+  { name: 'Narmada Estuary Corridor', state: 'Gujarat', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 21.705, lon: 72.995, radiusMeters: 24000, desc: 'Narmada River estuary & Bharuch tidal basin' },
+  { name: 'Tapi River Basin', state: 'Gujarat', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 21.170, lon: 72.831, radiusMeters: 22000, desc: 'Tapi River lower catchment & Surat coastal flood plain' },
+  { name: 'Periyar & Pamba River Basin', state: 'Kerala', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 9.931, lon: 76.267, radiusMeters: 24000, desc: 'Periyar River valley & Aluva/Kochi catchment basin' },
+  { name: 'Cauvery Delta Lowlands', state: 'Tamil Nadu', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 10.790, lon: 79.137, radiusMeters: 26000, desc: 'Cauvery River delta & Thanjavur alluvial irrigation basin' },
+  { name: 'Hooghly & Damodar Confluence', state: 'West Bengal', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 22.400, lon: 88.240, radiusMeters: 26000, desc: 'Hooghly River tidal basin & Howrah/Kolkata lowlands' },
+  { name: 'Teesta River Basin', state: 'West Bengal', typeLabel: 'River Basin Corridor', icon: '🌊', lat: 26.727, lon: 88.395, radiusMeters: 22000, desc: 'Teesta River downstream corridor & Jalpaiguri flood plain' },
+  { name: 'Hirakud Dam Catchment', state: 'Odisha', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 21.570, lon: 83.870, radiusMeters: 20000, desc: 'Mahanadi River — Largest earthen dam in India (5,896 MCM)' },
+  { name: 'Tehri Dam Catchment', state: 'Uttarakhand', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 30.378, lon: 78.480, radiusMeters: 18000, desc: 'Bhagirathi River — High-altitude reservoir (3,540 MCM)' },
+  { name: 'Sardar Sarovar Dam', state: 'Gujarat', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 21.831, lon: 73.748, radiusMeters: 22000, desc: 'Narmada River — Major gravity dam & spillway channel (9,500 MCM)' },
+  { name: 'Bhakra Nangal Dam', state: 'Himachal Pradesh', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 31.410, lon: 76.435, radiusMeters: 20000, desc: 'Sutlej River — Govind Sagar reservoir overflow corridor' },
+  { name: 'Idukki Dam Reservoir', state: 'Kerala', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 9.849, lon: 76.974, radiusMeters: 20000, desc: 'Periyar River — Double curvature arch dam spillway corridor' },
+  { name: 'Nagarjuna Sagar Dam', state: 'Telangana', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 16.575, lon: 79.313, radiusMeters: 22000, desc: 'Krishna River — Massive storage reservoir & spillway buffer' },
+  { name: 'Koyna Dam Reservoir', state: 'Maharashtra', typeLabel: 'Dam & Reservoir Zone', icon: '🏛️', lat: 17.400, lon: 73.750, radiusMeters: 20000, desc: 'Koyna River — Shivajisagar lake dam corridor (2,797 MCM)' },
+  { name: 'Kuttanad Lowlands', state: 'Kerala', typeLabel: 'Low-Lying Terrain Depression', icon: '📉', lat: 9.498, lon: 76.338, radiusMeters: 24000, desc: 'Lowest altitude in India (1.5m to 2m below sea level)' },
+  { name: 'North Bihar Alluvial Depression', state: 'Bihar', typeLabel: 'Low-Lying Terrain Depression', icon: '📉', lat: 26.154, lon: 85.891, radiusMeters: 28000, desc: 'Darbhanga & Madhubani low-lying alluvial depression zone' },
+  { name: 'Majuli Riverine Island', state: 'Assam', typeLabel: 'Low-Lying Terrain Depression', icon: '📉', lat: 26.950, lon: 94.200, radiusMeters: 24000, desc: 'World’s largest inhabited river island — vulnerable to bank overflow' },
+  { name: 'Sundarbans Coastal Lowlands', state: 'West Bengal', typeLabel: 'Low-Lying Terrain Depression', icon: '📉', lat: 21.949, lon: 88.899, radiusMeters: 26000, desc: 'Tidal mangrove lowlands & storm surge vulnerability' },
+  { name: 'Mithi River Urban Estuary', state: 'Maharashtra', typeLabel: 'Low-Lying Terrain Depression', icon: '📉', lat: 19.076, lon: 72.877, radiusMeters: 18000, desc: 'Mumbai low-lying storm drainage bottleneck & Kurla flood plain' }
+];
+
+function renderVulnerableZones() {
+  if (!map || !riskZonesLayer) return;
+  riskZonesLayer.clearLayers();
+
+  VULNERABLE_FLOOD_ZONES_INDEX.forEach(zone => {
+    const pred = getPred(zone.state);
+    const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+    const rain = pred ? (Number(pred.rainfall_24h_mm) || 0) : 0;
+
+    const isHigh = prob >= 0.65 || rain >= 55.0;
+    const isMed = !isHigh && (prob >= 0.25 || rain >= 20.0);
+
+    const color = isHigh ? '#ef4444' : (isMed ? '#facc15' : '#10b981');
+    const statusLabel = isHigh ? '🔴 HIGH FLOOD RISK' : (isMed ? '🟡 MODERATE WATCH' : '🟢 SAFE (NORMAL)');
+    const fillOpacity = isHigh ? 0.38 : (isMed ? 0.28 : 0.20);
+
+    const circle = L.circle([zone.lat, zone.lon], {
+      radius: zone.radiusMeters,
+      color: color,
+      weight: isHigh ? 2.5 : 1.5,
+      opacity: 0.85,
+      fillColor: color,
+      fillOpacity: fillOpacity
+    });
+
+    const popupHtml = `
+      <div class="pop-wrap" style="min-width:240px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:12px; font-weight:800; color:#fff;">${zone.icon} ${zone.name}</span>
+          <span class="pop-badge" style="background:${color}22; color:${color}; border:1px solid ${color}; font-size:9px; padding:2px 6px;">${isHigh ? 'HIGH RISK' : (isMed ? 'WATCH' : 'SAFE')}</span>
+        </div>
+        <div style="font-size:9.5px; color:#38bdf8; margin-bottom:4px;">${zone.typeLabel} • ${zone.state}</div>
+        <div style="font-size:9px; color:#94a3b8; line-height:1.35; margin-bottom:6px;">${zone.desc}</div>
+        <div style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; font-size:9.5px; margin-bottom:6px; border:1px solid rgba(255,255,255,0.06);">
+          <div>🌧️ 24h Rain: <b style="color:#38bdf8;">${rain.toFixed(1)} mm</b></div>
+          <div>🎯 Live Inundation Risk: <b style="color:${color};">${(prob * 100).toFixed(1)}%</b> (${statusLabel})</div>
+        </div>
+        <button class="pop-action" onclick="openModal()">🔓 District Inundation Map →</button>
+      </div>
+    `;
+
+    circle.bindPopup(popupHtml, { maxWidth: 280 });
+    circle.bindTooltip(`<b>${zone.name}</b> — ${statusLabel}`, { sticky: true, direction: 'top' });
+    circle.addTo(riskZonesLayer);
+  });
 }
 
+// ═══════════════════════════════════════════════════════════
+// CLICKABLE STATE BOUNDARIES (Click state to show risk details)
+// ═══════════════════════════════════════════════════════════
 function renderGeoLayer(geoData) {
   if (geoLayer) map.removeLayer(geoLayer);
 
+  // NO yellow or red boundary lines! Completely seamless satellite view.
   geoLayer = L.geoJSON(geoData, {
-    style: getStateStyle,
+    style: () => ({
+      fillColor: 'transparent',
+      fillOpacity: 0.0,
+      stroke: false,
+      weight: 0
+    }),
     onEachFeature: (feature, layer) => {
       const name = feature.properties.ST_NM || 'Region';
       const pred = getPred(name);
-      const probStr = pred ? pred.probability_str : '0%';
-      const isHigh = pred && pred.probability >= 0.75;
-      const isMed = pred && pred.probability >= 0.25 && pred.probability < 0.75;
+      const isHigh = pred && (pred.probability >= 0.65 || pred.risk_level === 'high');
+      const isMed = pred && !isHigh && (pred.probability >= 0.25 || pred.risk_level === 'medium');
       const riskLabel = isHigh ? '🔴 High Risk' : (isMed ? '🟡 Medium Risk' : '🟢 Safe (Normal)');
 
       layer.bindTooltip(
@@ -916,11 +1167,6 @@ function renderGeoLayer(geoData) {
       );
 
       layer.on({
-        mouseover() {
-          layer.setStyle({ fillOpacity: 0.14, fillColor: isHigh ? '#ef4444' : (isMed ? '#facc15' : '#38bdf8'), stroke: false });
-          layer.bringToFront();
-        },
-        mouseout() { geoLayer.resetStyle(layer); },
         click(e) { showPopup(name, pred, e.latlng); }
       });
     }
@@ -928,23 +1174,24 @@ function renderGeoLayer(geoData) {
 }
 
 function showPopup(name, pred, latlng) {
-  const prob = pred ? pred.probability : 0.02;
-  const probStr = pred ? pred.probability_str : '2.0%';
-  const isHigh = prob >= 0.75;
-  const isMed = prob >= 0.25 && prob < 0.75;
-  const cat = isHigh ? 'Extreme High Risk' : (isMed ? 'Moderate Risk' : 'Normal / Safe');
-  const guidance = pred ? pred.action_guidance : 'Normal conditions. Standard monitoring active.';
+  const prob = pred ? (Number(pred.probability) || 0) : 0.02;
+  const probStr = pred ? pred.probability_str : `${(prob * 100).toFixed(1)}%`;
+  const isHigh = prob >= 0.65 || (pred && pred.risk_level === 'high');
+  const isMed = !isHigh && (prob >= 0.25 || (pred && pred.risk_level === 'medium'));
+  const cat = isHigh ? 'High Risk (Severe Inundation)' : (isMed ? 'Medium Risk (Flood Watch)' : 'Safe (Normal Conditions)');
+  const guidance = pred ? pred.action_guidance : 'Normal conditions. Standard hydrological monitoring active.';
   const river = RIVER_DATA[name] || 'Regional Catchment';
   const cls = isHigh ? 'high' : (isMed ? 'med' : 'low');
+  const rain = pred ? (pred.rainfall_24h_mm || 0) : 0;
 
   const popupId = 'pop-' + Math.random().toString(36).substring(2, 9);
 
   const initialHtml = `
-    <div class="pop-wrap" id="${popupId}">
+    <div class="pop-wrap" id="${popupId}" style="min-width:260px;">
       <div class="pop-state">${name}</div>
       <div class="pop-row1">
-        <span class="pop-badge pb-${cls}">${isHigh ? '⚠️ HIGH RISK' : (isMed ? '🟡 MEDIUM RISK' : '🟢 NORMAL / SAFE')}</span>
-        <span style="font-size:8.5px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:2px 5px; border-radius:3px; font-weight:700;">LIVE METEO</span>
+        <span class="pop-badge pb-${cls}">${isHigh ? '🔴 HIGH RISK' : (isMed ? '🟡 MEDIUM RISK' : '🟢 NORMAL / SAFE')}</span>
+        <span style="font-size:8.5px; background:rgba(56,189,248,0.2); color:#38bdf8; padding:2px 5px; border-radius:3px; font-weight:700;">ML MODEL</span>
       </div>
       <div class="pop-prob-big ppb-${cls}">${probStr}</div>
       <div class="pop-prob-cap">Gradient Boosting Flood Inundation Probability</div>
@@ -952,9 +1199,13 @@ function showPopup(name, pred, latlng) {
       <div id="${popupId}-telemetry" style="background:rgba(0,0,0,0.4); padding:6px; border-radius:4px; margin:6px 0; font-size:10px; border:1px solid rgba(255,255,255,0.06);">
         <div style="color:#38bdf8; font-size:9.5px; margin-bottom:3px; display:flex; align-items:center; gap:4px;">
           <span style="width:5px; height:5px; border-radius:50%; background:#10b981; display:inline-block;"></span>
-          <span>Fetching Open-Meteo & GloFAS...</span>
+          <span>Hydrological Catchment Telemetry</span>
         </div>
-        <div style="font-size:9.5px; color:#94a3b8;">River Basin: <b>${river}</b></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:9.5px; color:#cbd5e1; margin-top:3px;">
+          <div>🌧️ Rain: <b style="color:#38bdf8;">${rain} mm</b></div>
+          <div>🌊 Basin: <b style="color:#38bdf8;">Active</b></div>
+        </div>
+        <div style="font-size:9px; color:#94a3b8; margin-top:4px;">River Basin: <b>${river}</b></div>
       </div>
 
       <div class="pop-meta"><span>Status</span><b style="color:${isHigh ? '#ef4444' : (isMed ? '#facc15' : '#10b981')}">${cat}</b></div>
@@ -962,49 +1213,10 @@ function showPopup(name, pred, latlng) {
       <button class="pop-action" onclick="openModal()">🔓 District Inundation Map →</button>
     </div>`;
 
-  const popup = L.popup({ maxWidth: 280, closeButton: true })
+  const popup = L.popup({ maxWidth: 290, closeButton: true })
     .setLatLng(latlng)
     .setContent(initialHtml)
     .openOn(map);
-
-  // Concurrently fetch Live Open-Meteo & GloFAS API Telemetry from backend
-  fetch('http://127.0.0.1:8000/predict-flood', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ state: name, rainfall_24h_mm: 0 })
-  })
-  .then(res => res.ok ? res.json() : null)
-  .then(data => {
-    if (!data) return;
-    const telemEl = document.getElementById(`${popupId}-telemetry`);
-    if (!telemEl) return;
-
-    const w = data.live_weather || {};
-    const r = data.river_telemetry || {};
-    const imd = data.imd_alert || {};
-    const dam = data.dam_telemetry || {};
-
-    telemEl.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; border-bottom:1px dashed rgba(255,255,255,0.1); padding-bottom:3px;">
-        <span style="color:#10b981; font-weight:700; font-size:9px;">📡 Open-Meteo Live</span>
-        <span style="background:${imd.color || '#16a34a'}; color:#fff; font-size:8px; font-weight:800; padding:1px 5px; border-radius:3px;">${imd.level || 'GREEN SAFE'}</span>
-      </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; font-size:9.5px; color:#cbd5e1;">
-        <div>🌧️ Rain: <b style="color:#38bdf8;">${w.accumulated_24h_rainfall_mm || 0}mm</b></div>
-        <div>🌊 Flow: <b style="color:#38bdf8;">${r.discharge_m3s !== null ? `${r.discharge_m3s}m³/s` : 'Normal'}</b></div>
-        <div>🌡️ Temp: <b>${w.temperature_c || 28}°C</b></div>
-        <div>🌱 Soil: <b>${w.soil_moisture || 0.3}</b></div>
-      </div>
-      ${dam.total_dams_in_zone ? `
-        <div style="margin-top:4px; font-size:8.5px; color:#94a3b8; border-top:1px dashed rgba(255,255,255,0.08); padding-top:2px;">
-          🏛️ CWC Dams: <b>${dam.total_dams_in_zone} dams</b> (${dam.total_storage_capacity_mcm} MCM capacity)
-        </div>
-      ` : ''}
-    `;
-  })
-  .catch(err => {
-    console.warn("Live API popup update deferred:", err);
-  });
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1078,5 +1290,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   setInterval(loadPredictions, 10 * 60 * 1000);
 });
 </script>
-</body>
+  <script src="js/language.js"></script>\n</body>
 </html>

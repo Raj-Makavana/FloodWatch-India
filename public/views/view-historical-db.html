@@ -1,0 +1,137 @@
+<section class="dash-view" id="view-historical-db">
+        <div class="view-container">
+          <div class="view-hero">
+            <div class="vh-left">
+              <div class="vh-icon-box">📜</div>
+              <div>
+                <h1 class="vh-title">Historical Flood Database & Disaster Archive</h1>
+                <p class="vh-subtitle">6,880+ documented flood disaster events across Indian States & Districts (2018–2026) indexed in Neon PostgreSQL</p>
+              </div>
+            </div>
+            <span class="vh-badge nt-neon">NEON DB CONNECTED</span>
+          </div>
+
+          <!-- Multi-Parameter Filter Card -->
+          <div class="view-card" style="margin-bottom:16px; padding:16px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-bottom:12px;">
+              <!-- 1. State Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">STATE / UT</label>
+                <select id="histStateFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="">All States / All India</option>
+                  <option value="Andaman & Nicobar">Andaman & Nicobar</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jammu & Kashmir">Jammu & Kashmir</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Ladakh">Ladakh</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Puducherry">Puducherry</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                </select>
+              </div>
+
+              <!-- 2. District Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">DISTRICT</label>
+                <input type="text" id="histDistrictFilter" oninput="applyHistoricalFiltersDebounced()" placeholder="Filter district name..." class="ai-input" style="width:100%; padding:7px 10px; font-size:11.5px;" />
+              </div>
+
+              <!-- 3. Year Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">YEAR (2018–2026)</label>
+                <select id="histYearFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="all">All Years (2018–2026)</option>
+                  <option value="2026">2026 (Recent Alerts)</option>
+                  <option value="2025">2025 (Monsoon Surge)</option>
+                  <option value="2024">2024 (Wayanad, Vadodara, Vijayawada)</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                </select>
+              </div>
+
+              <!-- 4. Cause of Flood Filter -->
+              <div>
+                <label style="display:block; font-size:10px; color:var(--text-dim); font-family:var(--mono); margin-bottom:4px; font-weight:700;">CAUSE OF FLOOD</label>
+                <select id="histCauseFilter" onchange="applyHistoricalFilters()" class="ai-select" style="width:100%; padding:7px 10px; font-size:11.5px;">
+                  <option value="all">All Flood Causes</option>
+                  <option value="Heavy">Heavy Monsoon Rainfall</option>
+                  <option value="Dam">Dam Release / Spillway Overflow</option>
+                  <option value="Cloudburst">Cloudburst & Mudflow</option>
+                  <option value="Overtopping">River Overtopping / Breach</option>
+                  <option value="Depression">Cyclonic Depression / Surge</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Search + Reset Row -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:240px;">
+                <span style="font-size:14px;">🔍</span>
+                <input type="text" id="histSearchInput" oninput="applyHistoricalFiltersDebounced()" placeholder="Search damage impact, river names, or event codes..." class="ai-input" style="padding:6px 10px; font-size:11px; flex:1;" />
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button onclick="resetHistoricalFilters()" style="background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text-secondary); padding:6px 12px; border-radius:6px; font-size:11px; cursor:pointer; font-family:'Inter', sans-serif;">
+                  🔄 Reset Filters
+                </button>
+                <span id="historicalDbLabel" style="font-size:11px; color:var(--blue); font-family:var(--mono); font-weight:700;">
+                  Showing records from Neon Database
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-card" style="padding:0; overflow:hidden;">
+            <div style="max-height: 520px; overflow-y: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; color: var(--text);">
+                <thead style="background: rgba(15,23,42,0.95); position: sticky; top: 0; color: var(--blue); border-bottom: 1px solid var(--border); z-index:2;">
+                  <tr>
+                    <th style="padding: 10px 14px;">Year</th>
+                    <th style="padding: 10px 14px;">State</th>
+                    <th style="padding: 10px 14px;">Districts</th>
+                    <th style="padding: 10px 14px;">Cause of Flood</th>
+                    <th style="padding: 10px 14px;">Impact & Damage Extent</th>
+                    <th style="padding: 10px 14px; text-align:right;">Fatalities</th>
+                  </tr>
+                </thead>
+                <tbody id="historicalTableBody">
+                  <tr><td colspan="6" style="padding: 24px; text-align: center; color: #64748b;">Loading records from Neon Database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 5: FLOOD FREQUENCY & TRENDS (INTERACTIVE CHARTS)
+           ═════════════════════════════════════════════════════════════ -->

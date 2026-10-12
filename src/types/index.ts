@@ -6,6 +6,12 @@ export interface User {
   google_id: string | null;
   provider: 'local' | 'google';
   email_verified: boolean;
+  phone?: string | null;
+  state?: string | null;
+  district?: string | null;
+  organization?: string | null;
+  bio?: string | null;
+  avatar_url?: string | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -16,6 +22,12 @@ export interface UserResponse {
   email: string;
   provider: string;
   email_verified: boolean;
+  phone?: string | null;
+  state?: string | null;
+  district?: string | null;
+  organization?: string | null;
+  bio?: string | null;
+  avatar_url?: string | null;
   created_at: Date;
 }
 

@@ -4,8 +4,12 @@ Called after training so the pre-login map heatmap stays in sync.
 """
 from __future__ import annotations
 
-import json
 import os
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+import json
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -85,29 +89,72 @@ def risk_level(probability: float, category: str) -> str:
     return "low"
 
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+
 def export_map_predictions() -> dict:
     predictor = FloodRiskPredictor()
     states_out = {}
 
-    for state, coords in STATE_COORDINATES.items():
-        rain = fetch_rainfall_24h(coords["lat"], coords["lon"])
-        result = predictor.predict(state=state, rainfall_24h_mm=rain)
+    def process_one_state(item):
+        state, coords = item
+        live_rain = fetch_rainfall_24h(coords["lat"], coords["lon"])
+        result = predictor.predict(state=state, rainfall_24h_mm=live_rain)
         pred = result["prediction"]
         raw = float(pred["risk_probability_raw"])
-        states_out[state] = {
-            "state": state,
-            "risk_category": pred["risk_category"],
-            "risk_level": risk_level(raw, pred["risk_category"]),
-            "probability": raw,
-            "probability_str": pred["flood_risk_probability"],
-            "alert_level": pred["alert_level"],
-            "color_code": pred["color_code"],
-            "action_guidance": pred["action_guidance"],
-            "key_risk_drivers": pred["key_risk_drivers"],
-            "rainfall_24h_mm": rain,
-            "model_used": result["meta"]["model_used"],
-        }
-        print(f"  {state:28s} rain={rain:6.1f}mm  {pred['flood_risk_probability']:>7s}  {pred['risk_category']}")
+        return state, live_rain, pred, raw, result["meta"]["model_used"]
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(process_one_state, item) for item in STATE_COORDINATES.items()]
+        for fut in as_completed(futures):
+            state, effective_rain, pred, raw, model_used = fut.result()
+
+            # Strict risk level categorization based on actual probability
+            if raw >= 0.65 or effective_rain >= 75.0:
+                lvl = "high"
+                category = "High Risk (Severe Inundation)"
+                alert = "🔴 RED HIGH ALERT"
+                color = "#ef4444"
+                guidance = "Flood defense activation required. River overflow warning for low-lying areas."
+            elif raw >= 0.25:
+                lvl = "medium"
+                category = "Medium Risk (Flood Watch)"
+                alert = "🟡 YELLOW WATCH"
+                color = "#facc15"
+                guidance = "Continuous monitoring of river gauge levels and catchment precipitation."
+            else:
+                lvl = "low"
+                category = "Safe (Normal Conditions)"
+                alert = "🟢 GREEN SAFE"
+                color = "#10b981"
+                guidance = "Normal conditions. Standard hydrological monitoring active."
+
+            # Key drivers
+            drivers = []
+            if effective_rain >= 65.0:
+                drivers.append(f"Heavy 24h Rainfall Intensity ({effective_rain:.1f} mm/24h)")
+            elif effective_rain >= 25.0:
+                drivers.append(f"Moderate Rain Activity ({effective_rain:.1f} mm/24h)")
+            else:
+                drivers.append("Low / Dry Precipitation Conditions")
+
+            if raw >= 0.25:
+                drivers.append("High Historical Flood Inundation Index")
+
+            states_out[state] = {
+                "state": state,
+                "risk_category": category,
+                "risk_level": lvl,
+                "probability": raw,
+                "probability_str": f"{raw * 100:.1f}%",
+                "alert_level": alert,
+                "color_code": color,
+                "action_guidance": guidance,
+                "key_risk_drivers": drivers,
+                "rainfall_24h_mm": round(effective_rain, 1),
+                "model_used": model_used,
+            }
+            print(f"  {state:28s} rain={effective_rain:6.1f}mm  {states_out[state]['probability_str']:>7s}  {category}")
 
     payload = {
         "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),

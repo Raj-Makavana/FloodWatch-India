@@ -1,0 +1,35 @@
+<section class="dash-view active" id="view-map">
+        <div id="floodMap"></div>
+
+        <!-- Top Map Bar with Radar Title -->
+        <div class="map-top-bar">
+          <div class="map-title-pill">
+            <span class="mtp-icon">🛰️</span>
+            <div class="mtp-text">India Satellite Flood Radar</div>
+          </div>
+        </div>
+
+        <!-- NOAA Flood Risk Inundation Alert Spectrum Legend -->
+        <div class="noaa-legend">
+          <div class="nl-title">
+            <span>Flood Inundation Risk Alert</span>
+            <span style="color:#ef4444;font-weight:900;">LIVE ML</span>
+            <span id="predUpdatedAt" style="color:#94a3b8;font-weight:600;margin-left:4px;"></span>
+          </div>
+          <div class="nl-bar"></div>
+          <div class="nl-labels">
+            <span style="color:#64748b;">Normal (Safe)</span>
+            <span style="color:#facc15;font-weight:800;">🟡 Medium Risk</span>
+            <span style="color:#ef4444;font-weight:900;">🔴 High Risk</span>
+          </div>
+        </div>
+
+        <!-- Floating "My Location" Button on Map -->
+        <button class="map-locate-btn" onclick="focusMapOnUser()">
+          <span>📍</span> My Location
+        </button>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           VIEW 2: FEATURE 1 - MY LOCATION (LIVE GEO-LOCATION DETECTION)
+           ═════════════════════════════════════════════════════════════ -->
